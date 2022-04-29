@@ -15,15 +15,15 @@ class Color:
 
 			Method:
 				serialize (allows to transform the class in dict for json use)
-    """
+	"""
 
-    def __init__(self, name, rgbValue, rgbwValue):
-    	pass
+	def __init__(self, name, rgbValue, rgbwValue):
+		pass
 
 
-    def serialize(self):
-    	"""
-    		method called for seriallize data of the class
-    	"""
+	def serialize(self):
+		"""
+			method called for seriallize data of the class
+		"""
 
-    	pass
+		pass

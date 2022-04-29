@@ -1,3 +1,6 @@
+from .moduleEvent import *
+
+
 class LightEvent(ModuleEvent):
 	"""
 		class bringing all the information and functionality of an light event
@@ -17,20 +20,22 @@ class LightEvent(ModuleEvent):
 
 	"""
 
-	def __init__(self, moduleNode,datetime, bulbState, eventType = "light evenement"):
-		pass
+	def __init__(self, moduleNode, datetime, bulbState, eventType="light evenement"):
+		ModuleEvent.__init__(self, moduleNode, eventType, datetime)
+		self.lightState = bulbState
 
 
 class LightOn(LightEvent):
 	def __init__(self, moduleNode, datetime):
-		pass
+		LightEvent.__init__(self, moduleNode, datetime, 'on', 'turn on light')
 
 	def __str__(self):
-		pass
+		return "[{}]: l'ampoule n°{} a été allumé".format(self.dateTime, self.moduleNode.node_id)
+
 
 class LightOff(LightEvent):
 	def __init__(self, moduleNode, datetime):
-		pass
+		LightEvent.__init__(self, moduleNode, datetime, 'off', 'turn off light')
 
 	def __str__(self):
-		pass
+		return "[{}]: l'ampoule n°{} a été éteinte".format(self.dateTime, self.moduleNode.node_id)

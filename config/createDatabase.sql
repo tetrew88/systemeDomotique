@@ -32,7 +32,7 @@ CREATE INDEX last_name ON Profils(last_name);
 CREATE TABLE Events(
     id INTEGER NOT NULL AUTO_INCREMENT,
     type VARCHAR(40),
-    datetime DATETIME,
+    datetime VARCHAR(60),
     fk_room_id INTEGER,
 
     PRIMARY KEY(id)

@@ -1,4 +1,54 @@
-class Test_Network:
+import unittest
+
+from homeAutomationServer.classes.network import *
+from homeAutomationServer.classes.events.event import *
+
+class FakeNode:
+	def __init__(self, id, deviceType, cmdClass):
+		self.node_id = id
+		self.device_type = deviceType
+		self.command_classes_as_string = cmdClass
+		self.name = ""
+		self.location = ""
+
+	def set_field(self, field, fieldData):
+		if field == 'name':
+			self.name = fieldData
+		if field == 'location':
+			self.location = fieldData
+
+
+class FakeZwaveNetwork:
+	def __init__(self, homeId, state, ready):
+		"""
+			class created for substitute the zwaveNetwork class
+			during the test
+		"""
+		self.home_id = homeId
+		self.state = state
+		self.is_ready = ready
+		self.nodes = {'0001': FakeNode(1, "bulb", "bulb"), '002': FakeNode(2, "light", "bulb")}
+		self.controller = FakeController(FakeNode(3, "main controller","controller"))
+
+	def write_config(self):
+		pass
+
+
+class FakeController():
+	def __init__(self, node):
+		self.node = node
+		self.id = self.node.node_id
+		self.zwaveNetwork = False
+
+	def add_node(self):
+		key = len(self.zwaveNetwork.nodes) + 2
+		self.zwaveNetwork.nodes[key] = FakeNode(key, "bulb", "light système")
+
+	def remove_node(self):
+		self.zwaveNetwork.nodes.pop('0001')
+
+
+class Test_Network(unittest.TestCase):
 	"""
 		testing class of the network.
 
@@ -47,151 +97,199 @@ class Test_Network:
 				test if the data was conform
 	"""
 
-	def __init__(self):
-		pass
+	def setUp(self):
+		self.network = Network()
+		self.goodZWaveNetwork = FakeZwaveNetwork(10, 10, True)
+		self.badZWaveNetwork = FakeZwaveNetwork(10, 1, False)
 
 	def test_homeId_property(self):
 		"""
 			check if method return good type of data
 		"""
+		#test with zwaveNework corectly configured
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		assert isinstance(self.network.homeId, int)
+		assert self.network.homeId == 10
 
-		pass
+		#test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		assert isinstance(self.network.homeId, int)
+		assert self.network.homeId == 10
+
+		#test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert isinstance(self.network.homeId, bool)
+		assert self.network.homeId is False
 
 	def test_state_property(self):
 		"""
 			check if method return good type of data
 		"""
 
-		pass
+		# test with zwaveNework corectly configured
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		assert isinstance(self.network.state, int)
+		assert self.network.state == 10
+
+		# test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		assert isinstance(self.network.state, int)
+		assert self.network.state == 1
+
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert isinstance(self.network.state, bool)
+		assert self.network.state is False
 
 	def test_isReady_property(self):
 		"""
 			check if method return good type of data
 		"""
 
-		pass
+		# test with zwaveNework corectly configured
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		assert isinstance(self.network.isReady, bool)
+		assert self.network.isReady is True
+
+		# test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		assert isinstance(self.network.isReady, bool)
+		assert self.network.isReady is False
+
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert isinstance(self.network.isReady, bool)
+		assert self.network.isReady is False
 
 	def test_modules_list_property(self):
 		"""
 			check if method return good type of data
 		"""
+		# test with zwaveNework corectly configured
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		moduleList = self.network.modulesList
+		assert len(moduleList) == 3
 
-		pass
+		# test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		moduleList = self.network.modulesList
+		assert len(moduleList) == 0
+
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		moduleList = self.network.modulesList
+		assert len(moduleList) == 0
 
 	def test_mainController_property(self):
 		"""
 			check if method return good type of data
 		"""
+		# test with zwaveNework corectly configured
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		assert isinstance(self.network.mainController, FakeController)
 
-		pass
+		# test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		assert isinstance(self.network.mainController, FakeController)
 
-	def test_controller_list_property(self):
-		"""
-			check if method return good type of data
-		"""
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert self.network.mainController is False
 
-		pass
+	def test_get_controller_path(self):
+		assert isinstance(self.network.controllerPath, str)
 
-
-	def test_homeAutomationNetwork_starting(self):
-		"""
-			test if the home automation network was started
-		"""
-
-		pass
-
-
-	def test_homeAutomationNetwork_Stopped(self):
-		"""
-			test if the home automation network was stoped
-		"""
-
-		pass
+	def test_get_Zwave_config_path(self):
+		assert isinstance(self.network.zwaveConfigPath, str)
 
 
 	def test_get_module(self):
 		"""
 			check if method return good type of data
 		"""
+		self.network.zWaveNetwork = self.goodZWaveNetwork
 
-		pass
+		#test with good Id
+		assert self.network.get_module(1).id == 1
 
+		#test with bad Id
+		assert self.network.get_module(4) is False
 
-	def test_add_module_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
+		# test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		assert self.network.get_module(1) is False
 
-		pass
+		#test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert self.network.get_module(1) is False
 
-	def test_add_module_with_bad_name(self);
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+	def test_add_module(self):
+		#test with good parametters and zwaveNetwork: test if the method works correctly
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		self.network.zWaveNetwork.controller.zwaveNetwork = self.network.zWaveNetwork
 
-		pass
+		assert self.network.add_module("test1", 1) is True
 
-	def test_add_module_with_bad_location(self);
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+		succes = False
 
-		pass
+		for module in self.network.modulesList:
+			if module.name == "test1":
+				succes = True
+				break
+			else:
+				succes = False
 
+		assert succes is True
 
-	def test_del_module_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
+		#test with bad name
+		assert self.network.add_module(int(1), 1) is False
 
-		pass
+		# test with bad location
+		assert self.network.add_module("test2", "1") is False
 
-	def test_del_module_with_bad_parametters(self);
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+		# test with zwaveNetwork uncorrectly configured
+		self.network.zWaveNetwork = self.badZWaveNetwork
+		assert self.network.add_module("test3", 1) is False
 
-		pass
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert self.network.add_module("test4", 1) is False
+
+	def test_add_event(self):
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+
+		#test with good parametters
+		assert self.network.add_event(Event("test1", "01/01/01 01:01:01", 1)) == True
+
+		#test with bad parametters
+		assert self.network.add_event(1) == False
+		assert self.network.add_event(Event(1, "01/01/01 01:01:01", 1)) == False
+		assert self.network.add_event(Event("test2", 1, 1)) == False
+		assert self.network.add_event(Event("test3", "01/01/01 01:01:01", 100000)) == False
+
+'''
+	def test_set_automation_network_controller_path(self):
+		# test with good parametter
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		assert self.network.set_automation_network_controller_path('/dev/test1') == True
+
+		# test with bad parametter
+		assert self.network.set_automation_network_controller_path(1) == False
+
+	def test_set_Zwave_config_path(self):
+		# test with good parametter
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		assert self.network.set_Zwave_config_path('/dev/test2') == True
 		
+		# test with bad parametter
+		assert self.network.set_Zwave_config_path(2) == False
+'''
 
-	def test_set_module_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
-		"""
+'''
+	def test_del_module(self):
+		#test with good parameters and good zwaveNetwork
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+		self.network.zWaveNetwork.controller.zwaveNetwork = self.network.zWaveNetwork
 
-		pass
-
-	def test_set_module_name_with_bad_moduleId(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_module_name_with_bad_newName(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_module_location_with_good_parametters(self):
-		"""
-			test if the method works correctly
-		"""
-
-		pass
-
-	def test_set_module_location_with_bad_moduleId(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_module_location_with_bad_newLocation(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
+		assert self.network.del_module(1) == True
+'''

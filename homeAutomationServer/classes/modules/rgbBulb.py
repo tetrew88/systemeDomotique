@@ -1,3 +1,7 @@
+from .module import *
+from .bulb import *
+from .color import *
+
 class RgbBulb(Bulb):
 	"""
 		class bringing all the information and functionality of an rbgBulb.
@@ -15,15 +19,15 @@ class RgbBulb(Bulb):
 			Methods:
 				set color: allow to set the color of the light 
 				serialize (allows to transform the class in dict for json use)
-    """
+	"""
 
-    def __init__(self, moduleNode):
-    	pass
+	def __init__(self, moduleNode):
+		pass
 
 
-    @property
-    def color(self):
-    	"""
+	@property
+	def color(self):
+		"""
 			property representing the color of the light
 
 				return: False/True
@@ -49,8 +53,8 @@ class RgbBulb(Bulb):
 
 
 	def serialize(self):
-    	"""
-    		method called for seriallize data of the class
-    	"""
+		"""
+			method called for seriallize data of the class
+		"""
 
-    	pass
+		pass

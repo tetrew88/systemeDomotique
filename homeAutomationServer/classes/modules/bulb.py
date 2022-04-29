@@ -1,5 +1,8 @@
+from .module import *
+
+
 class Bulb(Module):
-    """
+	"""
 		class bringing all the information and functionality of an bulb.
 
 			Parammetters:
@@ -21,13 +24,13 @@ class Bulb(Module):
 				serialize (allows to transform the class in dict for json use)
     """
 
-    def __init__(self, moduleNode):
-    	pass
+	def __init__(self, moduleNode):
+		Module.__init__(self, moduleNode)
+		self.type = 'bulb'
 
-
-    @property
-    def lightUp(self):
-    	"""
+	@property
+	def lightUp(self):
+		"""
 			property representing if the light is on or not
 
 				return: False/True
@@ -77,8 +80,7 @@ class Bulb(Module):
 
 
 	def serialize(self):
-    	"""
-    		method called for seriallize data of the class
-    	"""
-
-    	pass
+		"""
+			method called for seriallize data of the class
+		"""
+		pass

@@ -1,3 +1,5 @@
+from .event import *
+
 class ModuleEvent(Event):
     """
         class bringing all the information and functionality of an module event
@@ -15,5 +17,6 @@ class ModuleEvent(Event):
 
     """
 
-    def __init__(self, module, Type, dateTime):
-        pass
+    def __init__(self, moduleNode, Type, dateTime):
+        Event.__init__(self, Type, dateTime, moduleNode.location)
+        self.moduleNode = moduleNode

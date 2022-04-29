@@ -1,3 +1,5 @@
+import mysql.connector
+
 class HomeDatabase:
 	"""
 		class bringing all the information and functionality of the home database.
@@ -53,15 +55,36 @@ class HomeDatabase:
 	"""
 
 	def __init__(self):
-		pass
+		self.username = "HomeAutomatisationSystem"
+		self.host = "localHost"
+		self.databaseName = "Home"
+		self.databasePassword = "0000"
+
+		self.db_connection = False
+		self.db_cursor = False
 
 
 	def connect(self):
 		"""
 			method called for establish connection with the home database
 		"""
+		succes = False
 
-		pass
+		self.db_connection = mysql.connector.connect(
+			host=self.host,
+			user=self.username,
+			passwd=self.databasePassword,
+			database=self.databaseName,
+			connection_timeout=10000
+		)
+		self.db_cursor = self.db_connection.cursor(buffered=True)
+
+		if self.db_connection == False or self.db_cursor == False:
+			succes = False
+		else:
+			succes = True
+
+		return succes
 
 	def disconnect(self):
 		"""
@@ -79,56 +102,59 @@ class HomeDatabase:
 
 
 	def get_rooms_list(self):
-    	"""
+		"""
     		Method called for get an list of the rooms
 
     			return:
     				list of room classes
     	"""
+		pass
 
-    	pass
-
-    def get_inhabitants_list(self):
-    	"""
+	def get_inhabitants_list(self):
+		"""
     		Method called for get an list of the inhabitants
 
     			return:
     				list of inhabitant classes
     	"""
+		pass
 
-    	pass
-
-    def get_guests_list(self):
-    	"""
+	def get_guests_list(self):
+		"""
     		method called for get an list of guests
 
     			return:
     				list of guests class
     	"""
+		pass
 
-    	pass
-
-    def get_profils_list(self):
-    	"""
+	def get_profils_list(self):
+		"""
     		method called for get an list of profil
 
     			return:
     				list of profil class
     	"""
+		pass
 
-    	pass
-
-    def get_events_list(self):
-    	"""
+	def get_events_list(self):
+		"""
     		method called for get an list of events
     			return:
     				list of events class
     	"""
+		request = """SELECT * FROM Events"""
 
-    	pass
+		if self.db_connection is not False and self.db_cursor is not False:
+			self.db_cursor.execute(request)
+			events = self.db_cursor.fetchall()
 
-    def get_room(self, roomId):
-    	"""
+			return events
+		else:
+			return False
+
+	def get_room(self, roomId):
+		"""
     		Method called for get an specific room
 
 				Parametters:
@@ -143,10 +169,10 @@ class HomeDatabase:
     				room classes/False
     	"""
 
-    	pass
+		pass
 
-    def get_inhabitant(self, inhabitantId):
-    	"""
+	def get_inhabitant(self, inhabitantId):
+		"""
     		Method called for get an specific inhabitant
 
     			Parametters:
@@ -162,10 +188,10 @@ class HomeDatabase:
     				inhabitant class/False
     	"""
 
-    	pass
+		pass
 
-    def get_guest(self, guestId):
-    	"""
+	def get_guest(self, guestId):
+		"""
     		method called for get an specific guest
 
     			Parametters:
@@ -181,10 +207,10 @@ class HomeDatabase:
     				guests class/False
     	"""
 
-    	pass
+		pass
 
-    def get_profil(self, profilId):
-    	"""
+	def get_profil(self, profilId):
+		"""
     		method called for get an specific profil
 
     			Parametters:
@@ -200,10 +226,10 @@ class HomeDatabase:
     				profil class/False
     	"""
 
-    	pass
+		pass
 
-    def get_event(self, eventId):
-    	"""
+	def get_event(self, eventId):
+		"""
     		method called for get an specific event
 
     			Parametters:
@@ -219,11 +245,11 @@ class HomeDatabase:
     				event class/False
     	"""
 
-    	pass
+		pass
 
 
-    def add_room(self, newRoom):
-    	"""
+	def add_room(self, newRoom):
+		"""
     		method called for adding an room.
 
     			Parametters:
@@ -243,11 +269,10 @@ class HomeDatabase:
     			return:
     				succes (True/False)
     	"""
+		pass
 
-    	pass
-
-    def add_inhabitant(self, newInhabitant):
-    	"""
+	def add_inhabitant(self, newInhabitant):
+		"""
     		method called for adding an inhabitant
 
     			Parametters:
@@ -268,10 +293,10 @@ class HomeDatabase:
     				succes (True/False)
     	"""
 
-    	pass
+		pass
 
-    def add_guest(self, newGuest):
-    	"""
+	def add_guest(self, newGuest):
+		"""
     		method called for adding an guest
 
     			Parametters:
@@ -292,10 +317,10 @@ class HomeDatabase:
     				succes (True/False)
     	"""
 
-    	pass
+		pass
 
-    def add_profil(self, newProfil):
-    	"""
+	def add_profil(self, newProfil):
+		"""
     		method called for adding an profil
 
     			Parametters:
@@ -316,35 +341,63 @@ class HomeDatabase:
     				succes (True/False)
     	"""
 
-    	pass
+		pass
 
-    def add_event(self, newEvent):
-    	"""
+	def add_event(self, eventType, eventDatetime, eventLocation):
+		"""
     		method called for adding an event
 
     			Parametters:
     				newEvent: event class
 
     			functionning:
-    				- check if newEvent is an instance of event class
-    					if it is:
-    						adding the event
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				adding the event
+    					if succes:
+    						return True
+    					else:
+    						return False
     					else:
     						return False
 
     			return:
     				succes (True/False)
     	"""
+		succes = False
 
-    	pass
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(eventType, str) and isinstance(eventDatetime, str):
+				if isinstance(eventLocation, int):
+					request = "INSERT INTO Events(type, datetime, fk_room_id) VALUES\
+							('{}', '{}', {})".format(eventType,
+													 eventDatetime,
+													 eventLocation)
+
+					try:
+						self.db_cursor.execute(request)
+						self.commit_change()
+					except:
+						return False
+
+					for event in self.get_events_list():
+						if event[1] == eventType \
+								and event[2] == eventDatetime \
+								and event[3] == eventLocation:
+							succes = True
+							break
+						else:
+							succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 
-    def del_room(self, roomId):
-    	"""
+	def del_room(self, roomId):
+		"""
     		method called for del an specific room
 
     			Parametters:
@@ -361,10 +414,10 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-    	pass
+		pass
 
-    def del_inhabitant(self, inhabitantId):
-    	"""
+	def del_inhabitant(self, inhabitantId):
+		"""
     		method called for del an specific inhabitant
 
     			Parametters:
@@ -381,10 +434,10 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-    	pass
+		pass
 
-    def del_guest(self, guestId):
-    	"""
+	def del_guest(self, guestId):
+		"""
     		method called for del an specific guest
 
     			Parametters:
@@ -400,11 +453,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
+		pass
 
-    	pass
-
-    def del_profil(self, profilId):
-    	"""
+	def del_profil(self, profilId):
+		"""
     		method called for del an specific profil
 
     			Parametters:
@@ -421,10 +473,10 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-    	pass
+		pass
 
-    def del_event(self, eventId):
-    	"""
+	def del_event(self, eventId):
+		"""
     		method called for del an specific event
 
     			Parametters:
@@ -441,11 +493,11 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-    	pass
+		pass
 
 
-    def set_room_name(self, roomId, newName):
-    	"""
+	def set_room_name(self, roomId, newName):
+		"""
     		methods called for set an room's name.
 
     			Parametters:
@@ -462,11 +514,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
+		pass
 
-    	pass
-
-    def set_room_type(self, roomId, newType):
-    	"""
+	def set_room_type(self, roomId, newType):
+		"""
     		methods called for set an room's type.
 
     			Parametters:
@@ -483,11 +534,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
+		pass
 
-    	pass
-
-    def set_profil_last_name(self, profilId, newLastName):
-    	"""
+	def set_profil_last_name(self, profilId, newLastName):
+		"""
     		methods called for set an profil's last name.
 
     			Parametters:
@@ -505,10 +555,10 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-    	pass
+		pass
 
-    def set_profil_first_name(self, profilId, newFirstName):
-    	"""
+	def set_profil_first_name(self, profilId, newFirstName):
+		"""
     		methods called for set an profil's first name.
 
     			Parametters:
@@ -525,10 +575,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-    	pass
+		pass
 
-    def set_inhabitant_last_name(self, inhabitantId, newLastName):
-    	"""
+	def set_inhabitant_last_name(self, inhabitantId, newLastName):
+		"""
     		methods called for set an inhabitant's last name.
 
     			Parametters:
@@ -545,10 +595,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-    	pass
+		pass
 
-    def inhabitant_first_name(self, inhabitantId, newFirstName):
-    	"""
+	def inhabitant_first_name(self, inhabitantId, newFirstName):
+		"""
     		methods called for set an inhabitant's first name.
 
     			Parametters:
@@ -565,10 +615,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-    	pass
+		pass
 
-   	def set_guest_last_name(self, guestId, newLastName):
-   		"""
+	def set_guest_last_name(self, guestId, newLastName):
+		"""
     		methods called for set an guest's last name.
 
     			Parametters:
@@ -585,10 +635,10 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-    	pass
+		pass
 
-    def set_guest_first_name(self, guestId, newFirstName):
-    	"""
+	def set_guest_first_name(self, guestId, newFirstName):
+		"""
     		methods called for set an guest's first name.
 
     			Parametters:
@@ -605,4 +655,4 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-    	pass
+		pass

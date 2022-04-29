@@ -1,3 +1,6 @@
+from .moduleEvent import *
+
+
 class MotionDetection(ModuleEvent):
     """
         class bringing all the information and functionality of an motion detection
@@ -15,7 +18,7 @@ class MotionDetection(ModuleEvent):
     """
 
     def __init__(self, moduleNode, datetime):
-    	pass
+        ModuleEvent.__init__(self, moduleNode, "motion detection", datetime)
 
     def __str__(self):
-    	pass
+        return "[{}]: un mouvement as été détécter".format(self.dateTime)
