@@ -259,7 +259,7 @@ class Test_Network(unittest.TestCase):
 		self.network.zWaveNetwork = self.goodZWaveNetwork
 
 		#test with good parametters
-		assert self.network.add_event(Event("test1", "01/01/01 01:01:01", 1)) == True
+		assert self.network.add_event(Event("test1", "01/01/01 01:01:01", 1)) is not False
 
 		#test with bad parametters
 		assert self.network.add_event(1) == False

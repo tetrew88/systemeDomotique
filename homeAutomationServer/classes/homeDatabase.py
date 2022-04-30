@@ -91,14 +91,28 @@ class HomeDatabase:
 			method called for disconnect the connection with the home database
 		"""
 
-		pass
+		succes = False
+
+		if self.db_connection is not False:
+			try:
+				self.db_connection.close()
+				self.db_cursor = False
+				self.db_connection = False
+				succes = True
+			except:
+				succes = False
+
+		return succes
+
+
 
 	def commit_change(self):
 		"""
 			method called for commit change to the database
 		"""
 
-		pass
+		if self.db_connection != False:
+			self.db_connection.commit()
 
 
 	def get_rooms_list(self):
@@ -108,7 +122,20 @@ class HomeDatabase:
     			return:
     				list of room classes
     	"""
-		pass
+
+		request = """SELECT * FROM Rooms"""
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			try:
+				self.db_cursor.execute(request)
+			except:
+				return False
+
+			rooms = self.db_cursor.fetchall()
+
+			return rooms
+		else:
+			return False
 
 	def get_inhabitants_list(self):
 		"""
@@ -117,7 +144,19 @@ class HomeDatabase:
     			return:
     				list of inhabitant classes
     	"""
-		pass
+		request = """SELECT * FROM Inhabitants"""
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			try:
+				self.db_cursor.execute(request)
+			except:
+				return False
+
+			inhabitants = self.db_cursor.fetchall()
+
+			return inhabitants
+		else:
+			return False
 
 	def get_guests_list(self):
 		"""
@@ -126,7 +165,20 @@ class HomeDatabase:
     			return:
     				list of guests class
     	"""
-		pass
+
+		request = """SELECT * FROM Guests"""
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			try:
+				self.db_cursor.execute(request)
+			except:
+				return False
+
+			guests = self.db_cursor.fetchall()
+
+			return guests
+		else:
+			return False
 
 	def get_profils_list(self):
 		"""
@@ -135,7 +187,20 @@ class HomeDatabase:
     			return:
     				list of profil class
     	"""
-		pass
+
+		request = """SELECT * FROM Profils"""
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			try:
+				self.db_cursor.execute(request)
+			except:
+				return False
+
+			profils = self.db_cursor.fetchall()
+
+			return profils
+		else:
+			return False
 
 	def get_events_list(self):
 		"""
@@ -146,7 +211,11 @@ class HomeDatabase:
 		request = """SELECT * FROM Events"""
 
 		if self.db_connection is not False and self.db_cursor is not False:
-			self.db_cursor.execute(request)
+			try:
+				self.db_cursor.execute(request)
+			except:
+				return False
+
 			events = self.db_cursor.fetchall()
 
 			return events
@@ -169,8 +238,28 @@ class HomeDatabase:
     				room classes/False
     	"""
 
-		pass
+		room = False
 
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(roomId, int):
+				request = "SELECT * FROM Rooms WHERE id = {}".format(roomId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				room = self.db_cursor.fetchall()
+
+				if len(room) > 0:
+					return room[0]
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
+	
 	def get_inhabitant(self, inhabitantId):
 		"""
     		Method called for get an specific inhabitant
@@ -188,7 +277,27 @@ class HomeDatabase:
     				inhabitant class/False
     	"""
 
-		pass
+		inhabitant = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(inhabitantId, int):
+				request = "SELECT * FROM Inhabitants WHERE id = {}".format(inhabitantId)
+				
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				inhabitant = self.db_cursor.fetchall()
+
+				if len(inhabitant) > 0:
+					return inhabitant[0]
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
 
 	def get_guest(self, guestId):
 		"""
@@ -207,7 +316,27 @@ class HomeDatabase:
     				guests class/False
     	"""
 
-		pass
+		guest = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(guestId, int):
+				request = "SELECT * FROM Guests WHERE id = {}".format(guestId)
+				
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				guest = self.db_cursor.fetchall()
+
+				if len(guest) > 0:
+					return guest[0]
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
 
 	def get_profil(self, profilId):
 		"""
@@ -226,7 +355,27 @@ class HomeDatabase:
     				profil class/False
     	"""
 
-		pass
+		profil = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(profilId, int):
+				request = "SELECT * FROM Profils WHERE id = {}".format(profilId)
+				
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				profil = self.db_cursor.fetchall()
+
+				if len(profil) > 0:
+					return profil[0]
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
 
 	def get_event(self, eventId):
 		"""
@@ -245,10 +394,29 @@ class HomeDatabase:
     				event class/False
     	"""
 
-		pass
+		event = False
 
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(eventId, int):
+				request = "SELECT * FROM Events WHERE id = {}".format(eventId)
+				
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
 
-	def add_room(self, newRoom):
+				event = self.db_cursor.fetchall()
+
+				if len(event) > 0:
+					return event[0]
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
+
+	def add_room(self, roomName, roomType):
 		"""
     		method called for adding an room.
 
@@ -256,22 +424,50 @@ class HomeDatabase:
     				newRoom: room class
 
     			functionning:
-    				- check if new room is an instance of room class
-    					if it is:
-    						adding the room
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				check parametters
+    				adding the room
+    					if succes:
+    						return True
     					else:
     						return False
 
     			return:
     				succes (True/False)
     	"""
-		pass
 
-	def add_inhabitant(self, newInhabitant):
+		succes = False
+		roomId = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(roomName, str) and isinstance(roomType, str):
+				request = "INSERT INTO Rooms(name, type) VALUES ('{}', '{}')".format(roomName, roomType)
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+				roomId = self.db_cursor.lastrowid
+
+				for room in self.get_rooms_list():
+					if room[0] == roomId \
+							and room[1] == roomName \
+							and room[2] == roomType:
+						succes = True
+						break
+					else:
+						succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		if succes:
+			return roomId
+		else:
+			return False
+
+	def add_inhabitant(self, firstName, lastName, sexe, dateOfBirth):
 		"""
     		method called for adding an inhabitant
 
@@ -279,13 +475,9 @@ class HomeDatabase:
     				newInhabitant: inhabitant class
 
     			functionning:
-    				- check if newInhabitant is an instance of inhabitant class
-    					if it is:
-    						adding the inhabitant
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				adding the inhabitant
+    					if succes:
+    						return True
     					else:
     						return False
 
@@ -293,9 +485,46 @@ class HomeDatabase:
     				succes (True/False)
     	"""
 
-		pass
+		succes = False
+		profilId = inhabitantId = False
 
-	def add_guest(self, newGuest):
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(firstName, str) \
+				and isinstance(lastName, str) \
+				and sexe == "f" or sexe == "m" \
+				and isinstance(dateOfBirth, str):
+
+				profilId = self.add_profil(firstName, lastName, sexe, dateOfBirth)
+				if profilId is not False:
+					request = "INSERT INTO Inhabitants(fk_profil_id) VALUES ({})".format(profilId)
+
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					inhabitantId = self.db_cursor.lastrowid
+
+					for inhabitant in self.get_inhabitants_list():
+						if inhabitant[0] == inhabitantId and inhabitant[1] == profilId:
+							succes = True
+						else:
+							succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		if succes:
+			return inhabitantId
+		else:
+			return False
+		
+	def add_guest(self, firstName, lastName, sexe, dateOfBirth):
 		"""
     		method called for adding an guest
 
@@ -303,13 +532,10 @@ class HomeDatabase:
     				newGuest: guest class
 
     			functionning:
-    				- check if newGuest is an instance of guest class
-    					if it is:
-    						adding the guest
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				check parametters
+    				adding the guest
+    					if succes:
+    						return True
     					else:
     						return False
 
@@ -317,23 +543,60 @@ class HomeDatabase:
     				succes (True/False)
     	"""
 
-		pass
+		succes = False
+		profilId = guestId = False
 
-	def add_profil(self, newProfil):
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(firstName, str) \
+				and isinstance(lastName, str) \
+				and sexe == "f" or sexe == "m" \
+				and isinstance(dateOfBirth, str):
+
+				profilId = self.add_profil(firstName, lastName, sexe, dateOfBirth)
+				if profilId is not False:
+					request = "INSERT INTO Guests(fk_profil_id) VALUES ({})".format(profilId)
+
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					guestId = self.db_cursor.lastrowid
+
+					for guest in self.get_guests_list():
+						if guest[0] == guestId and guest[1] == profilId:
+							succes = True
+						else:
+							succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		if succes:
+			return guestId
+		else:
+			return False
+		
+	def add_profil(self, firstName, lastName, sexe, dateOfBirth):
 		"""
     		method called for adding an profil
 
-    			Parametters:
-    				newProfil: profil class
+		    Parametters:
+				newProfil: profil class
 
-    			functionning:
-    				- check if newProfil is an instance of profil class
-    					if it is:
-    						adding the profil
-    							if succes:
-    								return True
-    							else:
-    								return False
+    		functionning:
+    			- check if newProfil is an instance of profil class
+    				if it is:
+    					adding the profil
+    						if succes:
+    							return True
+    						else:
+    							return False
     					else:
     						return False
 
@@ -341,7 +604,46 @@ class HomeDatabase:
     				succes (True/False)
     	"""
 
-		pass
+		succes = profilId = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(firstName, str) \
+				and isinstance(lastName, str) \
+				and sexe == "f" or sexe == "m" \
+				and isinstance(dateOfBirth, str):
+
+				request = "INSERT INTO Profils(first_name, last_name, sexe, date_of_birth) VALUES\
+				('{}', '{}', '{}', '{}')".format(firstName, lastName, sexe, dateOfBirth)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				profilId = self.db_cursor.lastrowid
+
+				for profil in self.get_profils_list():
+					if profil[0] == profilId \
+						and profil[1] == firstName \
+						and profil[2] == lastName \
+						and profil[3] == sexe \
+						and profil[4] == dateOfBirth:
+
+						succes = True
+						break
+					else:
+						succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		if succes:
+			return profilId
+		else:
+			return False
 
 	def add_event(self, eventType, eventDatetime, eventLocation):
 		"""
@@ -367,7 +669,7 @@ class HomeDatabase:
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(eventType, str) and isinstance(eventDatetime, str):
 				if isinstance(eventLocation, int):
-					request = "INSERT INTO Events(type, datetime, fk_room_id) VALUES\
+					request = "INSERT INTO Events(type, datetime, fk_room_id) VALUES \
 							('{}', '{}', {})".format(eventType,
 													 eventDatetime,
 													 eventLocation)
@@ -414,7 +716,32 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		pass
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(roomId, int):
+				request = "DELETE FROM Rooms WHERE id = {}".format(roomId)
+
+				if self.get_room(roomId) is not False:
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					if self.get_room(roomId) is False:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def del_inhabitant(self, inhabitantId):
 		"""
@@ -434,7 +761,40 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		pass
+		succes = False
+		profilId = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(inhabitantId, int):
+				request = "DELETE FROM Inhabitants WHERE id = {}".format(inhabitantId)
+
+				profilId = self.get_inhabitant(inhabitantId)[0]
+				if profilId is not False:
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					if self.get_inhabitant(inhabitantId) is False:
+						if self.del_profil(profilId):
+							if self.get_profil(profilId) is False:
+								succes = True
+							else:
+								succes = False
+						else:
+							succes = False
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def del_guest(self, guestId):
 		"""
@@ -453,8 +813,42 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
 
+		succes = False
+		profilId = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(guestId):
+				request = "DELETE FROM Guests WHERE id = {}".format(guestId)
+
+				profilId = self.get_guest(guestId)[0]
+				if profilId is not False:
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					if self.get_guest(guestId) is False:
+						if self.del_profil(profilId):
+							if self.get_profil(profilId) is False:
+								succes = True
+							else:
+								succes = False
+						else:
+							succes = False
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+	
 	def del_profil(self, profilId):
 		"""
     		method called for del an specific profil
@@ -472,8 +866,32 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
+		succes = False
 
-		pass
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(profilId, int):
+				request = "DELETE FROM Profils WHERE id = {}".format(profilId)
+				
+				if self.get_profil(profilId) is not False:
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					if self.get_profil(profilId) is False:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def del_event(self, eventId):
 		"""
@@ -493,7 +911,32 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		pass
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(eventId, int):
+				request = "DELETE FROM Events WHERE id = {}".format(eventId)
+				
+				if self.get_event(eventId) is not False:
+					try:
+						self.db_cursor.execute(request)
+					except:
+						return False
+
+					self.commit_change()
+
+					if self.get_event(eventId) is False:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 
 	def set_room_name(self, roomId, newName):
@@ -514,7 +957,35 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(roomId, int) and isinstance(newName, str):
+				request = """UPDATE Rooms SET name = '{}' where id = {}""".format(newName, roomId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				room = self.get_room(roomId)
+
+				if room is not False:
+					if room[1] == newName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def set_room_type(self, roomId, newType):
 		"""
@@ -534,7 +1005,36 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(roomId, int) and isinstance(newType, str):
+				request = """UPDATE Rooms SET type = '{}' where id = {}""".format(newType, roomId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				room = self.get_room(roomId)
+
+				if room is not False:
+					if room[2] == newType:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+
 
 	def set_profil_last_name(self, profilId, newLastName):
 		"""
@@ -555,7 +1055,34 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		pass
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(profilId, int) and isinstance(newLastName, str):
+				request = """UPDATE Profils SET last_name = '{}' where id = {}""".format(newLastName, profilId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				profil = self.get_profil(profilId)
+
+				if profil is not False:
+					if profil[2] == newLastName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def set_profil_first_name(self, profilId, newFirstName):
 		"""
@@ -575,7 +1102,116 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(profilId, int) and isinstance(newFirstName, str):
+				request = """UPDATE Profils SET first_name = '{}' where id = {}""".format(newFirstName, profilId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				profil = self.get_profil(profilId)
+
+				if profil is not False:
+					if profil[1] == newFirstName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+
+	def set_profil_sexe(self, profilId, newSexe):
+		"""
+		    methods called for set an profil's sexe.
+
+		    	Parametters:
+		    				inhabitantId: int
+		    				newLastName: str
+
+		    			functionning:
+							set the inhabitant's last name
+								if the inhabitant's last name was correctly modified:
+									return True
+								else:
+									return False
+
+		    			return:
+		    				succes: True/False
+		"""
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(profilId, int) and isinstance(newSexe, str) \
+					and newSexe is 'f' or newSexe is 'm':
+				request = """UPDATE Profils SET sexe = '{}' where id = {}""".format(newSexe, profilId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				profil = self.get_profil(profilId)
+
+				if profil is not False:
+					if profil[3] == newSexe:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+
+	def set_profil_date_of_birth(self, profilId, newDateOfBirth):
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(profilId, int) and isinstance(newDateOfBirth, str):
+				request = """UPDATE Profils SET date_of_birth = '{}' where id = {}""".format(newDateOfBirth, profilId)
+
+				try:
+					self.db_cursor.execute(request)
+				except:
+					return False
+
+				self.commit_change()
+
+				profil = self.get_profil(profilId)
+
+				if profil is not False:
+					if profil[4] == newDateOfBirth:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def set_inhabitant_last_name(self, inhabitantId, newLastName):
 		"""
@@ -595,7 +1231,30 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(inhabitantId, int) and isinstance(newLastName, str):
+				profilId = self.get_inhabitant(inhabitantId)[1]
+
+				if profilId is not False:
+					self.set_profil_last_name(profilId, newLastName)
+
+					profil =  self.get_profil(profilId)
+
+					if profil[2] == newLastName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def inhabitant_first_name(self, inhabitantId, newFirstName):
 		"""
@@ -615,7 +1274,81 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(inhabitantId, int) and isinstance(newFirstName, str):
+				profilId = self.get_inhabitant(inhabitantId)[1]
+
+				if profilId is not False:
+					self.set_profil_last_name(profilId, newFirstName)
+
+					profil = self.get_profil(profilId)
+
+					if profil[1] == newFirstName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+
+	def set_inhabitant_sexe(self, inhabitantId, newSexe):
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(inhabitantId, int) and isinstance(newSexe, str) \
+					and newSexe == "f" or newSexe == "m":
+				profilId = self.get_inhabitant(inhabitantId)[1]
+
+				if profilId is not False:
+					self.set_profil_sexe(profilId, newSexe)
+
+					profil = self.get_profil(profilId)
+
+					if profil[3] == newSexe:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+
+	def set_inhabitant_date_of_birth(self, inhabitantId, newDateOfBirth):
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(inhabitantId, int) and isinstance(newDateOfBirth, str):
+				profilId = self.get_inhabitant(inhabitantId)[1]
+
+				if profilId is not False:
+					self.set_profil_date_of_birth(profilId, newDateOfBirth)
+
+					profil = self.get_profil(profilId)
+
+					if profil[4] == newDateOfBirth:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
 
 	def set_guest_last_name(self, guestId, newLastName):
 		"""
@@ -635,7 +1368,30 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(guestId, int) and isinstance(newLastName, str):
+				profilId = self.get_guest(guestId)[1]
+
+				if profilId is not False:
+					self.set_profil_last_name(profilId, newLastName)
+
+					profil = self.get_profil(profilId)
+
+					if profil[2] == newLastName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return False
 
 	def set_guest_first_name(self, guestId, newFirstName):
 		"""
@@ -655,4 +1411,78 @@ class HomeDatabase:
     			return:
     				succes: True/False
     	"""
-		pass
+
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(guestId, int) and isinstance(newFirstName, str):
+				profilId = self.get_guest(guestId)[1]
+
+				if profilId is not False:
+					self.set_profil_last_name(profilId, newFirstName)
+
+					profil = self.get_profil(profilId)
+
+					if profil[1] == newFirstName:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return False
+
+	def set_guest_sexe(self, guestId, newSexe):
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(guestId, int) and isinstance(newSexe, str) \
+					and newSexe == "f" or newSexe == "m":
+				profilId = self.get_guest(guestId)[1]
+
+				if profilId is not False:
+					self.set_profil_sexe(profilId, newSexe)
+
+					profil = self.get_profil(profilId)
+
+					if profil[3] == newSexe:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes
+
+	def set_guest_date_of_birth(self, guestId, newDateOfBirth):
+		succes = False
+
+		if self.db_connection is not False and self.db_cursor is not False:
+			if isinstance(guestId, int) and isinstance(newDateOfBirth, str):
+				profilId = self.get_guest(guestId)[1]
+
+				if profilId is not False:
+					self.set_profil_date_of_birth(profilId, newDateOfBirth)
+
+					profil = self.get_profil(profilId)
+
+					if profil[4] == newDateOfBirth:
+						succes = True
+					else:
+						succes = False
+				else:
+					succes = False
+			else:
+				succes = False
+		else:
+			succes = False
+
+		return succes

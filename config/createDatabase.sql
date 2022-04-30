@@ -21,6 +21,8 @@ CREATE TABLE Profils(
     id INTEGER NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(40),
     last_name VARCHAR(40),
+    sexe VARCHAR(1),
+    date_of_birth VARCHAR(15),
 
     PRIMARY KEY(id)
 )

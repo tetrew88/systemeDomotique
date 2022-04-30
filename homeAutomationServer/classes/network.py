@@ -341,12 +341,15 @@ class Network:
 
 		selectedModule = False
 
-		for module in self.modulesList:
-			if module.id == moduleId:
-				selectedModule = module
-				break
-			else:
-				selectedModule = False
+		if isinstance(moduleId, int):
+			for module in self.modulesList:
+				if module.id == moduleId:
+					selectedModule = module
+					break
+				else:
+					selectedModule = False
+		else:
+			selectedModule = False
 
 		return selectedModule
 
