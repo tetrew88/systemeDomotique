@@ -1232,11 +1232,13 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(inhabitantId, int) and isinstance(newLastName, str):
-				profilId = self.get_inhabitant(inhabitantId)[1]
+				inhabitant = self.get_inhabitant(inhabitantId)
+				if inhabitant is not False:
+					profilId = inhabitant[1]
 
 				if profilId is not False:
 					self.set_profil_last_name(profilId, newLastName)
@@ -1256,7 +1258,7 @@ class HomeDatabase:
 
 		return succes
 
-	def inhabitant_first_name(self, inhabitantId, newFirstName):
+	def set_inhabitant_first_name(self, inhabitantId, newFirstName):
 		"""
     		methods called for set an inhabitant's first name.
 
@@ -1275,14 +1277,16 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(inhabitantId, int) and isinstance(newFirstName, str):
-				profilId = self.get_inhabitant(inhabitantId)[1]
+				inhabitant = self.get_inhabitant(inhabitantId)
+				if inhabitant is not False:
+					profilId = inhabitant[1]
 
 				if profilId is not False:
-					self.set_profil_last_name(profilId, newFirstName)
+					self.set_profil_first_name(profilId, newFirstName)
 
 					profil = self.get_profil(profilId)
 
@@ -1300,12 +1304,14 @@ class HomeDatabase:
 		return succes
 
 	def set_inhabitant_sexe(self, inhabitantId, newSexe):
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(inhabitantId, int) and isinstance(newSexe, str) \
 					and newSexe == "f" or newSexe == "m":
-				profilId = self.get_inhabitant(inhabitantId)[1]
+				inhabitant = self.get_inhabitant(inhabitantId)
+				if inhabitant is not False:
+					profilId = inhabitant[1]
 
 				if profilId is not False:
 					self.set_profil_sexe(profilId, newSexe)
@@ -1326,11 +1332,13 @@ class HomeDatabase:
 		return succes
 
 	def set_inhabitant_date_of_birth(self, inhabitantId, newDateOfBirth):
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(inhabitantId, int) and isinstance(newDateOfBirth, str):
-				profilId = self.get_inhabitant(inhabitantId)[1]
+				inhabitant = self.get_inhabitant(inhabitantId)
+				if inhabitant is not False:
+					profilId = inhabitant[1]
 
 				if profilId is not False:
 					self.set_profil_date_of_birth(profilId, newDateOfBirth)
@@ -1369,11 +1377,13 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(guestId, int) and isinstance(newLastName, str):
-				profilId = self.get_guest(guestId)[1]
+				guest = self.get_guest(guestId)
+				if guest is not False:
+					profilId = guest[1]
 
 				if profilId is not False:
 					self.set_profil_last_name(profilId, newLastName)
@@ -1391,7 +1401,7 @@ class HomeDatabase:
 		else:
 			succes = False
 
-		return False
+		return succes
 
 	def set_guest_first_name(self, guestId, newFirstName):
 		"""
@@ -1412,14 +1422,16 @@ class HomeDatabase:
     				succes: True/False
     	"""
 
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(guestId, int) and isinstance(newFirstName, str):
-				profilId = self.get_guest(guestId)[1]
+				guest = self.get_guest(guestId)
+				if guest is not False:
+					profilId = guest[1]
 
 				if profilId is not False:
-					self.set_profil_last_name(profilId, newFirstName)
+					self.set_profil_first_name(profilId, newFirstName)
 
 					profil = self.get_profil(profilId)
 
@@ -1434,15 +1446,17 @@ class HomeDatabase:
 		else:
 			succes = False
 
-		return False
+		return succes
 
 	def set_guest_sexe(self, guestId, newSexe):
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(guestId, int) and isinstance(newSexe, str) \
 					and newSexe == "f" or newSexe == "m":
-				profilId = self.get_guest(guestId)[1]
+				guest = self.get_guest(guestId)
+				if guest is not False:
+					profilId = guest[1]
 
 				if profilId is not False:
 					self.set_profil_sexe(profilId, newSexe)
@@ -1463,11 +1477,13 @@ class HomeDatabase:
 		return succes
 
 	def set_guest_date_of_birth(self, guestId, newDateOfBirth):
-		succes = False
+		succes = profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
 			if isinstance(guestId, int) and isinstance(newDateOfBirth, str):
-				profilId = self.get_guest(guestId)[1]
+				guest = self.get_guest(guestId)
+				if guest is not False:
+					profilId = guest[1]
 
 				if profilId is not False:
 					self.set_profil_date_of_birth(profilId, newDateOfBirth)

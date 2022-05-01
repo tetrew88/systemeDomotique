@@ -567,7 +567,7 @@ class Test_homeDatabase(unittest.TestCase):
 
 	def test_set_room_type(self):
 		"""
-			test if the method detect the bad parametters
+			test changing the type of the room
 		"""
 
 		succes = False
@@ -595,45 +595,303 @@ class Test_homeDatabase(unittest.TestCase):
 
 	def test_set_profil_last_name(self):
 		"""
-			test if the method detect the bad parammeters
+			test changing the last name of an profil
 		"""
 
-		pass
+		succes = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_profil_last_name(1, "testSetProfilLN") is True
+		assert self.homeDatabase.get_profil(1)[2] == "testSetProfilLN"
+
+		#test with bad parametters
+		assert self.homeDatabase.set_profil_last_name("1", "testSetProfilLN") is False
+		assert self.homeDatabase.set_profil_last_name(1, 1) is False
+		assert self.homeDatabase.set_profil_last_name(10000, "testSetProfilLN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_profil_last_name(1, "testSetProfilLN") is False
 
 	def test_set_profil_first_name(self):
 		"""
-			test if the method detect the bad parammeters
+			test changing the last name of an profil
 		"""
 
-		pass
+		succes = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_profil_first_name(1, "testSetProfilFN") is True
+		assert self.homeDatabase.get_profil(1)[1] == "testSetProfilFN"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_profil_first_name("1", "testSetProfilFN") is False
+		assert self.homeDatabase.set_profil_first_name(1, 1) is False
+		assert self.homeDatabase.set_profil_first_name(10000, "testSetProfilFN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_profil_first_name(1, "testSetProfilFN") is False
+
+	def test_set_profil_sexe(self):
+		"""
+			test changing the sexe of an profil
+		"""
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_profil_sexe(1, "f") is True
+		assert self.homeDatabase.get_profil(1)[3] == "f"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_profil_sexe("1", "f") is False
+		assert self.homeDatabase.set_profil_sexe(1, 1) is False
+		assert self.homeDatabase.set_profil_sexe(10000, "f") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_profil_sexe(1, "f") is False
+
+	def test_set_profil_date_of_birth(self):
+		"""
+			test changing the date of birth of an profil
+		"""
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_profil_date_of_birth(1, "02/02/2002") is True
+		assert self.homeDatabase.get_profil(1)[4] == "02/02/2002"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_profil_date_of_birth("1", "02/02/2002") is False
+		assert self.homeDatabase.set_profil_date_of_birth(1, 1) is False
+		assert self.homeDatabase.set_profil_date_of_birth(10000, "02/02/2002") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_profil_date_of_birth(1, "02/02/2002") is False
 
 	def test_set_inhabitant_last_name(self):
 		"""
-			test if the method detect the bad parammeters
+			test changing inhabitant last name
 		"""
 
-		pass
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_inhabitant_last_name(1, "testSetInhabitantLN") is True
+
+		profilId = self.homeDatabase.get_inhabitant(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[2] == "testSetInhabitantLN"
+
+		#test with bad parametters
+		assert self.homeDatabase.set_inhabitant_last_name("1", "testSetInhabitantLN") is False
+		assert self.homeDatabase.set_inhabitant_last_name(1, 1) is False
+		assert self.homeDatabase.set_inhabitant_last_name(1000, "testSetInhabitantLN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_inhabitant_last_name(1, "testSetInhabitantLN") is False
+
 
 	def test_set_inhabitant_first_name(self):
 		"""
-			test if the method detect the bad parammeters
+			test changing inhabitant first name
 		"""
 
-		pass
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_inhabitant_first_name(1, "testSetInhabitantFN") is True
+
+		profilId = self.homeDatabase.get_inhabitant(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[1] == "testSetInhabitantFN"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_inhabitant_first_name("1", "testSetIFN") is False
+		assert self.homeDatabase.set_inhabitant_first_name(1, 1) is False
+		assert self.homeDatabase.set_inhabitant_first_name(1000, "testSetIFN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_inhabitant_first_name(1, "testSetInhabitantFN") is False
+
+
+	def test_set_inhabitant_sexe(self):
+		"""
+			test changing the sexe of an inhabitant
+		"""
+
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_inhabitant_sexe(1, "f") is True
+
+		profilId = self.homeDatabase.get_inhabitant(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[3] == "f"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_inhabitant_sexe("1", "f") is False
+		assert self.homeDatabase.set_inhabitant_sexe(1, "g") is False
+		assert self.homeDatabase.set_inhabitant_sexe(1, 1) is False
+		assert self.homeDatabase.set_inhabitant_sexe(1000, "testSetIFN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_inhabitant_sexe(1, "f") is False
+
+
+	def test_set_inhabitant_date_of_birth(self):
+		"""
+			test changin the date of birth of an inhabitant
+		"""
+
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_inhabitant_date_of_birth(1, "03/03/03") is True
+
+		profilId = self.homeDatabase.get_inhabitant(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[4] == "03/03/03"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_inhabitant_sexe("1", "03/03/03") is False
+		assert self.homeDatabase.set_inhabitant_sexe(1, 1) is False
+		assert self.homeDatabase.set_inhabitant_sexe(1000, "03/03/03") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_inhabitant_date_of_birth(1, "03/03/03") is False
+
 
 	def test_set_guest_last_name(self):
 		"""
 			test if the method detect the bad parammeters
 		"""
 
-		pass
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_guest_last_name(1, "testSetGuestLN") is True
+
+		profilId = self.homeDatabase.get_guest(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[2] == "testSetGuestLN"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_guest_last_name("1", "testSetGuestLN") is False
+		assert self.homeDatabase.set_guest_last_name(1, 1) is False
+		assert self.homeDatabase.set_guest_last_name(1000, "testSetGuestLN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_guest_last_name(1, "testSetGuestLN") is False
 
 	def test_set_guest_first_name(self):
 		"""
 			test if the method works correctly
 		"""
 
-		pass
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_guest_first_name(1, "testSetGuestFN") is True
+
+		profilId = self.homeDatabase.get_guest(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[1] == "testSetGuestFN"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_guest_first_name("1", "testSetGuestFN") is False
+		assert self.homeDatabase.set_guest_first_name(1, 1) is False
+		assert self.homeDatabase.set_guest_first_name(1000, "testSetGuestFN") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_guest_first_name(1, "testSetGuestFN") is False
+
+	def test_set_guest_sexe(self):
+		"""
+			test changing the sexe of an guest
+		"""
+
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_guest_sexe(1, "f") is True
+
+		profilId = self.homeDatabase.get_guest(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[3] == "f"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_guest_sexe("1", "f") is False
+		assert self.homeDatabase.set_guest_sexe(1, 1) is False
+		assert self.homeDatabase.set_guest_sexe("1", "g") is False
+		assert self.homeDatabase.set_guest_sexe(1000, "f") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_guest_sexe(1, "f") is False
+
+	def test_set_guest_date_of_birth(self):
+		"""
+			test changin the date of birth of an guest
+		"""
+
+		succes = profil = False
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeDatabase.set_guest_date_of_birth(1, "04/04/04") is True
+
+		profilId = self.homeDatabase.get_guest(1)[1]
+
+		assert self.homeDatabase.get_profil(profilId)[4] == "04/04/04"
+
+		# test with bad parametters
+		assert self.homeDatabase.set_guest_date_of_birth("1", "04/04/04") is False
+		assert self.homeDatabase.set_guest_date_of_birth(1, 1) is False
+		assert self.homeDatabase.set_guest_date_of_birth(1000, "04/04/04") is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.set_guest_date_of_birth(1, "04/04/04") is False
 
 
 	def test_del_room(self):
