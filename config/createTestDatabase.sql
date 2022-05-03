@@ -1,10 +1,10 @@
-CREATE DATABASE Home CHARACTER SET 'utf8';
+CREATE DATABASE TestHome CHARACTER SET 'utf8';
 
 CREATE USER 'HomeAutomatisationSystem'@'localhost' IDENTIFIED BY '0000';
-GRANT ALL PRIVILEGES ON Home.* TO 'HomeAutomatisationSystem'@'localhost';
+GRANT ALL PRIVILEGES ON TestHome.* TO 'HomeAutomatisationSystem'@'localhost';
 FLUSH PRIVILEGES;
 
-USE Home
+USE TestHome
 
 CREATE TABLE Rooms(
     id INTEGER NOT NULL AUTO_INCREMENT,
@@ -69,3 +69,9 @@ ADD FOREIGN KEY(fk_profil_id) REFERENCES Profils(id);
 
 ALTER TABLE Guests
 ADD FOREIGN KEY(fk_profil_id) REFERENCES Profils(id);
+
+INSERT INTO Rooms(name, type) VALUES ('test', 'test');
+INSERT INTO Profils(first_name, last_name, sexe, date_of_birth) VALUES ('test', 'test', 'f', 'test');
+INSERT INTO Events(type, datetime, fk_room_id) VALUES ('test', 'test', 1);
+INSERT INTO Guests(fk_profil_id) VALUES (1);
+INSERT INTO Inhabitants(fk_profil_id) VALUES (1);

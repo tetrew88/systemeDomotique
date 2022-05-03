@@ -680,8 +680,11 @@ class HomeDatabase:
 					except:
 						return False
 
+					eventId = self.db_cursor.lastrowid
+
 					for event in self.get_events_list():
-						if event[1] == eventType \
+						if event[0] == eventId\
+								and event[1] == eventType \
 								and event[2] == eventDatetime \
 								and event[3] == eventLocation:
 							succes = True
@@ -695,7 +698,10 @@ class HomeDatabase:
 		else:
 			succes = False
 
-		return succes
+		if succes:
+			return eventId
+		else:
+			return False
 
 
 	def del_room(self, roomId):
@@ -723,6 +729,14 @@ class HomeDatabase:
 				request = "DELETE FROM Rooms WHERE id = {}".format(roomId)
 
 				if self.get_room(roomId) is not False:
+					eventList = self.get_events_list()
+					if eventList is not False:
+						for event in eventList:
+							if event[3] == roomId:
+								self.del_event(event[0])
+					else:
+						return False
+
 					try:
 						self.db_cursor.execute(request)
 					except:
@@ -768,8 +782,10 @@ class HomeDatabase:
 			if isinstance(inhabitantId, int):
 				request = "DELETE FROM Inhabitants WHERE id = {}".format(inhabitantId)
 
-				profilId = self.get_inhabitant(inhabitantId)[0]
-				if profilId is not False:
+				inhabitant = self.get_inhabitant(inhabitantId)
+				if inhabitant is not False:
+					profilId = inhabitant[1]
+
 					try:
 						self.db_cursor.execute(request)
 					except:
@@ -818,11 +834,12 @@ class HomeDatabase:
 		profilId = False
 
 		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId):
+			if isinstance(guestId, int):
 				request = "DELETE FROM Guests WHERE id = {}".format(guestId)
 
-				profilId = self.get_guest(guestId)[0]
-				if profilId is not False:
+				guest = self.get_guest(guestId)
+				if guest is not False:
+					profilId = guest[1]
 					try:
 						self.db_cursor.execute(request)
 					except:
@@ -964,10 +981,8 @@ class HomeDatabase:
 			if isinstance(roomId, int) and isinstance(newName, str):
 				request = """UPDATE Rooms SET name = '{}' where id = {}""".format(newName, roomId)
 
-				try:
-					self.db_cursor.execute(request)
-				except:
-					return False
+				self.db_cursor.execute(request)
+
 
 				self.commit_change()
 

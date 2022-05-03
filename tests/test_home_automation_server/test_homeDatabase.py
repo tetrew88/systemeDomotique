@@ -105,6 +105,7 @@ class Test_homeDatabase(unittest.TestCase):
 
 	def setUp(self):
 		self.homeDatabase = HomeDatabase()
+		self.homeDatabase.databaseName = "TestHome"
 
 
 	def test_homeDatabaseConnection_established(self):
@@ -128,79 +129,6 @@ class Test_homeDatabase(unittest.TestCase):
 		assert self.homeDatabase.db_cursor is False
 
 
-	def test_get_rooms_list(self):
-		"""
-			check if method return good type of data
-		"""
-		self.homeDatabase.connect()
-
-		#test with connected database
-		roomList = self.homeDatabase.get_rooms_list()
-		assert isinstance(roomList, list)
-
-		#test with unconnected database
-		self.homeDatabase.disconnect()
-		self.homeDatabase.get_rooms_list() == False
-
-	def test_get_inhabitants_list(self):
-		"""
-			check if method return good type of data
-		"""
-		self.homeDatabase.connect()
-
-		# test with connected database
-		inhabitantList = self.homeDatabase.get_inhabitants_list()
-		assert isinstance(inhabitantList, list)
-
-		# test with unconnected database
-		self.homeDatabase.disconnect()
-		self.homeDatabase.get_inhabitants_list() == False
-
-	def test_get_guests_list(self):
-		"""
-			check if method return good type of data
-		"""
-
-		self.homeDatabase.connect()
-
-		# test with connected database
-		guestList = self.homeDatabase.get_guests_list()
-		assert isinstance(guestList, list)
-
-		# test with unconnected database
-		self.homeDatabase.disconnect()
-		self.homeDatabase.get_guests_list() == False
-
-	def test_get_profils_list(self):
-		"""
-			check if method return good type of data
-		"""
-
-		self.homeDatabase.connect()
-
-		# test with connected database
-		profilList = self.homeDatabase.get_profils_list()
-		assert isinstance(profilList, list)
-
-		# test with unconnected database
-		self.homeDatabase.disconnect()
-		self.homeDatabase.get_profils_list() == False
-
-	def test_get_events_list(self):
-		"""
-			check if method return good type of data
-		"""
-
-		self.homeDatabase.connect()
-
-		# test with connected database
-		eventList = self.homeDatabase.get_events_list()
-		assert isinstance(eventList, list)
-
-		# test with unconnected database
-		self.homeDatabase.disconnect()
-		self.homeDatabase.get_events_list() == False
-
 	def test_add_room_(self):
 		"""
 			test adding room in database
@@ -211,7 +139,7 @@ class Test_homeDatabase(unittest.TestCase):
 		self.homeDatabase.connect()
 
 		# test with connected database
-		#test with good parammeters
+		# test with good parammeters
 		assert self.homeDatabase.add_room('roomTest', 'bathroom') is not False
 		for room in self.homeDatabase.get_rooms_list():
 			if room[1] == "roomTest" and room[2] == 'bathroom':
@@ -222,8 +150,7 @@ class Test_homeDatabase(unittest.TestCase):
 
 		assert succes is True
 
-
-		#test with bad parametters
+		# test with bad parametters
 		assert self.homeDatabase.add_room(1, 'bathroom') == False
 		assert self.homeDatabase.add_room('roomTest2', 1) == False
 
@@ -245,7 +172,7 @@ class Test_homeDatabase(unittest.TestCase):
 		assert self.homeDatabase.add_profil("test1", "test1", "m", "10/10/2010") is not False
 		for profil in self.homeDatabase.get_profils_list():
 			if profil[1] == "test1" and profil[2] == "test1" \
-				and profil[3] == "m" and profil[4] == "10/10/2010":
+					and profil[3] == "m" and profil[4] == "10/10/2010":
 				succes = True
 				break
 			else:
@@ -284,7 +211,7 @@ class Test_homeDatabase(unittest.TestCase):
 		if profilId is not False:
 			for profil in self.homeDatabase.get_profils_list():
 				if profil[1] == "test2" and profil[2] == "test2" \
-					and profil[3] == "m" and profil[4] == "10/10/2010":
+						and profil[3] == "m" and profil[4] == "10/10/2010":
 					succes = True
 					break
 				else:
@@ -360,7 +287,7 @@ class Test_homeDatabase(unittest.TestCase):
 		assert self.homeDatabase.add_event("motion detection", "01/01/01 01:01:01", 1) is not False
 		for event in self.homeDatabase.get_events_list():
 			if event[1] == "motion detection" and event[2] == "01/01/01 01:01:01" \
-				and event[3] == 1:
+					and event[3] == 1:
 				succes = True
 			else:
 				succes = False
@@ -375,6 +302,81 @@ class Test_homeDatabase(unittest.TestCase):
 		# test with unconnected database
 		self.homeDatabase.disconnect()
 		assert self.homeDatabase.add_event("motion detection", "01/01/01 01:01:01", 1) is False
+
+
+	def test_get_rooms_list(self):
+		"""
+			check if method return good type of data
+		"""
+		self.homeDatabase.connect()
+
+		#test with connected database
+		roomList = self.homeDatabase.get_rooms_list()
+		assert isinstance(roomList, list)
+
+		#test with unconnected database
+		self.homeDatabase.disconnect()
+		self.homeDatabase.get_rooms_list() == False
+
+	def test_get_inhabitants_list(self):
+		"""
+			check if method return good type of data
+		"""
+		self.homeDatabase.connect()
+
+		# test with connected database
+		inhabitantList = self.homeDatabase.get_inhabitants_list()
+		assert isinstance(inhabitantList, list)
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		self.homeDatabase.get_inhabitants_list() == False
+
+	def test_get_guests_list(self):
+		"""
+			check if method return good type of data
+		"""
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		guestList = self.homeDatabase.get_guests_list()
+		assert isinstance(guestList, list)
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		self.homeDatabase.get_guests_list() == False
+
+	def test_get_profils_list(self):
+		"""
+			check if method return good type of data
+		"""
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		profilList = self.homeDatabase.get_profils_list()
+		assert isinstance(profilList, list)
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		self.homeDatabase.get_profils_list() == False
+
+	def test_get_events_list(self):
+		"""
+			check if method return good type of data
+		"""
+
+		self.homeDatabase.connect()
+
+		# test with connected database
+		eventList = self.homeDatabase.get_events_list()
+		assert isinstance(eventList, list)
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		self.homeDatabase.get_events_list() == False
+
 
 	def test_get_room(self):
 		"""
@@ -515,6 +517,7 @@ class Test_homeDatabase(unittest.TestCase):
 
 		# test with connected database
 		# test with good parammeters
+
 		assert self.homeDatabase.get_event(1) is not False
 
 		event = self.homeDatabase.get_event(1)
@@ -783,6 +786,8 @@ class Test_homeDatabase(unittest.TestCase):
 		assert self.homeDatabase.set_inhabitant_sexe(1, 1) is False
 		assert self.homeDatabase.set_inhabitant_sexe(1000, "03/03/03") is False
 
+		print('1')
+
 		# test with unconnected database
 		self.homeDatabase.disconnect()
 		assert self.homeDatabase.set_inhabitant_date_of_birth(1, "03/03/03") is False
@@ -792,6 +797,8 @@ class Test_homeDatabase(unittest.TestCase):
 		"""
 			test if the method detect the bad parammeters
 		"""
+
+		print("2")
 
 		succes = profil = False
 
@@ -896,36 +903,112 @@ class Test_homeDatabase(unittest.TestCase):
 
 	def test_del_room(self):
 		"""
-			test with bad parametters: test if the method detect the bad parammeters
+			test deleting an room in the database
 		"""
 
-		pass
+		self.homeDatabase.connect()
+
+		roomId = self.homeDatabase.add_room("testDel", "testDel")
+
+		# test with connected database
+		# test with good parametters
+		assert self.homeDatabase.del_room(roomId) is True
+		assert self.homeDatabase.get_room(roomId) is False
+
+		# test with bad parametters
+		assert self.homeDatabase.del_room("1") is False
+		assert self.homeDatabase.del_room(10000) is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.del_room(2) is False
 
 	def test_del_inhabitant(self):
 		"""
-			test with bad parametters: test if the method detect the bad parammeters
+			test deleting an inhabitant in the database
 		"""
 
-		pass
+		self.homeDatabase.connect()
+
+		inhabitantId = self.homeDatabase.add_inhabitant("testDel", "testDel", "m", "0/0/0")
+
+		# test with connected database
+		# test with good parametters
+		assert self.homeDatabase.del_inhabitant(inhabitantId) is True
+		assert self.homeDatabase.get_inhabitant(inhabitantId) is False
+		# ajouter verif profil
+
+		# test with bad parametters
+		assert self.homeDatabase.del_inhabitant("1") is False
+		assert self.homeDatabase.del_inhabitant(10000) is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.del_inhabitant(1) is False
 
 	def test_del_guest(self):
-		pass
 
 		"""
-			test with bad parametters: test if the method detect the bad parammeters
+			test deleting an guest in the database
 		"""
 
-		pass
+		self.homeDatabase.connect()
+
+		guestId = self.homeDatabase.add_guest("testDel", "testDel", "m", "0/0/0")
+
+		# test with connected database
+		# test with good parametters
+		assert self.homeDatabase.del_guest(guestId) is True
+		assert self.homeDatabase.get_guest(guestId) is False
+		#ajouter verif profil
+
+		# test with bad parametters
+		assert self.homeDatabase.del_guest("1") is False
+		assert self.homeDatabase.del_guest(10000) is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.del_guest(1) is False
 
 	def test_del_profil(self):
 		"""
 			test with bad parametters: test if the method detect the bad parammeters
 		"""
 
-		pass
+		self.homeDatabase.connect()
+
+		guestId = self.homeDatabase.add_profil("testDel", "testDel", "m", "0/0/0")
+
+		# test with connected database
+		# test with good parametters
+		assert self.homeDatabase.del_profil(guestId) is True
+		assert self.homeDatabase.get_profil(guestId) is False
+
+		# test with bad parametters
+		assert self.homeDatabase.del_profil("1") is False
+		assert self.homeDatabase.del_profil(10000) is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.del_profil(1) is False
 
 	def test_del_event(self):
 		"""
 			test with bad parametters: test if the method detect the bad parammeters
 		"""
-		pass
+		self.homeDatabase.connect()
+
+		eventId = self.homeDatabase.add_event("testDel", "test", 1)
+
+		# test with connected database
+		# test with good parametters
+		assert self.homeDatabase.del_event(eventId) is True
+		assert self.homeDatabase.get_event(eventId) is False
+
+		# test with bad parametters
+		assert self.homeDatabase.del_event("1") is False
+		assert self.homeDatabase.del_event(10000) is False
+
+		# test with unconnected database
+		self.homeDatabase.disconnect()
+		assert self.homeDatabase.del_event(1) is False
