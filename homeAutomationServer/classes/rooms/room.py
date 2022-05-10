@@ -1,5 +1,5 @@
 class Room:
-	'''
+    """
         class bringing all the information and functionality of an module
 			
 			Parametters:
@@ -24,15 +24,19 @@ class Room:
 
             methods:
             	serialize (allows to transform the class in dict for json use)
-    '''
+    """
 
-    def __init__(self):
-    	pass
+    def __init__(self, id, name, Type, automationNetwork):
+        self.id = int(id)
+        self.name = name
+        self.type = Type
+
+        self.automationNetwork = automationNetwork
 
 
     @property
     def content(self):
-    	"""
+        """
             property representing the module list contained in the room
 
                 return: list of module class
@@ -42,7 +46,7 @@ class Room:
 
     @property
     def temperature(self):
-    	"""
+        """
             property representing the temperature of the room
 
                 return: float
@@ -52,7 +56,7 @@ class Room:
 
     @property
     def luminosity(self):
-    	"""
+        """
             property representing the luminosity of the room
 
                 return: int

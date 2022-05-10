@@ -1,3 +1,5 @@
+from .room import *
+
 class Kitchen(Room):
 	'''
         class bringing all the information and functionality of an kitchen
@@ -9,5 +11,5 @@ class Kitchen(Room):
 				automation network
     '''
 
-    def __init__(self):
-    	pass
+	def __init__(self, id, name, Type, automationNetwork):
+		Room.__init__(self, id, name, "kitchen", automationNetwork)

@@ -1,9 +1,27 @@
+from .network import *
+
+from .homeDatabase import *
+
+from .events.event import *
+from .events.motionDetection import *
+
+from .rooms.room import *
+from .rooms.bedroom import *
+from .rooms.kitchen import *
+from .rooms.bathroom import *
+from .rooms.livingroom import *
+from .rooms.corridor import *
+
+from .users.profil import *
+from .users.inhabitant import *
+from .users.guest import *
+
+
 class Home:
 	"""
 		class bringing all the information and functionality of the home.
 
 			Parammetters:
-				controllerPath: path to the zwave controller (ex: "/dev/ttyACM0")
 
 			Attributes:
 				home database (database containing home information)
@@ -21,12 +39,6 @@ class Home:
                 modules list (list of module contained in the automation network)
 
 			Methods:
-				start database (allows to establish connection with the home database)
-				start automation network (allows to start the automation network)
-
-				stop database (allows to close the connection with the home database)
-				stop automation network (allows to stop the automation network)
-
 				get room (allows to retrieve a specific room in the home database)
 
 				get inhabitant (allows to retrieve a specific inhabitant in the home database)
@@ -37,53 +49,11 @@ class Home:
 				get module (allows to retrieve a specific module on the network)
 
 				get event (allows to retrieve a specific event)
-
-				add room (allows to add an room in the house)
-
-				add inhabitant (allows to add an inhabitant in the house)
-				add guest (allows to add an guest in the house)
-				add profil (allows to add an profil in the house)
-
-				add module (allows to add an module on the network)
-
-				add event (allows to add an event in the home database)
-
-				del room (allows to delete an room in the home database)
-				
-                del inhabitant (allows to delete an inhabitant in the home database)
-                del guest (allows to delete an guest in the home database)
-                del profil (allows to del an profil in the home database)
-
-                del module (allows to del an module)
-
-                del event (allows to del an event in the home database)
-
-                set room name (allows to set the name of an room)
-				set room type (allows to set the type of an room)
-
-				set profil last name (allows to set the last name of an profil)
-				set profil first name (allows to set the first name of an profil)
-
-				set inhabitant last name (allows to set the last name of an inhabitant)
-				set inhabitant first name (allows to set the first name of an inhabitant)
-
-				set guest last name (allows to set the last name of an guest)
-				set guest first name (allows to set the first name of an inhabitant)
-
-				set module name (allows to set the name of an module)
-				set module location (allows to set the location of an module)
-
-				set automation network controller path (allows to set the path of the automation network controller)
-
-				heal network (allows to heal the automation network(zwave network))
-				destroy network (allows to destroy the automation network)
-				save network (allows to save modification on the automation network)
-
-				serialize (allows to transform the class in dict for json use)
 	"""
 
-	def __init__(self, controllerPath):
-		pass
+	def __init__(self):
+		self.homeDatabase = HomeDatabase()
+		self.homeAutomationNetwork = Network()
 
 
 	@property
@@ -94,10 +64,13 @@ class Home:
 				return: int
 		"""
 
-		pass
+		if self.homeAutomationNetwork != False and self.homeAutomationNetwork.isReady:
+			return self.homeAutomationNetwork.homeId
+		else:
+			return False
 
 	@property
-	def roomsList:
+	def roomsList(self):
 		"""
     		property representing list of rooms contained in the home.
 
@@ -108,11 +81,36 @@ class Home:
     				list of room classes
     	"""
 
-    	pass
+		tmpRooms = rooms = []
+		if self.homeDatabase.db_connection is not False:
+			tmpRooms = self.homeDatabase.get_rooms_list()
 
-    @property
-    def inhabitantsList(self):
-    	"""
+			if tmpRooms is not False:
+				for room in tmpRooms:
+					if room[2].lower() == "bathroom":
+						tmpRoom = Bathroom(room[0], room[1], room[2], self.homeAutomationNetwork)
+					elif room[2].lower() == "bedroom":
+						tmpRoom = Bedroom(room[0], room[1], room[2], self.homeAutomationNetwork)
+					elif room[2].lower() == "kitchen":
+						tmpRoom = Kitchen(room[0], room[1], room[2], self.homeAutomationNetwork)
+					elif room[2].lower() == "livingroom":
+						tmpRoom = Livingroom(room[0], room[1], room[2], self.homeAutomationNetwork)
+					elif room[2].lower() == "corridor":
+						tmpRoom = Corridor(room[0], room[1], room[2], self.homeAutomationNetwork)
+					else:
+						tmpRoom = Room(room[0], room[1], room[2], self.homeAutomationNetwork)
+
+					rooms.append(tmpRoom)
+			else:
+				return False
+		else:
+			return False
+
+		return rooms
+
+	@property
+	def inhabitantsList(self):
+		"""
     		property representing list of inhabitants contained in the home.
 
 				functionning:
@@ -121,12 +119,31 @@ class Home:
     			return:
     				list of inhabitants classes
     	"""
-    
-    	pass
 
-    @property
-    def guestsList(self):
-    	"""
+		tmpInhabitants = inhabitants = []
+
+		if self.homeDatabase.db_connection is not False:
+			tmpInhabitants = self.homeDatabase.get_inhabitants_list()
+
+			if tmpInhabitants is not False:
+				for inhabitant in tmpInhabitants:
+					tmpProfil = self.homeDatabase.get_profil(inhabitant[1])
+
+					profil = Profil(tmpProfil[0], tmpProfil[1], tmpProfil[2], tmpProfil[3], tmpProfil[4])
+
+					tmpInhabitant = Inhabitant(inhabitant[0], profil)
+
+					inhabitants.append(tmpInhabitant)
+			else:
+				return False
+		else:
+			return False
+
+		return inhabitants
+
+	@property
+	def guestsList(self):
+		"""
     		property representing list of guests contained in the home.
 
 				functionning:
@@ -136,11 +153,30 @@ class Home:
     				list of guests classes
     	"""
 
-    	pass
+		tmpGuests = guests = []
 
-    @property
-    def profilsList(self):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			tmpGuests = self.homeDatabase.get_guests_list()
+
+			if tmpGuests is not False:
+				for guest in tmpGuests:
+					tmpProfil = self.homeDatabase.get_profil(guest[1])
+
+					profil = Profil(tmpProfil[0], tmpProfil[1], tmpProfil[2], tmpProfil[3], tmpProfil[4])
+
+					tmpGuest = Guest(guest[0], profil)
+
+					guests.append(tmpGuest)
+			else:
+				return False
+		else:
+			return False
+
+		return guests
+
+	@property
+	def profilsList(self):
+		"""
     		property representing list of profils contained in the home.
 
 				functionning:
@@ -150,11 +186,26 @@ class Home:
     				list of profils classes
     	"""
 
-    	pass
+		tmpProfils = profils = []
 
-    @property
-    def eventsList(self):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			tmpProfils = self.homeDatabase.get_profils_list()
+
+			if tmpProfils is not False:
+				for profil in tmpProfils:
+
+					profil = Profil(profil[0], profil[1], profil[2], profil[3], profil[4])
+					profils.append(profil)
+			else:
+				return False
+		else:
+			return False
+
+		return profils
+
+	@property
+	def eventsList(self):
+		"""
     		property representing list of events contained in the home.
 
 				functionning:
@@ -164,11 +215,25 @@ class Home:
     				list of events classes
     	"""
 
-    	pass
+		tmpEvents = events = []
 
-    @property
-    def modulesList(self):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			tmpEvents = self.homeDatabase.get_events_list()
+
+			if tmpEvents is not False:
+				for event in tmpEvents:
+					event = Event(event[1], event[2], event[3], event[0])
+					events.append(event)
+			else:
+				return False
+		else:
+			return False
+
+		return events
+
+	@property
+	def modulesList(self):
+		"""
     		property representing list of modules contained in the home.
 
 				functionning:
@@ -178,51 +243,18 @@ class Home:
     				list of modules classes
     	"""
 
-    	pass
+		tmpModules = modules = []
+
+		if self.homeAutomationNetwork.isReady:
+			tmpModules = self.homeAutomationNetwork.modulesList
+
+			return tmpModules
+		else:
+			return False
 
 
-    def start_database(self):
-    	"""
-    		Method call for start the home database connection.
-
-    			return:
-    				succes: True/False
-    	"""
-
-    	pass
-
-    def start_automation_network(self):
-    	"""
-    		method call for start the automation network
-
-    			return:
-    				succes: True/False
-    	"""
-
-    	pass
-
-    def stop_database(self):
-    	"""
-    		Method call for stop the home database connection.
-
-    			return:
-    				succes: True/False
-    	"""
-
-    	pass
-
-    def stop_automation_network(self):
-    	"""
-    		method call for stop the automation network
-
-    			return:
-    				succes: True/False
-    	"""
-    	pass
-
-
-    def get_room(self, roomId):
-    	"""
+	def get_room(self, roomId):
+		"""
     		Method called for get an specific room contains in the home.
 
 				Parametters:
@@ -238,10 +270,34 @@ class Home:
     				room classes/False
     	"""
 
-    	pass
+		room = False
 
-    def get_inhabitant(self, inhabitantId):
-    	"""
+
+		if self.homeDatabase.db_connection is not False:
+			tmpRoom = self.homeDatabase.get_room(roomId)
+
+			if tmpRoom is not False:
+				if tmpRoom[2].lower() == "bathroom":
+					room = Bathroom(tmpRoom[0], tmpRoom[1], tmpRoom[2], self.homeAutomationNetwork)
+				elif tmpRoom[2].lower() == "bedroom":
+					room = Bedroom(tmpRoom[0], tmpRoom[1], tmpRoom[2], self.homeAutomationNetwork)
+				elif tmpRoom[2].lower() == "kitchen":
+					room = Kitchen(tmpRoom[0], tmpRoom[1], tmpRoom[2], self.homeAutomationNetwork)
+				elif tmpRoom[2].lower() == "livingroom":
+					room = Livingroom(tmpRoom[0], tmpRoom[1], tmpRoom[2], self.homeAutomationNetwork)
+				elif tmpRoom[2].lower() == "corridor":
+					room = Corridor(tmpRoom[0], tmpRoom[1], tmpRoom[2], self.homeAutomationNetwork)
+				else:
+					room = Room(tmpRoom[0], tmpRoom[1], tmpRoom[2], self.homeAutomationNetwork)
+			else:
+				return False
+		else:
+			return False
+
+		return room
+
+	def get_inhabitant(self, inhabitantId):
+		"""
     		Method called for get an specific inhabitant in the home
 
     			Parametters:
@@ -258,10 +314,30 @@ class Home:
     				inhabitant class/False
     	"""
 
-    	pass
+		inhabitant = profil = False
 
-    def get_guest(self, guestId):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			tmpInhabitant = self.homeDatabase.get_inhabitant(inhabitantId)
+
+			if tmpInhabitant is not False:
+				tmpProfil = self.homeDatabase.get_profil(tmpInhabitant[1])
+
+				if tmpProfil is not False:
+					profil = Profil(tmpProfil[0], tmpProfil[1],
+									tmpProfil[2], tmpProfil[3], tmpProfil[4])
+
+					inhabitant = Inhabitant(tmpInhabitant[0], profil)
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
+
+		return inhabitant
+
+	def get_guest(self, guestId):
+		"""
     		method called for get an specific guest in the home
 
     			Parametters:
@@ -278,10 +354,30 @@ class Home:
     				guests class/False
     	"""
 
-    	pass
+		guest = profil = False
 
-    def get_profil(self, profilId):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			tmpGuest = self.homeDatabase.get_guest(guestId)
+
+			if tmpGuest is not False:
+				tmpProfil = self.homeDatabase.get_profil(tmpGuest[1])
+
+				if tmpProfil is not False:
+					profil = Profil(tmpProfil[0], tmpProfil[1],
+									tmpProfil[2], tmpProfil[3], tmpProfil[4])
+
+					guest = Guest(tmpGuest[0], profil)
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
+
+		return guest
+
+	def get_profil(self, profilId):
+		"""
     		method called for get an specific profil in the home
 
     			Parametters:
@@ -298,10 +394,21 @@ class Home:
     				profil class/False
     	"""
 
-    	pass
+		profil = False
 
-    def get_module(self, moduleId):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			tmpProfil = self.homeDatabase.get_profil(profilId)
+
+			if tmpProfil is not False:
+				profil = Profil(tmpProfil[0], tmpProfil[1],
+								tmpProfil[2], tmpProfil[3], tmpProfil[4])
+		else:
+			return False
+
+		return profil
+
+	def get_module(self, moduleId):
+		"""
     		method called for get an specific module on the network
 
     			Parametters:
@@ -318,10 +425,13 @@ class Home:
     				module class/False
     	"""
 
-    	pass
+		if self.homeAutomationNetwork.isReady:
+			return self.homeAutomationNetwork.get_module(moduleId)
+		else:
+			return False
 
-    def get_event(self, eventId):
-    	"""
+	def get_event(self, eventId):
+		"""
     		method called for get an specific event
 
     			Parametters:
@@ -338,117 +448,130 @@ class Home:
     				event class/False
     	"""
 
-    	pass
+		event = False
 
-    def get_automation_network(self):
-    	"""
-    		method called get the home automation network.
+		if self.homeDatabase.db_connection is not False:
+			tmpEvent = self.homeDatabase.get_event(eventId)
 
-    			return:
-    				home automation network class
-    	"""
+			if tmpEvent is not False:
+				event = Event(tmpEvent[1], tmpEvent[2], tmpEvent[3])
+				print(event)
+			else:
+				return False
+		else:
+			return False
 
-    	pass
+		return event
 
 
-    def add_room(self, newRoom):
-    	"""
+	def add_room(self, roomName, roomType):
+		"""
     		method called for adding an room in the home.
 
     			Parametters:
-    				newRoom: room class
+    				roomName,
+    				roomType
 
     			functionning:
-    				- check if new room is an instance of room class
-    					if it is:
-    						asks the home database to add the room
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				asks the home database to add the room
+    					if succes:
+    						return True
     					else:
     						return False
 
     			return:
-    				succes (True/False)
+    				succes room id
+    				failes: False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.add_room(roomName, roomType)
+		else:
+			return False
 
-    def add_inhabitant(self, newInhabitant):
-    	"""
+	def add_inhabitant(self, firstName, lastName, sexe, dateOfBirth):
+		"""
     		method called for adding an inhabitant in the home.
 
     			Parametters:
-    				newInhabitant: inhabitant class
+    				firstName
+    				lastName
+    				sexe
+    				dateOfBirth
 
     			functionning:
-    				- check if newInhabitant is an instance of inhabitant class
-    					if it is:
-    						asks the homeDatabase to add the inhabitant
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				asks the homeDatabase to add the inhabitant
+    					if succes:
+    						return True
     					else:
     						return False
 
     			return:
-    				succes (True/False)
+    				succes inhabitant id
+    				failed: False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.add_inhabitant(firstName, lastName, sexe, dateOfBirth)
+		else:
+			return False
 
-    def add_guest(self, newGuest):
-    	"""
+	def add_guest(self, firstName, lastName, sexe, dateOfBirth):
+		"""
     		method called for adding an guest in the home.
 
     			Parametters:
-    				newGuest: guest class
+    				firstName
+    				lastName
+    				sexe
+    				dateOfBirth
 
     			functionning:
-    				- check if newGuest is an instance of guest class
-    					if it is:
-    						asks the home database to add the guest
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				asks the homeDatabase to add the guest
+    					if succes:
+    						return True
     					else:
     						return False
 
     			return:
-    				succes (True/False)
+    				succes guest id
+    				failed: False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.add_guest(firstName, lastName, sexe, dateOfBirth)
+		else:
+			return False
 
-    def add_profil(self, newProfil):
-    	"""
+	def add_profil(self, firstName, lastName, sexe, dateOfBirth):
+		"""
     		method called for adding an profil in the home.
 
     			Parametters:
-    				newProfil: profil class
+    				firstName
+    				lastName
+    				sexe
+    				dateOfBirth
 
     			functionning:
-    				- check if newProfil is an instance of profil class
-    					if it is:
-    						asks the home database to add the profil
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				asks the homeDatabase to add the profil
+    					if succes:
+    						return True
     					else:
     						return False
 
     			return:
-    				succes (True/False)
+    				succes profil id
+    				failed: False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.add_profil(firstName, lastName, sexe, dateOfBirth)
+		else:
+			return False
 
-    def add_module(self, newModuleName, newModuleLocation):
-    	"""
+	def add_module(self, newModuleName, newModuleLocation):
+		"""
     		method called for adding an module on the network.
 
     			Parametters:
@@ -456,57 +579,57 @@ class Home:
     				newModuleLocation: int
 
     			functionning:
-    				- check if newModuleName  is instance str
-    					if it is:
-    						pass
+    				ask to automation network adding the module
+    					if succes:
+    						return True
     					else:
     						return False
-    				- check if newModuleLocation is instance int
-    					if it is:
-    						pass
-    					else:
-    						return false
-
-    				if all the parameters are of good type:
-    					ask to home add the module
-    						if succes:
-    							return True
-    						else:
-    							return False
 
     			return:
     				succes (True/False)
     	"""
 
-    	pass
+		if self.homeAutomationNetwork is not False:
+			if self.homeAutomationNetwork.isReady:
+				moduleId = self.homeAutomationNetwork.add_module(newModuleName, newModuleLocation)
+			else:
+				return False
+		else:
+			return False
 
-    def add_event(self, newEvent):
-    	"""
+		return moduleId
+
+	def add_event(self, eventType, eventDatetime, eventLocation):
+		"""
     		method called for adding an event in the home.
 
     			Parametters:
-    				newEvent: event class
+    				eventType
+    				eventDatetime
+    				eventLocation
 
     			functionning:
-    				- check if newEvent is an instance of event class
-    					if it is:
-    						asks the home database to add the event
-    							if succes:
-    								return True
-    							else:
-    								return False
+    				asks the home database to add the event
+    					if succes:
+    						return True
     					else:
     						return False
 
     			return:
-    				succes (True/False)
+    				succes event id
+    				failed: False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			eventId = self.homeDatabase.add_event(eventType, eventDatetime, eventLocation)
+		else:
+			return False
+
+		return eventId
 
 
-    def del_room(self, roomId):
-    	"""
+	def del_room(self, roomId):
+		"""
     		method called for del an specific room
 
     			Parametters:
@@ -523,10 +646,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.del_room(roomId)
+		else:
+			return False
 
-    def del_inhabitant(self, inhabitantId):
-    	"""
+	def del_inhabitant(self, inhabitantId):
+		"""
     		method called for del an specific inhabitant
 
     			Parametters:
@@ -543,12 +669,15 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.del_inhabitant(inhabitantId)
+		else:
+			return False
 
 
 
-    def del_guest(self, guestId):
-    	"""
+	def del_guest(self, guestId):
+		"""
     		method called for del an specific guest
 
     			Parametters:
@@ -565,10 +694,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.del_guest(guestId)
+		else:
+			return False
 
-    def del_profil(self, profilId):
-    	"""
+	def del_profil(self, profilId):
+		"""
     		method called for del an specific profil
 
     			Parametters:
@@ -585,10 +717,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.del_profil(profilId)
+		else:
+			return False
 
-    def del_module(self, moduleId):
-    	"""
+	def del_module(self, moduleId):
+		"""
     		method called for del an specific module
 
     			Parametters:
@@ -605,10 +740,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeAutomationNetwork.isReady():
+			return self.homeAutomationNetwork.del_module(moduleId)
+		else:
+			return False
 
-    def del_event(self, eventId):
-    	"""
+	def del_event(self, eventId):
+		"""
     		method called for del an specific event
 
     			Parametters:
@@ -625,11 +763,14 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.del_event(eventId)
+		else:
+			return False
 
 
-    def set_room_name(self, roomId, newName):
-    	"""
+	def set_room_name(self, roomId, newName):
+		"""
     		methods called for set an room's name.
 
     			Parametters:
@@ -647,10 +788,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_room_name(roomId, newName)
+		else:
+			return False
 
-    def set_room_type(self, roomId, newType):
-    	"""
+	def set_room_type(self, roomId, newType):
+		"""
     		methods called for set an room's type.
 
     			Parametters:
@@ -668,10 +812,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_room_type(roomId, newType)
+		else:
+			return False
 
-    def set_profil_last_name(self, profilId, newLastName):
-    	"""
+	def set_profil_last_name(self, profilId, newLastName):
+		"""
     		methods called for set an profil's last name.
 
     			Parametters:
@@ -689,10 +836,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_profil_last_name(profilId, newLastName)
+		else:
+			return False
 
-    def set_profil_first_name(self, profilId, newFirstName):
-    	"""
+	def set_profil_first_name(self, profilId, newFirstName):
+		"""
     		methods called for set an profil's first name.
 
     			Parametters:
@@ -709,10 +859,26 @@ class Home:
     			return:
     				succes: True/False
     	"""
-    	pass
 
-    def set_inhabitant_last_name(self, inhabitantId, newLastName):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_profil_first_name(profilId, newFirstName)
+		else:
+			return False
+
+	def set_profil_sexe(self, profilId, newSexe):
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_profil_sexe(profilId, newSexe)
+		else:
+			return False
+
+	def set_profil_date_of_birth(self, profilId, newDateOfBirth):
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_profil_date_of_birth(profilId, newDateOfBirth)
+		else:
+			return False
+
+	def set_inhabitant_last_name(self, inhabitantId, newLastName):
+		"""
     		methods called for set an inhabitant's last name.
 
     			Parametters:
@@ -729,10 +895,14 @@ class Home:
     			return:
     				succes: True/False
     	"""
-    	pass
 
-    def inhabitant_first_name(self, inhabitantId, newFirstName):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_inhabitant_last_name(inhabitantId, newLastName)
+		else:
+			return False
+
+	def set_inhabitant_first_name(self, inhabitantId, newFirstName):
+		"""
     		methods called for set an inhabitant's first name.
 
     			Parametters:
@@ -749,10 +919,26 @@ class Home:
     			return:
     				succes: True/False
     	"""
-    	pass
 
-   	def set_guest_last_name(self, guestId, newLastName):
-   		"""
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_inhabitant_first_name(inhabitantId, newFirstName)
+		else:
+			return False
+
+	def set_inhabitant_sexe(self, inhabitantId, newSexe):
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_inhabitant_sexe(inhabitantId, newSexe)
+		else:
+			return False
+
+	def set_inhabitant_date_of_birth(self, inhabitantId, newDateOfBirth):
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_inhabitant_date_of_birth(inhabitantId, newDateOfBirth)
+		else:
+			return False
+
+	def set_guest_last_name(self, guestId, newLastName):
+		"""
     		methods called for set an guest's last name.
 
     			Parametters:
@@ -770,10 +956,14 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
 
-    def set_guest_first_name(self, guestId, newFirstName):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_guest_last_name(guestId, newLastName)
+		else:
+			return False
+
+	def set_guest_first_name(self, guestId, newFirstName):
+		"""
     		methods called for set an guest's first name.
 
     			Parametters:
@@ -791,10 +981,26 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
 
-    def set_module_name(self, moduleId, newName):
-    	"""
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_guest_first_name(guestId, newFirstName)
+		else:
+			return False
+
+	def set_guest_sexe(self, guestId, newSexe):
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_guest_sexe(guestId, newSexe)
+		else:
+			return False
+
+	def set_guest_date_of_birth(self, guestId, newDateOfBirth):
+		if self.homeDatabase.db_connection is not False:
+			return self.homeDatabase.set_guest_date_of_birth(guestId, newDateOfBirth)
+		else:
+			return False
+
+	def set_module_name(self, moduleId, newName):
+		"""
     		methods called for set an module's name.
 
     			Parametters:
@@ -812,10 +1018,13 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
+		if self.homeAutomationNetwork.isReady:
+			return self.homeAutomationNetwork.set_module_name(moduleId, newName)
+		else:
+			return False
 
-    def set_module_location(self, moduleId, newLocation):
-    	"""
+	def set_module_location(self, moduleId, newLocation):
+		"""
     		methods called for set an module's location.
 
     			Parametters:
@@ -833,52 +1042,8 @@ class Home:
     				succes: True/False
     	"""
 
-    	pass
-
-    def set_automation_network_controller_path(self, newPath):
-    	"""
-    		set the path of the automation network controller
-
-    			Parametters:
-    				newPath: str
-
-    			functionning:
-					-ask the automation server for set the automation network controller path
-						if the path was correctly modified:
-							return True
-						else:
-							return False
-
-    			return:
-    				succes: True/False
-    	"""
-
-
-    def heal_network(self):
-    	"""
-    		Method called for heal automation network
-    	"""
-
-    	pass
-
-    def destroy_network(self):
-    	"""
-    		Method called for destroy the automation network
-    	"""
-
-    	pass
-
-    def save_network(self):
-    	"""
-    		Method called for save modification effectuate on the automation network
-    	"""
-
-    	pass
-
-
-    def serialize(self):
-    	"""
-    		method called for seriallize data of the class
-    	"""
-
-    	pass
+		if self.homeAutomationNetwork.isReady:
+			return self.homeAutomationNetwork.set_module_location(moduleId, newLocation)
+			return self.homeAutomationNetwork.set_module_location(moduleId, newLocation)
+		else:
+			return False

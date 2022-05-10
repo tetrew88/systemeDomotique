@@ -3,49 +3,9 @@ import unittest
 from homeAutomationServer.classes.network import *
 from homeAutomationServer.classes.events.event import *
 
-class FakeNode:
-	def __init__(self, id, deviceType, cmdClass):
-		self.node_id = id
-		self.device_type = deviceType
-		self.command_classes_as_string = cmdClass
-		self.name = ""
-		self.location = ""
-
-	def set_field(self, field, fieldData):
-		if field == 'name':
-			self.name = fieldData
-		if field == 'location':
-			self.location = fieldData
-
-
-class FakeZwaveNetwork:
-	def __init__(self, homeId, state, ready):
-		"""
-			class created for substitute the zwaveNetwork class
-			during the test
-		"""
-		self.home_id = homeId
-		self.state = state
-		self.is_ready = ready
-		self.nodes = {'0001': FakeNode(1, "bulb", "bulb"), '002': FakeNode(2, "light", "bulb")}
-		self.controller = FakeController(FakeNode(3, "main controller","controller"))
-
-	def write_config(self):
-		pass
-
-
-class FakeController():
-	def __init__(self, node):
-		self.node = node
-		self.id = self.node.node_id
-		self.zwaveNetwork = False
-
-	def add_node(self):
-		key = len(self.zwaveNetwork.nodes) + 2
-		self.zwaveNetwork.nodes[key] = FakeNode(key, "bulb", "light système")
-
-	def remove_node(self):
-		self.zwaveNetwork.nodes.pop('0001')
+from .fakeClasses.zwaves.fakeNode import *
+from .fakeClasses.zwaves.fakeZwaveNetwork import *
+from  .fakeClasses.zwaves.fakeController import *
 
 
 class Test_Network(unittest.TestCase):
@@ -266,6 +226,36 @@ class Test_Network(unittest.TestCase):
 		assert self.network.add_event(Event(1, "01/01/01 01:01:01", 1)) == False
 		assert self.network.add_event(Event("test2", 1, 1)) == False
 		assert self.network.add_event(Event("test3", "01/01/01 01:01:01", 100000)) == False
+
+
+	def test_set_module_name(self):
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+
+		# test with good parametters
+		assert self.network.set_module_name(1, "testSetName") is not False
+
+		# test with bad parametters
+		assert self.network.set_module_name("1", "testSetName") is False
+		assert self.network.set_module_name(1, 1) is False
+
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert self.network.set_module_name(1, "testSetName") is False
+
+
+	def test_set_module_location(self):
+		self.network.zWaveNetwork = self.goodZWaveNetwork
+
+		# test with good parametters
+		assert self.network.set_module_location(1, 1) is not False
+
+		# test with bad parametters
+		assert self.network.set_module_location("1", 1) is False
+		assert self.network.set_module_location(1, "1") is False
+
+		# test with failure zwaveNetwork
+		self.network.zWaveNetwork = False
+		assert self.network.set_module_location(1, 1) is False
 
 '''
 	def test_set_automation_network_controller_path(self):

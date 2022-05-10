@@ -113,7 +113,7 @@ class Test_homeDatabase(unittest.TestCase):
 			test if the connection with the home database is established
 		"""
 
-		assert self.homeDatabase.connect() == True
+		assert self.homeDatabase.connect() is not False
 		assert self.homeDatabase.db_connection is not False
 		assert self.homeDatabase.db_cursor is not False
 
@@ -124,7 +124,7 @@ class Test_homeDatabase(unittest.TestCase):
 		"""
 		self.homeDatabase.connect()
 
-		assert self.homeDatabase.disconnect() == True
+		assert self.homeDatabase.disconnect() is not False
 		assert self.homeDatabase.db_connection is False
 		assert self.homeDatabase.db_cursor is False
 
@@ -312,11 +312,12 @@ class Test_homeDatabase(unittest.TestCase):
 
 		#test with connected database
 		roomList = self.homeDatabase.get_rooms_list()
+		assert roomList is not False
 		assert isinstance(roomList, list)
 
 		#test with unconnected database
 		self.homeDatabase.disconnect()
-		self.homeDatabase.get_rooms_list() == False
+		self.homeDatabase.get_rooms_list() is False
 
 	def test_get_inhabitants_list(self):
 		"""

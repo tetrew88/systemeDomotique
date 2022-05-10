@@ -1,5 +1,5 @@
 class Inhabitant:
-	'''
+    '''
         class bringing all the information and functionality of an inhabitant
 			
 			Parametters:
@@ -11,18 +11,42 @@ class Inhabitant:
 				profil: profil of the inhabitant
 
             property:
+                lastname: lastname of the inhabitant
+                firstname: firstname of the inhabitant
+                sexe: sexe of the inhabitant
+                date of birth: date of birth of the inhabitant
 
             methods:
             	serialize (allows to transform the class in dict for json use)
     '''
 
-    def __init__(self):
-    	pass
+    def __init__(self, Id, profil):
+        self.id = Id
+        self.profil = profil
+
+
+    @property
+    def lastName(self):
+        return self.profil.lastName
+
+    @property
+    def firstName(self):
+        return self.profil.firstName
+
+    @property
+    def sexe(self):
+        return self.profil.sexe
+
+    @property
+    def dateOfBirth(self):
+        return self.profil.dateOfBirth
 
 
     def serialize(self):
-        """
-            method called for seriallize data of the class
-        """
+        data = {}
 
-        pass
+        data = {'id': self.id,
+                'profil': self.profil.serialize()
+                }
+
+        return data

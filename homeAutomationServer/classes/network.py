@@ -43,9 +43,6 @@ class Network:
 	"""
 		class bringing all the information and functionality of the automation network.
 
-			Parammetters:
-				controllerPath: path to the zwave controller (ex: "/dev/ttyACM0")
-
 			Attributes:
 				logFile: path to the network log file
 
@@ -76,6 +73,9 @@ class Network:
 
 				set automation network controller path: allows to set the path of the automation network controller)
 				set zwave config directory path: allows to set the path of the zwave directory config
+
+				set module name: allows to set the name of an module
+				set module location: allows to set the location of an module
 
 				heal network: allows to heal the automation network(zwave network)
 				destroy network: allows to destroy the automation network
@@ -380,36 +380,44 @@ class Network:
 		newModule = False
 
 		if self.isReady:
-			for module in self.modulesList:
-				moduleIdList.append(module.id)
+			if isinstance(newModuleName, str) and isinstance(newModuleLocation, int):
+				for module in self.modulesList:
+					moduleIdList.append(module.id)
 
-			self.mainController.add_node()
+				self.mainController.add_node()
 
-			print("Mettez le module en état d'inclusion")
-			time.sleep(10)
+				print("Mettez le module en état d'inclusion")
+				time.sleep(10)
 
-			for module in self.modulesList:
-				if module.id in moduleIdList:
-					newModule = False
+				for module in self.modulesList:
+					if module.id in moduleIdList:
+						newModule = False
+					else:
+						newModule = module
+
+				if newModule is not False:
+					if newModule.set_name(newModuleName):
+						succes = True
+					else:
+						succes = False
+
+					if succes and newModule.set_location(newModuleLocation):
+						succes = True
+					else:
+						succes = False
+
+					self.save_modification()
 				else:
-					newModule = module
-
-		if newModule is not False:
-			if newModule.set_name(newModuleName):
-				succes = True
+					succes = False
 			else:
 				succes = False
-
-			if succes and newModule.set_location(newModuleLocation):
-				succes = True
-			else:
-				succes = False
-
-			self.save_modification()
 		else:
 			succes = False
 
-		return succes
+		if succes is not False:
+			return newModule.id
+		else:
+			return False
 
 
 	def del_module(self, moduleId):
@@ -562,6 +570,81 @@ class Network:
 			succes = False
 
 		return succes
+
+	def set_module_name(self, moduleId, newName):
+		"""
+	    	methods called for set an module's name.
+
+	    		Parametters:
+	    			moduleId: int
+	    			newName: str
+
+	    		functionning:
+					-ask to the module to change is name
+						if the module's name was correctly modified:
+							return True
+						else:
+							return False
+
+	    		return:
+	    			succes: True/False
+	    """
+
+		selectedModule = False
+		succes = False
+
+		if self.isReady:
+			for module in self.modulesList:
+				if module.id == moduleId:
+					selectedModule = module
+					break
+				else:
+					selectedModule = False
+		else:
+			return False
+
+		if selectedModule is not False:
+			return selectedModule.set_name(newName)
+		else:
+			return False
+
+	def set_module_location(self, moduleId, newLocation):
+		"""
+            methods called for set an module's location.
+
+                Parametters:
+                    moduleId: int
+                    newLocation: int(roomId)
+
+                functionning:
+                    -ask to the module to change is location
+                        if the module's location was correctly modified:
+                            return True
+                        else:
+                            return False
+
+                return:
+                    succes: True/False
+        """
+
+		selectedModule = False
+		succes = False
+
+		if self.isReady:
+			for module in self.modulesList:
+				if module.id == moduleId:
+					selectedModule = module
+					break
+				else:
+					selectedModule = False
+		else:
+			return False
+
+		if selectedModule is not False:
+			return selectedModule.set_location(newLocation)
+		else:
+			return False
+
 
 	def heal_network(self):
 		"""

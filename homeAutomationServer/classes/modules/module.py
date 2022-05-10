@@ -66,7 +66,14 @@ class Module:
 				return: int
 		"""
 
-		return int(self.moduleNode.location)
+		location = 0
+
+		try:
+			location = int(self.moduleNode.location)
+		except:
+			location = 0
+
+		return location
 
 	@property
 	def isAwake(self):
@@ -174,6 +181,11 @@ class Module:
 		else:
 			succes = False
 
+		if self.name == newName:
+			succes = True
+		else:
+			succes = False
+
 		return succes
 
 	def set_location(self, newLocation):
@@ -199,13 +211,15 @@ class Module:
 		succes = False
 
 		if isinstance(newLocation, int):
-			newLocation = str(newLocation)
-			self.moduleNode.set_field('location', newLocation)
+			self.moduleNode.set_field('location', str(newLocation))
 			succes = True
 		else:
 			succes = False
 
-		print(succes)
+		if self.location == newLocation:
+			succes = True
+		else:
+			succes = False
 
 		return succes
 

@@ -1,3 +1,5 @@
+from .room import *
+
 class Bedroom(Room):
 	'''
         class bringing all the information and functionality of an bedroom
@@ -9,5 +11,5 @@ class Bedroom(Room):
 				automation network
     '''
 
-    def __init__(self):
-    	pass
+	def __init__(self, id, name, Type, automationNetwork):
+		Room.__init__(self, id, name, "bedroom", automationNetwork)
