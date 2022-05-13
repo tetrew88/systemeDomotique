@@ -13,5 +13,8 @@ class FakeZwaveNetwork:
 		self.nodes = {'0001': FakeNode(1, "bulb", "bulb"), '002': FakeNode(2, "light", "bulb")}
 		self.controller = FakeController(FakeNode(3, "main controller","controller"))
 
+	def start(self):
+		pass
+
 	def write_config(self):
 		pass

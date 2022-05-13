@@ -277,41 +277,44 @@ class Network:
 
 		succes = False
 
-		device = self.controllerPath
-		log = "Debug"
+		if self.controllerPath is not False and self.zwaveConfigPath is not False:
+			device = self.controllerPath
+			log = "Debug"
 
-		# configuration og the logs
-		options = ZWaveOption(device, self.zwaveConfigPath, user_path=".", cmd_line="")
-		options.set_log_file(self.logPath)
-		options.set_append_log_file(True)
-		options.set_console_output(False)
-		options.set_save_log_level(log)
-		options.set_logging(True)
-		options.lock()
+			# configuration og the logs
+			options = ZWaveOption(device, self.zwaveConfigPath, user_path=".", cmd_line="")
+			options.set_log_file(self.logPath)
+			options.set_append_log_file(True)
+			options.set_console_output(False)
+			options.set_save_log_level(log)
+			options.set_logging(True)
+			options.lock()
 
-		# Construction of the zwave network
-		self.zWaveNetwork = ZWaveNetwork(options, autostart=False)
+			# Construction of the zwave network
+			self.zWaveNetwork = ZWaveNetwork(options, autostart=False)
 
-		if self.zWaveNetwork is not False:
-			self.zWaveNetwork.start()
+			if self.zWaveNetwork is not False:
+				self.zWaveNetwork.start()
 
-			print("Etablissement du serveur ZWave: ")
+				print("Etablissement du serveur ZWave: ")
 
-			if not self.isReady:
-				for i in range(0, 300 * len(self.modulesList)):
-					while not self.zWaveNetwork.state >= self.zWaveNetwork.STATE_AWAKED:
-						if self.state >= self.zWaveNetwork.STATE_READY:
-							print("Le serveur ZWave est prêt")
+				if not self.isReady:
+					for i in range(0, 300 * len(self.modulesList)):
+						while not self.zWaveNetwork.state >= self.zWaveNetwork.STATE_AWAKED:
+							if self.state >= self.zWaveNetwork.STATE_READY:
+								print("Le serveur ZWave est prêt")
 
-							succes = True
-							break
-						else:
-							sys.stdout.write(".")
-							sys.stdout.flush()
-							time.sleep(1.0)
-							succes = False
+								succes = True
+								break
+							else:
+								sys.stdout.write(".")
+								sys.stdout.flush()
+								time.sleep(1.0)
+								succes = False
+				else:
+					succes = True
 			else:
-				succes = True
+				succes = False
 		else:
 			succes = False
 

@@ -1,733 +1,928 @@
-class Test_HomeAutomationSystem:
+import unittest
+
+from homeAutomationServer.classes.homeAutomationSystem import *
+
+from .fakeClasses.zwaves.fakeNode import *
+from .fakeClasses.zwaves.fakeZwaveNetwork import *
+from  .fakeClasses.zwaves.fakeController import *
+
+class Test_HomeAutomationSystem(unittest.TestCase):
 	"""
 		testing class of the home automation system.
 
 		tests list:
 			ruuning attribute:
-				check return: check if attribute return good type of data
-
-			home attributes:
-				check return: check if attribute return good type of data
 				
 			start method:
-				home automation network Starting: test if the home automation network was started
-				home database connection established: test if the connection with the home database is established
-				running on true: test if the running booléen was set on True
-
 			stop method:
-				home automation network Stop: test if the home automation network was stoped
-				home database connection disconnection: test if the connection with the home database is disconnect
-				running on false: test if the running booléen was set on False
 
 			set running:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters 
-
 
 			get rooms list:
-				check return: check if method return good type of data
 			get inhabitants list:
-				check return: check if method return good type of data
 			get guests list:
-				check return: check if method return good type of data
 			get profils list:
-				check return: check if method return good type of data
 			get events list:
-				check return: check if method return good type of data
 			get modules list
-				check return: check if method return good type of data
+
 			get room:
-				check return: check if method return good type of data
 			get inhabitant:
-				check return: check if method return good type of data
 			get guest:
-				check return: check if method return good type of data
 			get profil:
-				check return: check if method return good type of data
 			get event:
-				check return: check if method return good type of data
 			get module:
-				check return: check if method return good type of data
 			get home:
-				check return: check if method return good type of data
 			get home automation network
-				check return: check if method return good type of data
 
 			add room:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters 
 			add inhabitant:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters 
 			add guest:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 			add profil:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 			add module:
-				test with good parametters: test if the method works correctly
-				test with bad Name: test if the method detect the bad parammeters
-				test with bad location: test if the method detect the bad parammeters
 			add event:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 
 			del room:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters 
-
 			del inhabitant:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters 
 			del guest:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 			del profil:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 			del module:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 			del event:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
 
 			set room name:
-				test with good parametters: test if the method works correctly
-				test with bad room id parametters: test if the method detect the bad parammeters
-				test with bad newName parametters: test if the method detect the bad parammeters
 			set room type:
-				test with good parametters: test if the method works correctly
-				test with bad room id parametters: test if the method detect the bad parammeters
-				test with bad newType parametters: test if the method detect the bad parammeters
-
 			set profil last name:
-				test with good parametters: test if the method works correctly
-				test with bad profil id parametters: test if the method detect the bad parammeters
-				test with bad newLastName parametters: test if the method detect the bad parammeters
 			set profil first name:
-				test with good parametters: test if the method works correctly
-				test with bad profil id parametters: test if the method detect the bad parammeters
-				test with bad newFirstName parametters: test if the method detect the bad parammeters
-
+			set profil sexe
+			set profil date of birth
 			set inhabitant last name:
-				test with good parametters: test if the method works correctly
-				test with bad inhabitant id parametters: test if the method detect the bad parammeters
-				test with bad newLastName parametters: test if the method detect the bad parammeters
 			set inhabitant first name:
-				test with good parametters: test if the method works correctly
-				test with bad inhabitant id parametters: test if the method detect the bad parammeters
-				test with bad newFirstName parametters: test if the method detect the bad parammeters
-
+			set inhabitant sexe
+			set inhabitant date of birth
 			set guest last name:
-				test with good parametters: test if the method works correctly
-				test with bad guest id parametters: test if the method detect the bad parammeters
-				test with bad newLastName parametters: test if the method detect the bad parammeters
 			set guest first name:
-				test with good parametters: test if the method works correctly
-				test with bad guest id parametters: test if the method detect the bad parammeters
-				test with bad newFirstName parametters: test if the method detect the bad parammeters
+			set guest sexe
+			set guest date of birth
 
 			set module name:
-				test with good parametters: test if the method works correctly
-				test with bad module id parametters: test if the method detect the bad parammeters
-				test with bad module Name parametters: test if the method detect the bad parammeters
 			set module location:
-				test with good parametters: test if the method works correctly
-				test with bad module id parametters: test if the method detect the bad parammeters
-				test with bad module location parametters: test if the method detect the bad parammeters
-
 			set automation network controller path:
-				test with good parametters: test if the method works correctly
-				test with bad parametters: test if the method detect the bad parammeters
-
-			serialize:
-				test if the data was conform
+			set automation network zwave config file
 	"""
 
 
-	def __init__(self):
-		pass
+	def setUp(self):
+		self.homeAutomationSystem = HomeAutomationSystem()
+		self.goodZWaveNetwork = FakeZwaveNetwork(10, 10, True)
+		self.badZWaveNetwork = FakeZwaveNetwork(10, 1, False)
+
+		self.homeAutomationSystem.home.homeDatabase.databaseName = "TestHome"
 
 	def test_running(self):
 		"""
-			check if attribute return good type of data
+			test running property
 		"""
 
-		pass
+		assert isinstance(self.homeAutomationSystem.running, bool)
 
-	def test_home(self):
+
+	def test_set_running(self):
 		"""
-			check if attribute return good type of data
-		"""
-
-		pass
-
-	def test_homeAutomationNetwork_starting(self):
-		"""
-			test if the home automation network was started
-		"""
-
-		pass
-
-	def test_homeDatabaseConnection_established(self):
-		"""
-			test if the connection with the home database is established
-		"""
-
-		pass
-
-	def test_running_on_true(self):
-		"""
-			test if the running booléen was set on True
-		"""
-
-		pass
-
-
-	def test_homeAutomationNetwork_Stopped(self):
-		"""
-			test if the home automation network was stoped
-		"""
-
-		pass
-
-	def test_homeDatabaseConnection_disconnected(self):
-		"""
-			test if the connection with the home database is disconnect
-		"""
-
-		pass
-
-	def test_running_on_false(self):
-		"""
-			test if the running booléen was set on False
-		"""
-
-		pass
-
-
-	def test_setRunning_with_good_parametters(self): 
-		"""
-			test if the method works correctly
+			test setting the running property
 		"""
 				
-		pass
+		assert self.homeAutomationSystem.set_running(True) is not False
+		assert self.homeAutomationSystem.running == True
 
-	def test_setRunning_with_bad_parametters(self): 
-		"""
-			test if the method detect the bad parammeters 
-		"""
-
-		pass
+		assert self.homeAutomationSystem.set_running("True") is False
 
 
 	def test_get_rooms_list(self):
 		"""
-			check if method return good type of data
+			test getting room list
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		roomList = self.homeAutomationSystem.get_rooms_list()
+
+		assert roomList is not False
+		assert isinstance(roomList, list)
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_rooms_list() is False
 			
 	def test_get_inhabitants_list(self):
 		"""
-			check if method return good type of data
+			test getting inhabitants list
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		inhabitantList = self.homeAutomationSystem.get_inhabitants_list()
+
+		assert inhabitantList is not False
+		assert isinstance(inhabitantList, list)
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_inhabitants_list() is False
 
 	def test_get_guests_list(self):
 		"""
-			check if method return good type of data
+			test guetting guest list
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		guestList = self.homeAutomationSystem.get_guests_list()
+
+		assert guestList is not False
+		assert isinstance(guestList, list)
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_guests_list() is False
 
 	def test_get_profils_list(self):
 		"""
-			check if method return good type of data
+			test getting profils list
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		profilList = self.homeAutomationSystem.get_profils_list()
+
+		assert profilList is not False
+		assert isinstance(profilList, list)
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_profils_list() is False
 
 	def test_get_events_list(self):
 		"""
-			check if method return good type of data
+			test getting events list
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		eventList = self.homeAutomationSystem.get_events_list()
+
+		assert eventList is not False
+		assert isinstance(eventList, list)
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_events_list() is False
 
 	def test_get_modules_list(self):
 		"""
-			check if method return good type of data
+			test getting modules list
 		"""
 
-		pass
+		# test with zwaveNework corectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.goodZWaveNetwork
+		moduleList = self.homeAutomationSystem.get_modules_list()
+		assert moduleList is not False
+		assert isinstance(moduleList, list)
+
+		# test with zwaveNetwork uncorrectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.badZWaveNetwork
+		assert self.homeAutomationSystem.get_modules_list() is False
+
+		# test with failure zwaveNetwork
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = False
+		assert self.homeAutomationSystem.get_modules_list() is False
 
 	def test_get_room(self):
 		"""
-			check if method return good type of data
+			test getting an specific room
 		"""
 
-		pass
-			
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		room = self.homeAutomationSystem.get_room(1)
+		assert room is not False
+		assert isinstance(room, Room)
+
+		#test with bad parametters
+		assert self.homeAutomationSystem.get_room("1") is False
+
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_room(1) is False
+
 	def test_get_inhabitant(self):
 		"""
-			check if method return good type of data
+			test getting an specific inhabitant
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		inhabitant = self.homeAutomationSystem.get_inhabitant(1)
+		assert inhabitant is not False
+		assert isinstance(inhabitant, Inhabitant)
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.get_inhabitant("1") is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_inhabitant(1) is False
 
 	def test_get_guest(self):
 		"""
-			check if method return good type of data
+			test getting an specific guest
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		guest = self.homeAutomationSystem.get_guest(1)
+		assert guest is not False
+		assert isinstance(guest, Guest)
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.get_guest("1") is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_guest(1) is False
 
 	def test_get_profil(self):
 		"""
-			check if method return good type of data
+			test getting an specific profil
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		profil = self.homeAutomationSystem.get_profil(1)
+		assert profil is not False
+		assert isinstance(profil, Profil)
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.get_profil("1") is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_profil(1) is False
 
 	def test_get_event(self):
 		"""
-			check if method return good type of data
+			test getting an specific event
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		event = self.homeAutomationSystem.get_event(1)
+		assert event is not False
+		assert isinstance(event, Event)
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.get_event("1") is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.get_event(1) is False
 
 	def test_get_module(self):
 		"""
-			check if method return good type of data
+			test getting an specific module
 		"""
 
-		pass
+		# test with zwaveNework corectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.goodZWaveNetwork
+		module = self.homeAutomationSystem.get_module(1)
+		assert module is not False
+		assert isinstance(module, Module)
 
-	def test_get_home(self):
+		assert self.homeAutomationSystem.get_module("1") is False
+
+		# test with zwaveNetwork uncorrectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.badZWaveNetwork
+		assert self.homeAutomationSystem.get_module(1) is False
+
+		# test with failure zwaveNetwork
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = False
+		assert self.homeAutomationSystem.get_module(1) is False
+
+
+	def test_add_room(self):
 		"""
-			check if method return good type of data
-		"""
-
-		pass
-
-	def test_get_automationNetwork(self):
-		"""
-			check if method return good type of data
-		"""
-
-		pass
-
-
-	def test_add_room_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-		pass
-
-	def test_add_room_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters 
+			test adding an room
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_add_inhabitant_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
+		# test with connected database
+		# test with good parammeters
+		roomId = self.homeAutomationSystem.add_room("test", 'bathroom')
+		assert roomId is not False
+		assert self.homeAutomationSystem.get_room(roomId).name == 'test'
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.add_room(1, 'bathroom') is False
+		assert self.homeAutomationSystem.add_room("test", 1) is False
 
-	def test_add_inhabitant_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters 
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.add_room("test", 'bathroom') is False
 
-		pass
+	def test_add_inhabitant(self):
+		"""
+			test adding an inhabitant
+		"""
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		inhabitantId = self.homeAutomationSystem.add_inhabitant("test2", "test2", "m", "10/10/2010")
+		assert inhabitantId is not False
+		assert self.homeAutomationSystem.get_inhabitant(inhabitantId).firstName == "test2"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.add_inhabitant(1, "test2", "m", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_inhabitant("test2", 1, "m", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_inhabitant("test2", "test2", 1, "10/10/2010") is False
+		assert self.homeAutomationSystem.add_inhabitant("test2", "test2", "z", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_inhabitant("test2", "test2", "m", 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.add_inhabitant("test2", "test2", "m", "10/10/2010") is False
 		
-	def test_add_guest_with_good_parametters(self):
+	def test_add_guest(self):
+		"""
+			test adding guest
+		"""
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		guestId = self.homeAutomationSystem.add_guest("test3", "test3", "m", "10/10/2010")
+		assert guestId is not False
+		assert self.homeAutomationSystem.get_guest(guestId).firstName == "test3"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.add_guest(1, "test3", "m", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_guest("test3", 1, "m", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_guest("test3", "test3", 1, "10/10/2010") is False
+		assert self.homeAutomationSystem.add_guest("test3", "test3", "z", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_guest("test3", "test3", "m", 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.add_guest("test3", "test3", "m", "10/10/2010") is False
+
+	def test_add_profil(self):
+		"""
+			test adding profil
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		profilId = self.homeAutomationSystem.add_profil("test4", "test4", "m", "10/10/2010")
+		assert profilId is not False
+		assert self.homeAutomationSystem.get_profil(profilId).firstName == "test4"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.add_profil(1, "test4", "m", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_profil("test4", 1, "m", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_profil("test4", "test4", 1, "10/10/2010") is False
+		assert self.homeAutomationSystem.add_profil("test4", "test4", "z", "10/10/2010") is False
+		assert self.homeAutomationSystem.add_profil("test4", "test4", "m", 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.add_profil("test4", "test4", "m", "10/10/2010") is False
+
+	def test_add_module(self):
+		"""
+			test adding an module
+		"""
+		# test with zwaveNework corectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.goodZWaveNetwork
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork.controller.zwaveNetwork = self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork
+		moduleId = self.homeAutomationSystem.add_module("test", 1)
+		assert moduleId is not False
+		assert self.homeAutomationSystem.get_module(moduleId).name == "test"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.add_module(1, 1) is False
+		assert self.homeAutomationSystem.add_module("test", "1") is False
+
+		# test with zwaveNetwork uncorrectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.badZWaveNetwork
+		assert self.homeAutomationSystem.add_module("test", 1) is False
+
+		# test with failure zwaveNetwork
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = False
+		assert self.homeAutomationSystem.add_module("test", 1) is False
+
+	def test_add_event(self):
 		"""
 			test with good parametters: test if the method works correctly
 		"""
 
-		pass
-
-	def test_add_guest_with_bad_parametters(self):
-		pass
-
 		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+					test adding an event
+				"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		eventId = self.homeAutomationSystem.add_event("motion detection", "10/10/2010 01:01:01", 1)
+		assert eventId is not False
+		assert self.homeAutomationSystem.get_event(eventId).type == "motion detection"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.add_event(1, "10/10/2010 01:01:01", 1) is False
+		assert self.homeAutomationSystem.add_event("motion detection", 1, 1) is False
+		assert self.homeAutomationSystem.add_event("motion detection", "10/10/2010 01:01:01", "1") is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.add_event("motion detection", "10/10/2010 01:01:01", 1) is False
+
+
+	def test_del_room(self):
+		"""
+			test deleting an room
+		"""
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		roomId = self.homeAutomationSystem.add_room("testDel", "bathroom")
+		assert self.homeAutomationSystem.del_room(roomId) is not False
+		assert self.homeAutomationSystem.get_room(roomId) is False
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.del_room('1') is False
+		assert self.homeAutomationSystem.del_room(10000) is False
+
+
+		# test with unconnected database
+		roomId = self.homeAutomationSystem.add_room("testDel2", "bathroom")
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+
+		assert self.homeAutomationSystem.del_room(roomId) is False
+
+	def test_del_inhabitant(self):
+		"""
+			test deleting an inhabitant
+		"""
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		inhabitantId = self.homeAutomationSystem.add_inhabitant("testDel", "testDel", "m", "10/10/2010")
+		assert self.homeAutomationSystem.del_inhabitant(inhabitantId) is not False
+		assert self.homeAutomationSystem.get_inhabitant(inhabitantId) is False
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.del_inhabitant('1') is False
+		assert self.homeAutomationSystem.del_inhabitant(10000) is False
+
+		# test with unconnected database
+		inhabitantId = self.homeAutomationSystem.add_inhabitant("testDel2", "testDel2", "m", "10/10/2010")
+
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+
+		assert self.homeAutomationSystem.del_inhabitant(inhabitantId) is False
+
+	def test_del_guest(self):
+		"""
+			test deleting an guest
+		"""
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		guestId = self.homeAutomationSystem.add_guest("testDel", "testDel", "m", "10/10/2010")
+		assert self.homeAutomationSystem.del_guest(guestId) is not False
+		assert self.homeAutomationSystem.get_guest(guestId) is False
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.del_guest('1') is False
+		assert self.homeAutomationSystem.del_guest(10000) is False
+
+		# test with unconnected database
+		guestId = self.homeAutomationSystem.add_guest("testDel2", "testDel2", "m", "10/10/2010")
+
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+
+		assert self.homeAutomationSystem.del_guest(guestId) is False
 		
-	def test_add_profil_with_good_parametters(self):
+	def test_del_profil(self):
 		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-		pass
-
-	def test_add_profil_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
+			test deleting an profil
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_add_module_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
+		# test with connected database
+		# test with good parammeters
+		profilId = self.homeAutomationSystem.add_profil("testDel3", "testDel3", "m", "10/10/2010")
+		assert self.homeAutomationSystem.del_profil(profilId) is not False
+		assert self.homeAutomationSystem.get_profil(profilId) is False
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.del_profil('1') is False
+		assert self.homeAutomationSystem.del_profil(10000) is False
 
-	def test_add_module_with_bad_name(self);
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+		# test with unconnected database
+		profilId = self.homeAutomationSystem.add_profil("testDel3", "testDel3", "m", "10/10/2010")
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
 
-	def test_add_module_with_bad_location(self);
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+		assert self.homeAutomationSystem.del_profil(profilId) is False
 
-		pass
-
-	def test_add_event_with_good_parametters(self):
+	def test_del_event(self):
 		"""
-			test with good parametters: test if the method works correctly
+			test deleting an event
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_add_event_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
+		# test with connected database
+		# test with good parammeters
+		eventId = self.homeAutomationSystem.add_event("motion detection", "10/10/2010", 1)
+		assert self.homeAutomationSystem.del_event(eventId) is not False
+		assert self.homeAutomationSystem.get_event(eventId) is False
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.del_event('1') is False
+		assert self.homeAutomationSystem.del_event(10000) is False
 
+		# test with unconnected database
+		eventId = self.homeAutomationSystem.add_event("motion detection", "10/10/2010", 1)
 
-	def test_del_room_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
 
-		pass
-
-	def test_del_room_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters 
-		"""
-
-		pass
-
-	def test_del_inhabitant_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-		pass
-
-	def test_del_inhabitant_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters 
-		"""
-
-		pass
-		
-	def test_del_guest_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-	def test_del_guest_with_bad_parametters(self):
-		pass
-
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
-
-		pass
-		
-	def test_del_profil_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-		pass
-
-	def test_del_profil_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_del_module_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-		pass
-
-	def test_del_module_with_bad_parametters(self);
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_del_event_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
-
-		pass
-
-	def test_del_event_with_bad_parametters(self):
-		"""
-			test with bad parametters: test if the method detect the bad parammeters
-		"""
-
-		pass
+		assert self.homeAutomationSystem.del_event(eventId) is False
 		
 
-	def test_set_room_name_with_good_parametters(self):
+	def test_set_room_name(self):
 		"""
-			test if the method works correctly
-		"""
-
-		pass
-
-	def test_set_room_name_with_bad_roomId(self):
-		"""
-			test if the method detect the bad parammeters
+			test setting an roomName
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_room_name_with_bad_newName(self):
-		"""
-			test if the method detect the bad parammeter
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_room_name(1, "testSetName") is not False
+		assert self.homeAutomationSystem.get_room(1).name == "testSetName"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_room_name("1", "testSetName") is False
+		assert self.homeAutomationSystem.set_room_name(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_room_name(1, "testSetName") is False
 		
-	def test_set_room_type_with_good_parametters(self):
+	def test_set_room_type(self):
+		"""
+			test setting module location
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_room_type(1, "corridor") is not False
+		assert self.homeAutomationSystem.get_room(1).type == "corridor"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_room_name("1", "corridor") is False
+		assert self.homeAutomationSystem.set_room_name(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_room_name(1, "corridor") is False
+
+	def test_set_profil_last_name(self):
+		"""
+			test setting the last name of an profil
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_profil_last_name(1, "testSetLN") is not False
+		assert self.homeAutomationSystem.get_profil(1).lastName == "testSetLN"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_profil_last_name("1", "testSetLN") is False
+		assert self.homeAutomationSystem.set_profil_last_name(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_profil_last_name(1, "testSetLN") is False
+
+	def test_set_profil_first_name(self):
+		"""
+			test setting the first name of an profil
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_profil_first_name(1, "testSetFN") is not False
+		assert self.homeAutomationSystem.get_profil(1).firstName == "testSetFN"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_profil_first_name("1", "testSetFN") is False
+		assert self.homeAutomationSystem.set_profil_first_name(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_profil_first_name(1, "testSetFN") is False
+
+	def test_set_profil_sexe(self):
+		"""
+			test setting the sexe of an profil
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_profil_sexe(1, "f") is not False
+		assert self.homeAutomationSystem.get_profil(1).sexe == "f"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_profil_sexe("1", "f") is False
+		assert self.homeAutomationSystem.set_profil_sexe(1, 1) is False
+		assert self.homeAutomationSystem.set_profil_sexe(1, "z") is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_profil_sexe(1, "f") is False
+
+	def test_set_profil_date_of_birth(self):
+		"""
+			test setting the date of birth of an profil
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_profil_date_of_birth(1, "02/02/02") is not False
+		assert self.homeAutomationSystem.get_profil(1).dateOfBirth == "02/02/02"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_profil_date_of_birth("1", "02/02/02") is False
+		assert self.homeAutomationSystem.set_profil_date_of_birth(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_profil_date_of_birth(1, "02/02/02") is False
+
+	def test_set_inhabitant_last_name(self):
+		"""
+			test setting the last name of an inabitant
+		"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_inhabitant_last_name(1, "testSetLN") is not False
+		assert self.homeAutomationSystem.get_inhabitant(1).lastName == "testSetLN"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_inhabitant_last_name("1", "testSetLN") is False
+		assert self.homeAutomationSystem.set_inhabitant_last_name(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_inhabitant_last_name(1, "testSetLN") is False
+
+	def test_set_inhabitant_first_name(self):
 		"""
 			test if the method works correctly
 		"""
 
-		pass
-		
-	def test_set_room_type_with_bad_roomId(self):
 		"""
-			test if the method detect the bad parametters
+					test setting the first name of an inhabitant
+				"""
+
+		self.homeAutomationSystem.home.homeDatabase.connect()
+
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_inhabitant_first_name(1, "testSetFN") is not False
+		assert self.homeAutomationSystem.get_inhabitant(1).firstName == "testSetFN"
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_inhabitant_first_name("1", "testSetFN") is False
+		assert self.homeAutomationSystem.set_inhabitant_first_name(1, 1) is False
+
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_inhabitant_first_name(1, "testSetFN") is False
+
+	def test_set_inhabitant_sexe(self):
+		"""
+			test setting the sexe of an inhabitant
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_room_type_with_bad_newType(self):
-		"""
-			test if the method detect the bad parametters
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_inhabitant_sexe(1, "f") is not False
+		assert self.homeAutomationSystem.get_inhabitant(1).sexe == "f"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_inhabitant_sexe("1", "f") is False
+		assert self.homeAutomationSystem.set_inhabitant_sexe(1, 1) is False
+		assert self.homeAutomationSystem.set_inhabitant_sexe(1, "z") is False
 
-	def test_set_profil_last_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_inhabitant_sexe(1, "f") is False
 
-		pass
-
-	def test_set_profil_last_name_with_bad_profilId(self):
+	def test_set_inhabitant_date_of_birth(self):
 		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_profil_last_name_with_bad_newLastName(self):
-		"""
-			test if the method detect the bad parammeters
+			test setting the date of birth of an inhabitant
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_profil_first_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_inhabitant_date_of_birth(1, "02/02/02") is not False
+		assert self.homeAutomationSystem.get_inhabitant(1).dateOfBirth == "02/02/02"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_inhabitant_date_of_birth("1", "02/02/02") is False
+		assert self.homeAutomationSystem.set_inhabitant_date_of_birth(1, 1) is False
 
-	def test_set_profil_first_name_with_bad_profilId(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_inhabitant_date_of_birth(1, "02/02/02") is False
 
-		pass
-
-	def test_set_profil_first_name_with_bad_newFirstName(self):
+	def test_set_guest_last_name(self):
 		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_inhabitant_last_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
+			test setting the last name of an guest
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_inhabitant_last_name_with_bad_inhabitantId(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_guest_last_name(1, "testSetLN") is not False
+		assert self.homeAutomationSystem.get_guest(1).lastName == "testSetLN"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_guest_last_name("1", "testSetLN") is False
+		assert self.homeAutomationSystem.set_guest_last_name(1, 1) is False
 
-	def test_set_inhabitant_last_name_with_bad_newLastName(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_guest_last_name(1, "testSetLN") is False
 
-		pass
-
-	def test_set_inhabitant_first_name_with_good_parametters(self):
+	def test_set_guest_first_name(self):
 		"""
-			test if the method works correctly
-		"""
-
-		pass
-
-	def test_set_inhabitant_first_name_with_bad_inhabitantId(self):
-		"""
-			test if the method detect the bad parammeters
+			test setting the first name of an guest
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_inhabitant_first_name_with_bad_newFirstName(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_guest_first_name(1, "testSetFN") is not False
+		assert self.homeAutomationSystem.get_guest(1).firstName == "testSetFN"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_guest_first_name("1", "testSetFN") is False
+		assert self.homeAutomationSystem.set_guest_first_name(1, 1) is False
 
-	def test_set_guest_last_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_guest_first_name(1, "testSetFN") is False
 
-		pass
-
-	def test_set_guest_last_name_with_bad_guestId(self):
+	def test_set_guest_sexe(self):
 		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_guest_last_name_with_bad_newLastName(self):
-		"""
-			test if the method detect the bad parammeters
+			test setting the sexe of an inhabitant
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_guest_first_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_guest_sexe(1, "f") is not False
+		assert self.homeAutomationSystem.get_guest(1).sexe == "f"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_guest_sexe("1", "f") is False
+		assert self.homeAutomationSystem.set_guest_sexe(1, 1) is False
+		assert self.homeAutomationSystem.set_guest_sexe(1, "z") is False
 
-	def test_set_guest_first_name_with_bad_guestId(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_guest_sexe(1, "f") is False
 
-		pass
-
-	def test_set_guest_first_name_with_bad_newFirstName(self):
+	def test_set_guest_date_of_birth(self):
 		"""
-			test if the method detect the bad parammeters
-		"""
-
-		pass
-
-	def test_set_module_name_with_good_parametters(self):
-		"""
-			test if the method works correctly
+			test setting the date of birth of an guest
 		"""
 
-		pass
+		self.homeAutomationSystem.home.homeDatabase.connect()
 
-	def test_set_module_name_with_bad_moduleId(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with connected database
+		# test with good parammeters
+		assert self.homeAutomationSystem.set_guest_date_of_birth(1, "02/02/02") is not False
+		assert self.homeAutomationSystem.get_guest(1).dateOfBirth == "02/02/02"
 
-		pass
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_guest_date_of_birth("1", "02/02/02") is False
+		assert self.homeAutomationSystem.set_guest_date_of_birth(1, 1) is False
 
-	def test_set_module_name_with_bad_newName(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with unconnected database
+		self.homeAutomationSystem.home.homeDatabase.disconnect()
+		assert self.homeAutomationSystem.set_guest_date_of_birth(1, "02/02/02") is False
 
-		pass
-
-	def test_set_module_location_with_good_parametters(self):
+	def test_set_module_name(self):
 		"""
-			test if the method works correctly
-		"""
-
-		pass
-
-	def test_set_module_location_with_bad_moduleId(self):
-		"""
-			test if the method detect the bad parammeters
+			test setting the name of an module
 		"""
 
-		pass
+		# test with zwaveNework corectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.goodZWaveNetwork
+		assert self.homeAutomationSystem.set_module_name(1, 'testSetName') is not False
+		assert self.homeAutomationSystem.get_module(1).name == 'testSetName'
 
-	def test_set_module_location_with_bad_newLocation(self):
-		"""
-			test if the method detect the bad parammeters
-		"""
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_module_name("1", 'testSetName') is False
+		assert self.homeAutomationSystem.set_module_name(1, 1) is False
 
-		pass
+		# test with zwaveNetwork uncorrectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.badZWaveNetwork
+		assert self.homeAutomationSystem.set_module_name(1, 'testSetName') is False
 
-	def test_set_automationNetworkControllerPath_with_good_parametters(self):
-		"""
-			test with good parametters: test if the method works correctly
-		"""
+		# test with failure zwaveNetwork
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = False
+		assert self.homeAutomationSystem.set_module_name(1, 'testSetName') is False
 
-		pass
-
-	def test_set_automationNetworkControllerPath_with_bad_parametters(self):
+	def test_set_module_location(self):
 		"""
-			test with bad parametters: test if the method detect the bad parammeters 
-		"""
-
-		pass
-
-	def test_serialize(self):
-		"""
-			test if the data was conform
+			test setting the name of an module
 		"""
 
-		pass
+		# test with zwaveNework corectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.goodZWaveNetwork
+		assert self.homeAutomationSystem.set_module_location(1, 1) is not False
+		assert self.homeAutomationSystem.get_module(1).location == 1
+
+		# test with bad parametters
+		assert self.homeAutomationSystem.set_module_location("1", 1) is False
+		assert self.homeAutomationSystem.set_module_location(1, "1") is False
+
+		# test with zwaveNetwork uncorrectly configured
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = self.badZWaveNetwork
+		assert self.homeAutomationSystem.set_module_location(1, 1) is False
+
+		# test with failure zwaveNetwork
+		self.homeAutomationSystem.home.homeAutomationNetwork.zWaveNetwork = False
+		assert self.homeAutomationSystem.set_module_location(1, 1) is False
+'''
+	def test_set_automation_network_controller_path(self):
+		assert self.homeAutomationSystem.set_automation_network_controller_path("/test/") is not False
+		assert self.homeAutomationSystem.home.homeAutomationNetwork.controllerPath == "/test/"
+
+	def test_set_automation_network_Zwave_config_path(self):
+		assert self.homeAutomationSystem.set_automation_network_Zwave_config_path("/test/") is not False
+		assert self.homeAutomationSystem.home.homeAutomationNetwork.zwaveConfigPath == "/test/"
+'''
