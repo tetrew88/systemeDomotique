@@ -83,7 +83,7 @@ class Module:
 				return: False/True
 		"""
 
-		pass
+		return self.moduleNode.is_awake
 
 	@property
 	def isFailed(self):
@@ -93,7 +93,7 @@ class Module:
 				return: False/True
 		"""
 
-		pass
+		return self.moduleNode.is_failed
 
 	@property
 	def isReady(self):
@@ -103,7 +103,7 @@ class Module:
 				return: False/True
 		"""
 
-		pass
+		return self.moduleNode.is_ready
 
 	@property
 	def isSleeping(self):
@@ -113,37 +113,37 @@ class Module:
 				return: False/True
 		"""
 
-		pass
+		return self.moduleNode.is_sleeping
 
 	@property
 	def manufacturerName(self):
 		"""
 			property representing the manufacturer name of the module
 
-				return: False/True
+				return: str
 		"""
 
-		pass
+		return self.moduleNode.manufacturer_name
 
 	@property
 	def productName(self):
 		"""
 			property representing the product name of the module
 
-				return: False/True
+				return: str
 		"""
 
-		pass
+		return self.moduleNode.product_name
 
 	@property
 	def productType(self):
 		"""
 			property representing the product type of the module
 
-				return: False/True
+				return: str
 		"""
 
-		pass
+		return self.moduleNode.product_type
 
 	@property
 	def deviceType(self):
@@ -153,7 +153,7 @@ class Module:
 				return: False/True
 		"""
 
-		pass
+		return self.moduleNode.device_type
 
 
 	def set_name(self, newName):
@@ -237,4 +237,20 @@ class Module:
 			method called for seriallize data of the class
 		"""
 
-		pass
+		data = {}
+
+		data = {'id': self.id,
+				'name': self.name,
+				'location': self.location,
+				"awake": self.isAwake,
+				"disfunctionnement": self.isFailed,
+				"ready": self.isReady,
+				"sleep": self.isSleeping,
+				"manufacturer name": self.manufacturerName,
+				"product name": self.productName,
+				"product type": self.productType,
+				"system type": self.deviceType,
+				"type": self.type
+				}
+
+		return data
