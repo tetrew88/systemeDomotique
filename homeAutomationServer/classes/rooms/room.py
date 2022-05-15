@@ -42,7 +42,18 @@ class Room:
                 return: list of module class
         """
 
-        pass
+        modules = []
+
+        for module in self.automationNetwork.modulesList:
+            if module.location != '':
+                if int(module.location) == self.id:
+                    modules.append(module)
+                else:
+                    pass
+            else:
+                pass
+
+        return modules
 
     @property
     def temperature(self):
@@ -52,7 +63,23 @@ class Room:
                 return: float
         """
 
-        pass
+        temperatureSensor = False
+
+        temperature = 'NULL'
+
+        for module in self.content:
+            if isinstance(module, TemperatureSensor):
+                temperature = module.temperature
+                break
+            elif isinstance(module, MultiSensor):
+                if 'temperature' in module.sensors.keys():
+                    temperatureSensor = module.sensors['temperature']
+                    temperature = temperatureSensor.temperature
+                    break
+            else:
+                pass
+
+        return temperature
 
     @property
     def luminosity(self):
@@ -62,7 +89,22 @@ class Room:
                 return: int
         """
 
-        pass
+        luminositySensor = False
+        luminosity = 'NULL'
+
+        for module in self.content:
+            if isinstance(module, LuminositySensor):
+                luminosity = module.luminosity
+                break
+            elif isinstance(module, MultiSensor):
+                if 'luminosity' in module.sensors.keys():
+                    luminositySensor = module.sensors['luminosity']
+                    luminosity = luminositySensor.luminosity
+                    break
+            else:
+                pass
+
+        return luminosity
 
 
     def serialize(self):
@@ -70,4 +112,21 @@ class Room:
             method called for seriallize data of the class
         """
 
-        pass
+        data = {}
+
+        data = {"id": self.id,
+                "name": self.name,
+                "type": self.type,
+                "content": [],
+                "temperature": self.temperature,
+                "luminosity": self.luminosity,
+                "events": []
+                }
+
+        content = []
+        for element in self.content:
+            tmp = element.serialize()
+            content.append(tmp)
+        data['content'] = content
+
+        return data
