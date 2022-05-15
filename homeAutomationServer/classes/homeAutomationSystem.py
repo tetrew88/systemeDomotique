@@ -1,12 +1,13 @@
 from .home import *
 
+
 class HomeAutomationSystem:
 	"""
 		class bringing all the information and functionality of the system.
 
 			Attributes:
 				running (control boolean to know if the system is in working order)
-				Home (class bringing all the information of the home)
+				home (class bringing all the information of the home)
 
 			Propertys:
 
@@ -49,7 +50,7 @@ class HomeAutomationSystem:
 
 				del room (allows to delete an room in the home)
 
-                del inhabitant (allows to delete an inhabitant in the home)
+				del inhabitant (allows to delete an inhabitant in the home)
                 del guest (allows to delete an guest in the home)
                 del profil (allows to del an profil in the home)
 
@@ -108,7 +109,7 @@ class HomeAutomationSystem:
 		else:
 			return False
 
-		if self.running == True:
+		if self.running is True:
 			return True
 		else:
 			return False
@@ -134,7 +135,7 @@ class HomeAutomationSystem:
 				return False
 		else:
 			return False
-		if self.running == False:
+		if self.running is False:
 			return True
 		else:
 			return False
