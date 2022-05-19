@@ -26,7 +26,9 @@ class Profil:
 
         data = {"id": self.id,
         'firstName': self.firstName,
-        'lastName': self.lastName
+        'lastName': self.lastName,
+        'sexe': self.sexe,
+        'dateOfBirth': self.dateOfBirth
         }
 
         return data

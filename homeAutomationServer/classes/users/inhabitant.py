@@ -24,6 +24,9 @@ class Inhabitant:
         self.id = Id
         self.profil = profil
 
+    @property
+    def profilId(self):
+        return self.profil.id
 
     @property
     def lastName(self):
@@ -46,7 +49,11 @@ class Inhabitant:
         data = {}
 
         data = {'id': self.id,
-                'profil': self.profil.serialize()
+                'profilId': self.profilId,
+                'firstName': self.firstName,
+                'lastName': self.lastName,
+                'sexe': self.sexe,
+                'dateOfBirth': self.dateOfBirth
                 }
 
         return data

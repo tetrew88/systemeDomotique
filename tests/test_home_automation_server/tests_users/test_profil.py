@@ -1,11 +1,10 @@
 import unittest
 
-from homeAutomationServer.classes.users.guest import *
 from homeAutomationServer.classes.users.profil import *
 
-class Test_Guest(unittest.TestCase):
+class Test_Profil(unittest.TestCase):
     """
-		testing class of an inhabitant
+		testing class of an profil
 
 		tests list:
 			serialize:
@@ -13,17 +12,16 @@ class Test_Guest(unittest.TestCase):
 	"""
 
     def setUp(self):
-        self.guest = Guest(1, Profil( 1, "test","test", "m", "01/01/01"))
+        self.profil = Profil( 1, "test","test", "m", "01/01/01")
 
     def test_serialize(self):
         """
             test if the data was conform
         """
 
-        data = self.guest.serialize()
+        data = self.profil.serialize()
         assert data is not False
         assert data["id"] == 1
-        assert data["profilId"] == 1
         assert data["firstName"] == "test"
         assert data["lastName"] == "test"
         assert data["sexe"] == "m"

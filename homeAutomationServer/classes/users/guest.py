@@ -21,6 +21,10 @@ class Guest:
         self.profil = profil
 
     @property
+    def profilId(self):
+        return self.profil.id
+
+    @property
     def lastName(self):
         return self.profil.lastName
 
@@ -40,7 +44,11 @@ class Guest:
         data = {}
 
         data = {'id': self.id,
-                'profil': self.profil.serialize()
+                'profilId': self.profilId,
+                'firstName': self.firstName,
+                'lastName': self.lastName,
+                'sexe': self.sexe,
+                'dateOfBirth': self.dateOfBirth
                 }
 
         return data
