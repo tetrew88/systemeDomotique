@@ -1,0 +1,317 @@
+h1
+{
+  margin: auto;
+}
+
+h2
+{
+  margin: auto;
+}
+
+h3
+{
+  margin: auto;
+}
+
+#blocPage
+{
+	height: 100%;
+
+	min-height: 100vh;
+
+	background: url(../pictures/background.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+
+  color: white;
+
+  box-shadow: inset 0px 0px 10px 9px rgba(0, 0, 0, 0.5);
+}
+
+#pageContent
+{
+	padding-top: 5%;
+	padding-bottom: 5%;
+	margin: auto;
+}
+
+#pageContent .carousel
+{
+  padding: 5%;
+}
+
+
+/*navbar*/
+#mainNavbar
+{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	justify-content: flex-start;
+	align-items: space-around;
+
+  box-shadow: inset 0px 0px 10px 9px rgba(0, 0, 0, 0.5);
+}
+
+#mainNavBarContent
+{
+  width: inherit;
+  margin: auto;
+}
+
+#logo
+{
+	margin: auto;
+	height: 100%;
+}
+
+.shortcutsBar
+{
+
+	background-color: darkgray;
+}
+
+.nav-link
+{
+	margin: auto;
+}
+
+
+/*general*/
+
+/*listing*/
+.screen
+{
+  opacity: 90%;
+
+  min-height: 100px;
+
+  margin: auto;
+
+  box-shadow: inset 0px 0px 10px 9px rgba(0, 0, 255, 0.5);
+
+  padding: 2%;
+}
+
+
+/*cards*/
+.roomCard
+{
+  background-color: black;
+
+  width: 100%;
+  height: 100%;
+
+  margin: auto;
+
+  padding: 5%;
+
+  border: none;
+}
+
+.profilCard
+{
+
+  background-color: white;
+
+  width: 100%;
+  height: 100%;
+
+  margin: auto;
+
+  border: none;
+}
+
+.moduleCard
+{
+
+  background-color: white;
+
+  width: 100%;
+  height: 100%;
+
+  margin: auto;
+
+  border: none;
+}
+
+.eventsList
+{
+
+  background-color: black;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 90%;
+
+  min-height: 100px;
+
+  box-shadow: inset 0px 0px 10px 9px rgba(255, 0, 0, 0.5);
+}
+
+.eventRapport
+{
+  color:  white;
+  width: 100%;
+}
+
+.tile
+{
+  max-height: 120px;
+  max-width: 120px;
+}
+
+
+/*footer*/
+footer
+{
+	background: #000000;
+}
+
+/*buttons*/
+.personalButton
+{
+  background-color: white;
+  border: none;
+}
+
+.less
+{
+  box-shadow: inset 0px 0px 10px 9px rgba(255, 0, 0, 0.5);
+}
+
+.more
+{
+  box-shadow: inset 0px 0px 10px 9px rgba(0, 255, 0, 0.5);
+}
+
+
+/*responsive*/
+@media all and (max-width: 1199px) and (min-width:  600px)
+{
+  .blocPage
+  {
+    font-size: medium;
+  }
+
+  .nav-link
+  {
+    font-size: small;
+  }
+
+  h3
+  {
+    font-size: medium;
+  }
+
+  #homeId
+  {
+    font-size: small;
+  }
+
+  #networkState
+  {
+    font-size: small;
+  }
+}
+
+@media all and (max-width: 599px) and (min-width:  450px)
+{
+  .blocPage
+  {
+    font-size: x-small;
+  }
+
+  .nav-link
+  {
+    font-size: x-small;
+  }
+
+  h3
+  {
+    font-size: small;
+  }
+
+  #homeId
+  {
+    font-size: x-small;
+  }
+
+  #networkState
+  {
+    font-size: x-small;
+  }
+}
+
+@media all and (max-width: 449px)
+{
+  .blocPage
+  {
+    font-size: xx-small;
+  }
+
+  .nav-link
+  {
+    font-size: xx-small;
+  }
+
+  h3
+  {
+    font-size: x-small;
+  }
+
+  #homeId
+  {
+    font-size: x-small;
+  }
+
+  #networkState
+  {
+    font-size: x-small;
+  }
+}
+
+
+/*Loader*/
+.loader{
+  margin:auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  border: 16px solid #bdc3c7;
+  width: 120px;
+  height: 120px;
+  border-top-color: #1abc9c;
+  border-bottom-color: #3498db;
+  border-radius: 50%;
+  animation: chargeur 4s linear infinite;
+}
+
+@keyframes chargeur {
+  0%{
+    transform: rotate(0deg) scale(1);
+    border-top-color: red;
+    border-bottom-color: red;
+  }
+  25%{
+    border-top-color: blue;
+    border-bottom-color: blue;
+  }
+  50% {
+     transform: rotate(360deg) scale(1.15);
+    border-top-color: red;
+    border-bottom-color: red;
+  }
+  75%{
+    border-top-color: green;
+    border-bottom-color: green;
+  }
+  100%{
+     transform: rotate(720deg) scale(1);
+    border-top-color: red;
+    border-bottom-color: red;
+  }
+
+}

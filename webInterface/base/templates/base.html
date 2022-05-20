@@ -1,0 +1,134 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="fr">
+
+  <head>
+
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Boostrap -->
+	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	  <!-- Fonts -->
+	  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/html">
+	  <link href="http://fonts.googleapis.com/css?family=Scope+One" rel="stylesheet" type="text/html">
+	  {% block fonts %}{% endblock %}
+
+	  <!-- Personnal CSS -->
+	  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+
+	  {% block css %}{% endblock %}
+
+    <title>Hestia Domotics</title>
+
+  </head>
+
+	<body>
+
+		<div id='blocPage'>
+			<!--                              navBar                                       -->
+			<nav id="mainNavbar" class="col-lg navbar navbar-light navbar-expand-lg bg-dark">
+				<div id="mainNavBarContent" class="row">
+
+					<a id="logo" class="navbar-brand col-2" href="/">
+						<img src="/static/pictures/logo.png" class="img-fluid">
+					</a>
+
+					<!--                     shrortcutBar(carousel)                           -->
+					<div class="col-8 shortcutsBar rounded ">
+						<div id="shortcutsCarousel" class="carousel slide row " data-interval="false">
+							<a class="carousel-control-prev" href="#shortcutsCarousel" role="button" data-slide="prev">
+						    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						    <span class="sr-only">Previous</span>
+						  </a>
+
+							<div class="carousel-inner">
+
+								<div class="carousel-item active">
+									<div class="row container-fluid" style="margin: auto;">
+									  <a class="col-4 nav-item nav-link text-center" href="/roomListing">listing pièces</a>
+									  <a class="col-4 nav-item nav-link text-center" href="/profilListing">listing profils</a>
+									  <a class="col-4 nav-item nav-link text-center" href="/moduleListing">listing modules</a>
+									</div>
+								</div>
+
+								<div class="carousel-item">
+									<div class="row container-fluid" style="margin: auto;">
+									  	<a class="col-4 nav-item nav-link text-center" href="/homeManagement">gestion domicile</a>
+									  	<a class="col-4 nav-item nav-link text-center" href="/homeAutomationNetworkManagement">gestion réseau</a>
+									</div>
+    						</div>
+
+						  </div>
+
+						  <a class="carousel-control-next" href="#shortcutsCarousel" role="button" data-slide="next">
+						    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+						    <span class="sr-only">Next</span>
+						  </a>
+						</div>
+					</div>
+					<!--                          /shortcutBar                                      -->
+
+					<div class="col-2 text-right" style="margin: auto;">
+						<div class="dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type="button" id="menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="navbar-toggler-icon"></span>
+							</button>
+
+				       <div class="dropdown-menu" aria-labelledby="menu">
+				       	<a class="dropdown-item" href="#">profil</a>
+				       	<a class="dropdown-item" href="#">déconnexion</a>
+			        </div>
+	          </div>
+
+						<button type="button" class="dropdown-menu" data-toggle="collapse" data-target="#menuContent">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+					</div>
+
+				</div>
+			</nav>
+			<!--                                      /navbar                                               -->
+
+			{% block content %}{% endblock %}
+
+		</div>
+
+		<footer>
+			<div class="row">
+				<div class="col-4"></div>
+				<div class="col-4 text-center">
+					<a href="#">lien git</a>
+				</div>
+				<div class="col-4"></div>
+			</div>
+		</footer>
+
+
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% block jsScript %}{% endblock %}
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    {% block script %}{% endblock %}
+
+  </body>
+
+</html>
