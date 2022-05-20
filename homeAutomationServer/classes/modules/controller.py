@@ -18,4 +18,5 @@ class Controller(Module):
 	"""
 
 	def __init_(self, moduleNode):
-		pass
+		Module.__init__(self, moduleNode)
+		self.type = "controller"

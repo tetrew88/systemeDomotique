@@ -49,4 +49,7 @@ class NetworkController(Module):
 			method called to put the controller into inclusion mode
 		"""
 
-		pass
+		self.moduleNode.add_node()
+
+	def remove_node(self):
+		self.moduleNode.remove_node()

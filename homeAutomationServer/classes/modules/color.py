@@ -11,14 +11,15 @@ class Color:
 				name: name of the color
 				rgb value: rgb code of the color
 				rgbw value: rgbw code of the color
-				type: type of module (bulb)
 
 			Method:
 				serialize (allows to transform the class in dict for json use)
 	"""
 
 	def __init__(self, name, rgbValue, rgbwValue):
-		pass
+		self.name = name
+		self.rgbValue = rgbValue
+		self.rgbwValue = rgbwValue
 
 
 	def serialize(self):
@@ -26,4 +27,10 @@ class Color:
 			method called for seriallize data of the class
 		"""
 
-		pass
+		data = {}
+
+		data = {'name': self.name,
+				'rgbValue': self.rgbValue,
+				'rgbwValue': self.rgbwValue}
+
+		return data

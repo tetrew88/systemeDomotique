@@ -36,7 +36,10 @@ class Bulb(Module):
 				return: False/True
 		"""
 
-		pass
+		if self.intensity > 0:
+			return True
+		else:
+			return False
 
 	@property
 	def intensity(self):
@@ -46,22 +49,24 @@ class Bulb(Module):
 				return: int
 		"""
 
-		pass
+		for values in self.moduleNode.get_dimmers().values():
+			if values.label == 'Level':
+				return values.data
 
 
-	def on(self):
+	def on(self, intensity = 50):
 		"""
 			method called for light up the bulb
 		"""
 
-		pass
+		self.set_intensity(intensity)
 
 	def off(self):
 		"""
 			method called for light down the bulb
 		"""
 
-		pass
+		self.set_intensity(0)
 
 	def set_intensity(self, newIntensity):
 		"""
@@ -76,11 +81,39 @@ class Bulb(Module):
 						ask to node change the intensity value
 		"""
 
-		pass
+		if isinstance(newIntensity, int):
+			for values in self.moduleNode.get_dimmers().values():
+				if values.label == 'Level':
+					valueId = values.value_id
+					break
+
+			self.moduleNode.set_dimmer(valueId, intensity)
+			return True
+		else:
+			return False
 
 
 	def serialize(self):
 		"""
 			method called for seriallize data of the class
 		"""
-		pass
+
+		data = {}
+
+		data = {'id': self.id,
+				'name': self.name,
+				'location': self.location,
+				"awake": self.isAwake,
+				"disfunctionnement": self.isFailed,
+				"ready": self.isReady,
+				"sleep": self.isSleeping,
+				"manufacturer name": self.manufacturerName,
+				"product name": self.productName,
+				"product type": self.productType,
+				"system type": self.deviceType,
+				"type": self.type,
+				"lightUp": self.lightUp,
+				"intensity": self.intensity
+				}
+
+		return data
