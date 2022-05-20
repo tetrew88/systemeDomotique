@@ -281,6 +281,69 @@ class HomeAutomationSystem:
 		else:
 			return False
 
+	def get_room_content(self, roomId):
+		"""
+	    	Method called for get the content of an specific room
+
+				Parametters:
+					roomId: int
+
+				functionning:
+					-asks the home to search for the room linked to the id
+						if the room was found:
+							return this content
+						else:
+							return False
+	    		return:
+	    			succes: list of module
+	    			failure: False
+	    """
+
+		room = False
+
+		if self.home.homeDatabase.db_connection is not False:
+			room = self.home.get_room(roomId)
+
+			if room is not False:
+				return room.content
+			else:
+				return False
+		else:
+			return False
+
+	def get_room_event(self, roomId):
+		"""
+	    	Method called for get the event associate at an room.
+
+				Parametters:
+					roomId: int
+
+				functionning:
+					-asks the home to search for the room linked to the id
+						if the room was found:
+							return her event
+						else:
+							return False
+	    		return:
+	    			succes: list of event
+	    			failure: False
+	    """
+
+		room = False
+		eventList = []
+
+		if self.home.homeDatabase.db_connection is not False:
+			room = self.home.get_room(roomId)
+
+			if room is not False:
+				for event in self.get_events_list():
+					if event.location == room.id:
+						eventList.append(event)
+			else:
+				return False
+		else:
+			return False
+
 	def get_inhabitant(self, inhabitantId):
 		"""
     		Method called for get an specific inhabitant in the home
@@ -395,6 +458,18 @@ class HomeAutomationSystem:
 			return self.home.get_event(eventId)
 		else:
 			return False
+
+	def get_homeId(self):
+		if self.home.homeAutomationNetwork.isReady:
+			return self.home.homeAutomationNetwork.id
+		else:
+			return False
+
+	def get_network_state(self):
+		if self.home.homeAutomationNetwork.zWaveNetwork is not False:
+			return self.home.homeAutomationNetwork.state
+		else:
+			return 0
 
 
 	def add_room(self, roomName, roomType):
@@ -1049,7 +1124,7 @@ class HomeAutomationSystem:
     	"""
 
 		if self.home.homeAutomationNetwork.isReady:
-			return self.home.set_module_name(moduleId, newName)
+			if self.home.set_module_name(moduleId, newName):
 		else:
 			return False
 
@@ -1137,3 +1212,68 @@ class HomeAutomationSystem:
     	"""
 
 		return self.home.homeAutomationNetwork.save_modification()
+
+
+	def switch_light(self, moduleId):
+		"""
+			method called for switch the state of an light
+		"""
+
+		module = False
+
+		module = self.get_module(moduleId)
+
+		if module is not False:
+			if isinstance(module, Bulb):
+				if module.light_up:
+					module.off()
+				else:
+					module.on()
+			else:
+				return False
+		else:
+			return False
+
+	def set_rbgBulb_color(self, moduleId, colorLabel):
+		module = False
+		color = False
+
+		module = self.get_module(moduleId)
+
+		if module is not False:
+			if isinstance(module, RgbBulb):
+				for tmpColor in module.colorPalette:
+					if tmpColor.name == colorLabel:
+						if module.set_color(tmpColor):
+							return True
+						else:
+							return False
+					else:
+						return False
+
+			else:
+				return False
+		else:
+			return False
+
+	def set_bulb_intensity(self, moduleId, intensity):
+		"""
+			method called for switch the state of an light
+		"""
+
+		module = False
+
+		module = self.get_module(moduleId)
+
+		if module is not False:
+			if isinstance(module, Bulb):
+				if module.set_intensity(intensity):
+					return True
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
+
+

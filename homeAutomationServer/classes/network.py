@@ -607,7 +607,12 @@ class Network:
 			return False
 
 		if selectedModule is not False:
-			return selectedModule.set_name(newName)
+			if selectedModule.set_name(newName):
+				self.save_modification()
+
+				return True
+			else:
+				return False
 		else:
 			return False
 
@@ -644,7 +649,12 @@ class Network:
 			return False
 
 		if selectedModule is not False:
-			return selectedModule.set_location(newLocation)
+			if selectedModule.set_location(newLocation):
+				self.save_modification()
+
+				return True
+			else:
+				return False
 		else:
 			return False
 
