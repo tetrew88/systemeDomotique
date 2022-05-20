@@ -38,8 +38,14 @@ class HomeAutomationServer(socketio.Namespace):
         """
             method called for start the home automation system and the server
         """
-        HomeAutomationServer.homeAutomationSystem.start()
-        eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
+        
+        if HomeAutomationServer.homeAutomationSystem.start():
+            if eventlet.wsgi.server(eventlet.listen(('', 5000)), app):
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def stop(self):
         """

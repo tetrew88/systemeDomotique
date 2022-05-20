@@ -299,18 +299,18 @@ class Network:
 				print("Etablissement du serveur ZWave: ")
 
 				if not self.isReady:
-					for i in range(0, 300 * len(self.modulesList)):
-						while not self.zWaveNetwork.state >= self.zWaveNetwork.STATE_AWAKED:
-							if self.state >= self.zWaveNetwork.STATE_READY:
-								print("Le serveur ZWave est prêt")
+					print("111111")
+					for i in range(0, 300):
+						if self.state >= self.zWaveNetwork.STATE_READY:
+							print("Le serveur ZWave est prêt")
 
-								succes = True
-								break
-							else:
-								sys.stdout.write(".")
-								sys.stdout.flush()
-								time.sleep(1.0)
-								succes = False
+							succes = True
+							break
+						else:
+							sys.stdout.write(".")
+							sys.stdout.flush()
+							time.sleep(1.0)
+							succes = False
 				else:
 					succes = True
 			else:

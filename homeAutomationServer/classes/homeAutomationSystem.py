@@ -1125,6 +1125,9 @@ class HomeAutomationSystem:
 
 		if self.home.homeAutomationNetwork.isReady:
 			if self.home.set_module_name(moduleId, newName):
+				return True
+			else:
+				return False
 		else:
 			return False
 

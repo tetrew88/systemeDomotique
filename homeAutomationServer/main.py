@@ -10,3 +10,7 @@ def main():
 	homeAutomationServer.set_home_automation_system(homeAutomationSystem)
 
 	homeAutomationServer.start()
+
+
+if __name__ == "__main__":
+	main()
