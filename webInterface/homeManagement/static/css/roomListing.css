@@ -1,0 +1,56 @@
+#roomsScreen
+{
+	background-color: black;
+
+	margin-top: 10vh;
+}
+
+#roomCarousel
+{
+	margin: auto;
+}
+
+@media all and (max-height: 1250px)
+{
+	#roomsScreen
+	{
+		margin-top: 20vh;
+	}
+}
+
+@media all and (max-height: 1050px)
+{
+	#roomsScreen
+	{
+		margin-top: 10vh;
+	}
+}
+@media all and (max-height: 850px)
+{
+	#roomsScreen
+	{
+		margin-top: 10vh;
+	}
+}
+@media all and (max-height: 650px)
+{
+	#roomsScreen
+	{
+		margin-top: 20vh;
+	}
+}
+@media all and (max-height: 450px)
+{
+	#roomsScreen
+	{
+		margin-top: 0vh;
+	}
+}
+
+@media all and (max-width: 500px)
+{
+	#roomsScreen
+	{
+		margin-top: 20vh;
+	}
+}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/homeManagement.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div id="pageContent" class="row">
+  <div class="col-12">
+
+    <div id="roomsSection" class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <h2 class="text-center">Pièce</h2>
+      </div>
+      <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div id="roomsScreen" class="row screen rounded container-fluid"></div>
+        <div class="row">
+          <button class="col-6 personalButton more rounded">
+            <h2 class="text-center" style="margin: auto;">
+              <a class="text-center" href="/addRoom">+</a>
+            </h2>
+          </button>
+          <button class="col-6 personalButton less rounded">
+            <h2 class="text-center" style="margin: auto;">
+              <a class="text-center" href="/delRoom">-</a>
+            </h2>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="inhabitantsSection" class="row" style="margin-top: 5%;">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <h2 class="text-center">Habitants</h2>
+      </div>
+      <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div id="inhabitantsScreen" class="row screen rounded container-fluid"></div>
+        <div class="row">
+          <button class="col-6 personalButton more rounded">
+            <h2 class="text-center" style="margin: auto;">
+              <a class="text-center" href="/addInhabitant">+</a>
+            </h2>
+          </button>
+          <button class="col-6 personalButton less rounded">
+            <h2 class="text-center" style="margin: auto;">
+              <a class="text-center" href="/delInhabitant">-</a>
+            </h2>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="guestsSection" class="row" style="margin-top: 5%;">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <h2 class="text-center">Invité</h2>
+      </div>
+      <div class="col-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div id="guestsScreen" class="row screen rounded container-fluid"></div>
+        <div class="row">
+          <button class="col-6 personalButton more rounded">
+            <h2 class="text-center" style="margin: auto;">
+              <a class="text-center" href="/addGuest">+</a>
+            </h2>
+          </button>
+          <button class="col-6 personalButton less rounded">
+            <h2 class="text-center" style="margin: auto;">
+              <a class="text-center" href="/delGuest">-</a>
+            </h2>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="eventsSection" class="row" style="margin-top: 5%;">
+      <div class="col-2 container-fluid"></div>
+      <div class="col-8 container-fluid">
+        <div class="row container-fluid text-center" style="margin: auto;">
+          <h2 class="text-center title">Evénements</h2>
+        </div>
+
+        <div class="row container-fluid text-center" style="margin: auto;">
+            <div id="eventsScreen" class="col rounded text-center rounded container-fluid eventsList screen">
+
+            </div>
+          </div>
+      </div>
+      <div class="col-2 container-fluid"></div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block jsScript %}
+  <script src="{% static 'js/listRooms.js' %}"></script>
+  <script src="{% static 'js/listProfils.js' %}"></script>
+  <script src="{% static 'js/listEvents.js' %}"></script>
+  <script src="{% static 'js/homeManagement.js' %}"></script>
+{% endblock %}

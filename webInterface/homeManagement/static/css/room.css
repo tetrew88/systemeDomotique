@@ -1,0 +1,84 @@
+h3
+{
+	margin: auto;
+}
+
+#modulesSection
+{
+	padding-top: 5%;
+
+	margin: auto;
+	margin-bottom: 5%;
+}
+
+.screen
+{
+	background-color: white;
+}
+
+#eventsSection
+{
+	margin: auto;
+	margin-bottom: 5%;
+}
+
+#eventsScreen
+{
+	margin: auto;
+
+	margin-top: 5%;
+
+	padding: 5%;
+	padding-top: 5%;
+	padding-bottom: 5%;
+
+	background-color: black;
+
+	opacity: 90%;
+
+	min-height: 2em;
+
+	box-shadow: inset 0px 0px 10px 9px rgba(255, 0, 0, 0.5);
+}
+
+.eventRapport
+{
+	color:  white;
+	width: 100%;
+}
+
+
+.indicatorZone
+{
+	box-shadow: inset 0px 0px 10px 9px rgba(255, 0, 0, 0.5);
+	background-color: black;
+	margin: auto;
+
+	min-width: fit-content;
+}
+
+.indicator
+{
+	margin: auto;
+}
+
+#temperature
+{
+	margin: auto;
+}
+
+#luminosity
+{
+	margin: auto;
+}
+
+
+#moduleCarousel .carousel-control-prev-icon
+{
+	filter: invert(100%);
+}
+
+#moduleCarousel .carousel-control-next-icon
+{
+	filter: invert(100%);
+}

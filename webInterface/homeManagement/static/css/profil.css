@@ -1,0 +1,30 @@
+#profilInformation
+{
+	font-size: smaller;
+}
+
+#profilPicture
+{
+	margin: 2%;
+}
+
+.separation
+{
+	background-color: black;
+	height: 4px;
+
+	margin: 2%;
+	margin-bottom: 3%;
+}
+
+.screen
+{
+	background-color: black;
+}
+
+
+.data
+{
+	border-color: black;
+	border: solid;
+}

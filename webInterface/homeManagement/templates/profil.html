@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/profil.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+
+<div id='pageContent' class="row">
+    <div class="col">
+
+      <div class="row container-fluid">
+        <div class="col-4"></div>
+        <div id="profilPicture" class="col-4 text-center container-fluid">
+          <img src="/static/pictures/profil.png" class="img-fluid rounded-circle">
+        </div>
+        <div class="col-4"></div>
+      </div>
+
+      <div class="row container-fluid">
+        <div class="col-3"></div>
+        <div class="col-6">
+          <div class="row separation rounded"></div>
+        </div>
+        <div class="col-3"></div>
+      </div>
+
+      <div class="row container-fluid">
+        <div class="col-1 col-md-2 col-lg-4"></div>
+        <div id="profilInformation" class="col-10 col-md-8 col-lg-4 container-fluid screen rounded">
+
+          <div id="lastNameSection" class="row container-fluid" style="flex-wrap: nowrap;">
+            <div id="lastNameLabel" class="col-4 container-fluid">
+              Nom:
+            </div>
+            <input id="lastNameInput" class="col-6" type="text" value="">
+            <button type="button" class="col-2 container-fluid" onclick="set_profil_lastName();"></button>
+          </div>
+
+          <div id="firstNameSection" class="row container-fluid" style="flex-wrap: nowrap;">
+            <div id="firstNameLabel" class="col-4 container-fluid">
+              Prenom:
+            </div>
+            <input id="firstNameInput" class="col-6" type="text" id="firstName" value="">
+            <button type="button" class="col-2 container-fluid" onclick="set_profil_firstName();"></button>
+          </div>
+
+        </div>
+        <div class="col-1 col-md-2 col-lg-4"></div>
+      </div>
+
+    </div>
+</div>
+
+
+  <input type="hidden" id="profilId" name="profilId" value="{{ profilId }}">
+
+
+{% endblock %}
+
+{% block jsScript %}
+  <script src="{% static 'js/profil.js' %}"></script>
+{% endblock %}

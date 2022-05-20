@@ -1,0 +1,39 @@
+#inhabitantsScreen
+{
+	background-color: white;
+}
+#inhabitantCarousel
+{
+	margin: auto;
+}
+
+#guestsScreen
+{
+	background-color: white;
+}
+
+#guestCarousel
+{
+	margin: auto;
+}
+
+
+#inhabitantCarousel .carousel-control-prev-icon
+{
+	filter: invert(100%);
+}
+
+#inhabitantCarousel .carousel-control-next-icon
+{
+	filter: invert(100%);
+}
+
+#guestCarousel .carousel-control-prev-icon
+{
+	filter: invert(100%);
+}
+
+#guestCarousel .carousel-control-next-icon
+{
+	filter: invert(100%);
+}
