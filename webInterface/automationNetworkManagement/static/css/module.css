@@ -1,0 +1,75 @@
+#modulePicture
+{
+	margin: auto;
+}
+
+.separation
+{
+	background-color: black;
+	height: 4px;
+
+	margin-top: 2%;
+	margin-bottom: 3%;
+}
+
+.screen
+{
+	background-color: black;
+	margin-bottom: 5%;
+
+	min-height: auto;
+  	max-height: auto;
+}
+
+.informationSection
+{
+	flex-wrap: nowrap;
+	font-size: smaller;
+}
+
+
+.data
+{
+	border-color: black;
+	border: solid;
+}
+
+
+#color
+{
+	border-color: black;
+	border: solid;
+}
+
+#intensity
+{
+	border-color: black;
+	border: solid;
+}
+
+
+
+
+@media all and (max-width: 1199px) and (min-width:  600px)
+{
+    #pageContent
+	{
+		font-size: medium;
+	}
+}
+
+@media all and (max-width: 599px) and (min-width:  450px)
+{
+    #pageContent
+	{
+		font-size: x-small;
+	}
+}
+
+@media all and (max-width: 449px)
+{
+    #pageContent
+	{
+		font-size: xx-small;
+	}
+}
