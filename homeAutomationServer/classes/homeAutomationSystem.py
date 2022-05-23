@@ -1245,10 +1245,6 @@ class HomeAutomationSystem:
 
 		module = self.get_module(moduleId)
 
-		print("!!!!")
-		print(colorLabel)
-		print("!!!!")
-
 		if module is not False:
 			if isinstance(module, RgbBulb):
 				for tmpColor in module.colorPalette:

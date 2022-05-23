@@ -740,7 +740,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeAutomationNetwork.isReady():
+		if self.homeAutomationNetwork.isReady:
 			return self.homeAutomationNetwork.del_module(moduleId)
 		else:
 			return False

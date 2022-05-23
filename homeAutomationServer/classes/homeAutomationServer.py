@@ -292,7 +292,7 @@ class HomeAutomationServer(socketio.Namespace):
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def del_module(sid, data):
-        HomeAutomationServer.homeAutomationSystem.del_module()
+        HomeAutomationServer.homeAutomationSystem.del_module(int(data['moduleId']))
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def del_room(sid, data):
