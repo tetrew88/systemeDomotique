@@ -265,8 +265,6 @@ class Network:
 		dispatcher.connect(self.network_started, ZWaveNetwork.SIGNAL_NETWORK_STARTED)
 		dispatcher.connect(self.network_ready, ZWaveNetwork.SIGNAL_NETWORK_READY)
 		dispatcher.connect(self.network_awake, ZWaveNetwork.SIGNAL_NETWORK_AWAKED)
-		dispatcher.connect(self.node_event, ZWaveNetwork.SIGNAL_NODE_EVENT)
-		dispatcher.connect(self.scene_event, ZWaveNetwork.SIGNAL_SCENE_EVENT)
 		dispatcher.connect(self.value_changed, ZWaveNetwork.SIGNAL_VALUE_CHANGED)
 		dispatcher.connect(self.node_added, ZWaveNetwork.SIGNAL_NODE_ADDED)
 
@@ -294,12 +292,12 @@ class Network:
 			self.zWaveNetwork = ZWaveNetwork(options, autostart=False)
 
 			if self.zWaveNetwork is not False:
+				self.load()
 				self.zWaveNetwork.start()
 
 				print("Etablissement du serveur ZWave: ")
 
 				if not self.isReady:
-					print("111111")
 					for i in range(0, 300):
 						if self.state >= self.zWaveNetwork.STATE_READY:
 							print("Le serveur ZWave est prêt")
@@ -563,6 +561,9 @@ class Network:
 
 		if isinstance(event, Event):
 			if homeDatabase.connect():
+				print("!!!")
+				print(event.location)
+				print("!!!")
 				if homeDatabase.add_event(event.type, event.dateTime, int(event.location)):
 					succes = True
 				else:
@@ -735,7 +736,17 @@ class Network:
 					if value.label == 'Color':
 						pass
 
-		if event != False:
-			self.add_event(event)
+		print(event)
+
+		if event is not False:
+			if self.add_event(event):
+				print("aaaaaaa")
+				return True
+			else:
+				print("bbbbbbb")
+				return False
 		else:
 			pass
+
+	def node_added(self, node):
+		print("le noeud {} a été ajouter".format(node.name))

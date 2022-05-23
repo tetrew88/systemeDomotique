@@ -87,7 +87,7 @@ class Bulb(Module):
 					valueId = values.value_id
 					break
 
-			self.moduleNode.set_dimmer(valueId, intensity)
+			self.moduleNode.set_dimmer(valueId, newIntensity)
 			return True
 		else:
 			return False

@@ -64,7 +64,12 @@ class RgbBulb(Bulb):
 			if values.label == 'Color':
 				valueId = values.value_id
 
-		self.moduleNode.set_rgbw(valueId, color.rgbwValue)
+		self.moduleNode.set_rgbw(valueId, newColor.rgbwValue)
+
+		if self.color.name == newColor.name:
+			return True
+		else:
+			return False
 
 
 	def serialize(self):
@@ -90,7 +95,6 @@ class RgbBulb(Bulb):
 				"product name": self.productName,
 				"product type": self.productType,
 				"system type": self.deviceType,
-				"batterie level": self.batteryLevel,
 				"type": self.type,
 				"lightUp": self.lightUp,
 				"intensity": self.intensity,

@@ -1,3 +1,19 @@
+from classes.modules import *
+from classes.modules.networkController import *
+
+from classes.modules.controller import *
+
+from classes.modules.bulb import *
+from classes.modules.rgbBulb import *
+
+from classes.modules.sensors.sensor import *
+from classes.modules.sensors.multiSensor import *
+
+from classes.modules.sensors.motionSensor import *
+from classes.modules.sensors.luminositySensor import *
+from classes.modules.sensors.SeismicIntensitySensor import *
+from classes.modules.sensors.temperatureSensor import *
+
 class Room:
     """
         class bringing all the information and functionality of an module

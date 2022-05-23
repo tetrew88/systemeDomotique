@@ -344,6 +344,8 @@ class HomeAutomationSystem:
 		else:
 			return False
 
+		return eventList
+
 	def get_inhabitant(self, inhabitantId):
 		"""
     		Method called for get an specific inhabitant in the home
@@ -461,7 +463,7 @@ class HomeAutomationSystem:
 
 	def get_homeId(self):
 		if self.home.homeAutomationNetwork.isReady:
-			return self.home.homeAutomationNetwork.id
+			return self.home.homeAutomationNetwork.homeId
 		else:
 			return False
 
@@ -1228,7 +1230,7 @@ class HomeAutomationSystem:
 
 		if module is not False:
 			if isinstance(module, Bulb):
-				if module.light_up:
+				if module.lightUp:
 					module.off()
 				else:
 					module.on()
@@ -1239,20 +1241,30 @@ class HomeAutomationSystem:
 
 	def set_rbgBulb_color(self, moduleId, colorLabel):
 		module = False
-		color = False
+		color = selectedColor = False
 
 		module = self.get_module(moduleId)
+
+		print("!!!!")
+		print(colorLabel)
+		print("!!!!")
 
 		if module is not False:
 			if isinstance(module, RgbBulb):
 				for tmpColor in module.colorPalette:
 					if tmpColor.name == colorLabel:
-						if module.set_color(tmpColor):
-							return True
-						else:
-							return False
+						selectedColor = tmpColor
+						break
+					else:
+						pass
+
+				if selectedColor is not False:
+					if module.set_color(tmpColor):
+						return True
 					else:
 						return False
+				else:
+					return False
 
 			else:
 				return False

@@ -71,9 +71,15 @@ class HomeAutomationServer(socketio.Namespace):
             method called when an client claim the rooms list
         """
 
-        rooms = []
-        for room in HomeAutomationServer.homeAutomationSystem.get_rooms_list():
-            rooms.append(room.serialize())
+        tmpRooms = rooms = []
+
+        tmpRooms = HomeAutomationServer.homeAutomationSystem.get_rooms_list()
+
+        if tmpRooms is not False:
+            for room in tmpRooms:
+                rooms.append(room.serialize())
+        else:
+            rooms = []
 
         socketIoServer.emit('post_rooms_list', {'data': rooms}, namespace='/HomeAutomationServer')
 
@@ -83,10 +89,15 @@ class HomeAutomationServer(socketio.Namespace):
             method called when an client claim the inhabitant list
         """
 
-        inhabitants = []
+        tmpInhabitants = inhabitants = []
 
-        for inhabitant in HomeAutomationServer.homeAutomationSystem.get_inhabitants_list():
-            inhabitants.append(inhabitant.serialize())
+        tmpInhabitants = HomeAutomationServer.homeAutomationSystem.get_inhabitants_list()
+
+        if tmpInhabitants is not False:
+            for inhabitant in tmpInhabitants:
+                inhabitants.append(inhabitant.serialize())
+        else:
+            inhabitants = []
 
         socketIoServer.emit('post_inhabitants_list', {"data": inhabitants}, namespace='/HomeAutomationServer')
 
@@ -96,10 +107,15 @@ class HomeAutomationServer(socketio.Namespace):
             method called when an client claim the guest list
         """
 
-        guests = []
+        tmpGuests = guests = []
 
-        for guest in HomeAutomationServer.homeAutomationSystem.get_guests_list():
-            guests.append(guest.serialize())
+        tmpGuests = HomeAutomationServer.homeAutomationSystem.get_guests_list()
+
+        if tmpGuests is not False:
+            for guest in tmpGuests:
+                guests.append(guest.serialize())
+        else:
+            guests = []
 
         socketIoServer.emit('post_guests_list', {"data": guests}, namespace='/HomeAutomationServer')
 
@@ -147,8 +163,9 @@ class HomeAutomationServer(socketio.Namespace):
             method called when an client claim an specific room
         """
 
-        room = HomeAutomationServer.homeAutomationSystem.get_room(data)
-        room = room.serialize()
+        room = HomeAutomationServer.homeAutomationSystem.get_room(int(data))
+        if room is not False:
+            room = room.serialize()
 
         socketIoServer.emit('post_room', {"data": room}, namespace='/HomeAutomationServer')
 
@@ -161,13 +178,13 @@ class HomeAutomationServer(socketio.Namespace):
         tmpContent = False
         content = []
 
-        room = HomeAutomationServer.homeAutomationSystem.get_room(data)
+        tmpContent = HomeAutomationServer.homeAutomationSystem.get_room_content(int(data))
 
-        tmpContent = HomeAutomationServer.homeAutomationSystem.get_room_content(data)
-        for element in tmpContent:
-            content.append(element.serialize())
+        if tmpContent is not False:
+            for element in tmpContent:
+                content.append(element.serialize())
 
-        socketIoServer.emit('post_room_content', {"data": content, "roomId": room.id},
+        socketIoServer.emit('post_room_content', {"data": content, "roomId": data},
                             namespace='/HomeAutomationServer')
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
@@ -179,13 +196,13 @@ class HomeAutomationServer(socketio.Namespace):
         room = False
         events = []
 
-        room = HomeAutomationServer.homeAutomationSystem.get_room(data)
+        eventList = HomeAutomationServer.homeAutomationSystem.get_room_event(int(data))
 
-        eventList = HomeAutomationServer.homeAutomationSystem.get_room_event(data)
-        for event in eventList:
-            events.append(event.serialize())
+        if eventList is not False:
+            for event in eventList:
+                events.append(event.serialize())
 
-        socketIoServer.emit('post_room_events', {"data": events, "roomId": room.id}, namespace='/HomeAutomationServer')
+        socketIoServer.emit('post_room_events', {"data": events, "roomId": data}, namespace='/HomeAutomationServer')
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def get_module(sid, data):
@@ -193,14 +210,14 @@ class HomeAutomationServer(socketio.Namespace):
             method called when an client claim an specific module
         """
 
-        module = HomeAutomationServer.homeAutomationSystem.get_module(data)
+        module = HomeAutomationServer.homeAutomationSystem.get_module(int(data))
         module = module.serialize()
 
         socketIoServer.emit('post_module', {"data": module}, namespace='/HomeAutomationServer')
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def get_profil(sid, data):
-        profil = HomeAutomationServer.homeAutomationSystem.get_profil(data).serialize()
+        profil = HomeAutomationServer.homeAutomationSystem.get_profil(int(data)).serialize()
 
         socketIoServer.emit('post_profil', {"data": profil}, namespace='/HomeAutomationServer')
 
@@ -218,40 +235,43 @@ class HomeAutomationServer(socketio.Namespace):
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def switch_light(sid, data):
-        HomeAutomationServer.homeAutomationSystem.switch_light(data)
+        if isinstance(data, list):
+            for element in data:
+                HomeAutomationServer.homeAutomationSystem.switch_light(int(element))
+        else:
+            HomeAutomationServer.homeAutomationSystem.switch_light(int(data))
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_rbgBulb_color(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_rbgBulb_color(data['moduleId'], data["colorName"])
+        HomeAutomationServer.homeAutomationSystem.set_rbgBulb_color(int(data['moduleId']), data["colorName"])
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_bulb_intensity(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_bulb_intensity(data['moduleId'], int(data['intensity']))
+        HomeAutomationServer.homeAutomationSystem.set_bulb_intensity(int(data['moduleId']), int(data['intensity']))
 
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_module_name(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_module_name(data['moduleId'], data['name'])
+        HomeAutomationServer.homeAutomationSystem.set_module_name(int(data['moduleId']), data['name'])
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_module_location(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_module_location(data['moduleId'], data['location'])
-        ########
+        HomeAutomationServer.homeAutomationSystem.set_module_location(int(data['moduleId']), int(data['location']))
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_profil_last_name(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_profil_last_name(data['profilId'], data["lastName"])
+        HomeAutomationServer.homeAutomationSystem.set_profil_last_name(int(data['profilId']), data["lastName"])
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_profil_first_name(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_profil_first_name(data['profilId'], data["firstName"])
+        HomeAutomationServer.homeAutomationSystem.set_profil_first_name(int(data['profilId']), data["firstName"])
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_profil_sexe(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_profil_sexe(data['profilId'], data["sexe"])
+        HomeAutomationServer.homeAutomationSystem.set_profil_sexe(int(data['profilId']), data["sexe"])
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def set_profil_date_of_birth(sid, data):
-        HomeAutomationServer.homeAutomationSystem.set_profil_date_of_birth(data['profilId'], data['dateOfBirth'])
+        HomeAutomationServer.homeAutomationSystem.set_profil_date_of_birth(int(data['profilId']), data['dateOfBirth'])
 
     @socketIoServer.event(namespace='/HomeAutomationServer')
     def add_module(sid, data):
