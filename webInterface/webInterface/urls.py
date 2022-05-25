@@ -2,15 +2,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 
-from authentification.views.identification import identification
-
 from homeManagement.views.roomListing import room_listing
 from homeManagement.views.room import room
 
 from homeManagement.views.profilListing import profil_listing
 from homeManagement.views.profil import profil
 
-from homeAutomationNetworkManagement.views.moduleListing import module_listing
+from automationNetworkManagement.views.moduleListing import module_listing
 
 from homeManagement.views.homeManagement import home_management
 from homeManagement.views.addRoom import add_room
@@ -20,16 +18,15 @@ from homeManagement.views.delRoom import del_room
 from homeManagement.views.delInhabitant import del_inhabitant
 from homeManagement.views.delGuest import del_guest
 
-from homeAutomationNetworkManagement.views.homeAutomationNetworkManagement import automation_network_management
-from homeAutomationNetworkManagement.views.addModule import add_module
-from homeAutomationNetworkManagement.views.delModule import del_module
+from automationNetworkManagement.views.automationNetworkManagement import automation_network_management
+from automationNetworkManagement.views.addModule import add_module
+from automationNetworkManagement.views.delModule import del_module
 
-from homeAutomationNetworkManagement.views.module import module
+from automationNetworkManagement.views.module import module
 
 urlpatterns = [
     url(r'^$', room_listing),
     path('admin/', admin.site.urls),
-    path('identification/', identification),
     path('/index', room_listing),
     path('roomListing/', room_listing),
     path('profilListing/', profil_listing),

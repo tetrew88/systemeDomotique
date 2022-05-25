@@ -5,6 +5,8 @@ async function add_guest()
 {
 	let firstNameInput = document.getElementById("firstName");
 	let lastNameInput = document.getElementById("lastName");
+	let sexeInput = document.getElementById("sexe");
+	let dateOfBirthInput = document.getElementById("dateOfBirth");
 
 	let newGuestList = [];
 
@@ -13,6 +15,8 @@ async function add_guest()
 
 	data['firstName'] = firstNameInput.value;
 	data['lastName'] = lastNameInput.value;
+	data['sexe'] = sexeInput.value;
+	data['dateOfBirth'] = dateOfBirthInput.value;
 
 	socket.emit('add_guest', data);
 
@@ -33,12 +37,18 @@ async function add_guest()
 
 	for (const element of newGuestList)
 	{
-		if(element["profil"]["firstName"] == data['firstName'])
+		if(element["firstName"] == data['firstName'])
 		{
-			if(element["profil"]['lastName'] == data['lastName'])
+			if(element['lastName'] == data['lastName'])
 			{
-				succes = true;
-				break;
+				if(element['sexe'] == data['sexe'])
+			    {
+			        if(element['dateOfBirth'] == data['dateOfBirth'])
+			        {
+                        succes = true;
+                        break;
+                    }
+                }
 			}
 			else
 			{

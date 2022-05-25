@@ -118,6 +118,7 @@ function list_modules_by_type(socket, screen)
 					}
 
 					cardTitle.classList.add("card-title", "text-center");
+					console.log(element);
 					cardTitle.textContent = element["name"];
 
 					link.appendChild(cardPicture);
@@ -181,7 +182,15 @@ function list_modules_by_type(socket, screen)
 					link.classList.add("col-lg-4", "col-md-6","col-sm-12", "card", "moduleCard", "rounded", "container-fluid")
 
 					cardPicture.classList.add("img-fluid", "rounded", "container-fluid");
-					cardPicture.src = "/static/pictures/" + element['type'] + ".jpeg";
+					if(element['type'] == 'rgb bulb')
+					{
+						cardPicture.src = "/static/pictures/" + 'bulb' + ".jpeg";
+					}
+					else
+					{
+						cardPicture.src = "/static/pictures/" + element['type'] + ".jpeg";
+					}
+
 					cardTitle.classList.add("card-title", "text-center");
 					cardTitle.style.color = 'blue';
 					cardTitle.textContent = element["name"];
@@ -375,7 +384,14 @@ function list_modules(socket, screen)
 				link.classList.add("col-lg-4", "col-md-6","col-sm-12", "card", "moduleCard", "rounded","container-fluid")
 
 				cardPicture.classList.add("img-fluid", "rounded", "container-fluid");
-				cardPicture.src = "/static/pictures/" + element['type'] + ".jpeg";
+				if(element['type'] == 'rgb bulb')
+				{
+					cardPicture.src = "/static/pictures/" + 'bulb' + ".jpeg";
+				}
+				else
+				{
+					cardPicture.src = "/static/pictures/" + element['type'] + ".jpeg";
+				}
 				cardTitle.classList.add("card-title", "text-center");
 				cardTitle.style.color = 'blue';
 				cardTitle.textContent = element["name"];

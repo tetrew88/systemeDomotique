@@ -13,12 +13,7 @@
 	margin-top: 3%;
 }
 
-#inhabitantsScreen
-{
-	background-color: white;
-}
-
-#guestsScreen
+.screen
 {
 	background-color: white;
 }

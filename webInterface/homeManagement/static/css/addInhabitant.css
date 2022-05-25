@@ -5,19 +5,10 @@
 	margin-top: 5%;
 }
 
-.lastNameSection
-{
-	padding: 2%;
-}
-
-.firstNameSection
-{
-	padding: 2%;
-}
-
 .section
 {
 	font-size: smaller;
+	padding: 2%;
 }
 
 .personalButton

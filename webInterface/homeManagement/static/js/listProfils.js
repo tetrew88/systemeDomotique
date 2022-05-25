@@ -36,14 +36,14 @@ function list_inhabitants(socket, screen)
 				let cardPicture = document.createElement('img');
 				let cardTitle =  document.createElement('div');
 
-				link.href = '/inhabitant/' + element['profil']["id"] + "/"
+				link.href = '/inhabitant/' + element['profilId'] + "/"
 				link.classList.add("col-lg-4", "col-md-6","col-sm-12", "card", "profilCard", "rounded", "container-fluid")
 
 				cardPicture.classList.add("img-fluid", "rounded-circle", "tile","container-fluid");
 				cardPicture.src = "/static/pictures/profil.png";
 				cardTitle.classList.add("card-title", "text-center");
 				cardTitle.style.color = 'blue';
-				cardTitle.textContent = element["profil"]["firstName"] +'\n'+ element["profil"]["lastName"];
+				cardTitle.textContent = element["firstName"] +'\n'+ element["lastName"];
 
 				link.appendChild(cardPicture);
 				link.appendChild(cardTitle);
@@ -103,14 +103,14 @@ function list_inhabitants(socket, screen)
 				let cardPicture = document.createElement('img');
 				let cardTitle =  document.createElement('div');
 
-				link.href = '/inhabitant/' + element['profil']["id"] + "/"
+				link.href = '/inhabitant/' + element["id"] + "/"
 				link.classList.add("col-lg-4", "col-md-6","col-sm-12", "card", "profilCard", "rounded", "container-fluid")
 
 				cardPicture.classList.add("img-fluid", "rounded-circle", "tile", "container-fluid");
 				cardPicture.src = "/static/pictures/profil.png";
 				cardTitle.classList.add("card-title", "text-center");
 				cardTitle.style.color = 'blue';
-				cardTitle.textContent = element["profil"]["firstName"] +'\n'+ element["profil"]["lastName"];
+				cardTitle.textContent = element["firstName"] +'\n'+ element["lastName"];
 
 				link.appendChild(cardPicture);
 				link.appendChild(cardTitle);
@@ -188,14 +188,14 @@ function list_guests(socket, screen)
 				let cardPicture = document.createElement('img');
 				let cardTitle =  document.createElement('div');
 
-				link.href = '/inhabitant/' + element["profil"]['id'] + "/"
+				link.href = '/inhabitant/' + element["profilId"] + "/"
 				link.classList.add("col-lg-4", "col-md-6","col-sm-12", "card", "profilCard", "rounded", "container-fluid")
 
 				cardPicture.classList.add("img-fluid", "rounded-circle", "tile","container-fluid");
 				cardPicture.src = "/static/pictures/profil.png";
 				cardTitle.classList.add("card-title", "text-center");
 				cardTitle.style.color = 'blue';
-				cardTitle.textContent = element["profil"]["firstName"] +'\n'+ element["profil"]["lastName"];
+				cardTitle.textContent = element["firstName"] +'\n'+ element["lastName"];
 
 				link.appendChild(cardPicture);
 				link.appendChild(cardTitle);
@@ -255,14 +255,14 @@ function list_guests(socket, screen)
 				let cardPicture = document.createElement('img');
 				let cardTitle =  document.createElement('div');
 
-				link.href = '/inhabitant/' + element["profil"]['id'] + "/"
+				link.href = '/inhabitant/' + element['id'] + "/"
 				link.classList.add("col-lg-4", "col-md-6","col-sm-12", "card", "profilCard", "rounded", "container-fluid")
 
 				cardPicture.classList.add("img-fluid", "rounded-circle", "tile", "container-fluid");
 				cardPicture.src = "/static/pictures/profil.png";
 				cardTitle.classList.add("card-title", "text-center");
 				cardTitle.style.color = 'blue';
-				cardTitle.textContent = element["profil"]["firstName"] +'\n'+ element["profil"]["lastName"];
+				cardTitle.textContent = element["firstName"] +'\n'+ element["lastName"];
 
 				link.appendChild(cardPicture);
 				link.appendChild(cardTitle);

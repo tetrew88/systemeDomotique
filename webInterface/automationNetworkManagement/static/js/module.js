@@ -438,10 +438,12 @@ function set_color()
 	let moduleId = document.getElementById("moduleId").value;
 	let select = document.getElementById("color");
 	let choice = select.selectedIndex
-	let value = select.options[choice].value;
+	let value = select.options[choice].innerHTML;
+
+	console.log(value)
 
 	socket.emit('set_rbgBulb_color', {'moduleId': moduleId,
-	'colorValue': value
+	'colorName': value
 	});
 }
 

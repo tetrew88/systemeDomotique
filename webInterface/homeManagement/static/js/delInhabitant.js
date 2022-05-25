@@ -13,7 +13,7 @@ socket.on('post_inhabitants_list', data=>{
 	{
 		let option = document.createElement('option');
 
-		option.text = element["profil"]['firstName'];
+		option.text = element['firstName'] + " "+ element['lastName'];
 		option.value = element['id'];
 
 		optionList.push(option);
@@ -54,18 +54,25 @@ async function del_inhabitant()
 	pageContent.style.display = "block";
 	loadingScreen.style.display = "none";
 
-	for (const element of newInhabitantList)
-	{
-		if(element["id"] == data['inhabitantId'])
-		{
-			succes = false;
-			break;
-		}
-		else
-		{
-			succes = true;
-		}
-	}
+    if (newInhabitantList.lenght > 0)
+    {
+        for (const element of newInhabitantList)
+        {
+            if(element["id"] == data['inhabitantId'])
+            {
+                succes = false;
+                break;
+            }
+            else
+            {
+                succes = true;
+            }
+        }
+    }
+    else
+    {
+        succes = true;
+    }
 
 	if(succes == true)
 	{

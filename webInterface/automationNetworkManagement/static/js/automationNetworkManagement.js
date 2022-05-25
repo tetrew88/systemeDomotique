@@ -6,6 +6,8 @@ socket.emit('get_homeId', '')
 socket.on('post_homeId', data=>{
 	data = data["data"];
 
+    console.log(data)
+
 	let homeIdEmplacement = document.getElementById("homeId");
 
 	homeIdEmplacement.textContent = data;

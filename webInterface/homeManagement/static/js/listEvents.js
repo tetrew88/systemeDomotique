@@ -26,6 +26,8 @@ function list_events(socket, screen)
 		data = data["data"]
 		data = data.reverse()
 
+		console.log(data)
+
 		screen.innerHTML = "";
 
 		if(data.length <= maxEvent)

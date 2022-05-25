@@ -13,7 +13,7 @@ socket.on('post_guests_list', data=>{
   {
     let option = document.createElement('option');
 
-    option.text = element["profil"]['firstName'];
+    option.text = element['firstName'] + " " + element['lastName'];
     option.value = element['id'];
 
     optionList.push(option);
@@ -30,7 +30,7 @@ async function del_guest()
 {
   let guestInput = document.getElementById("guest");
 
-  let newInhabitantList = [];
+  let newGuestList = [];
 
   let data = {};
   let succes = false
@@ -46,7 +46,7 @@ async function del_guest()
 
   socket.emit('get_guests_list', '');
   socket.on('post_guests_list', guestData=>{
-    newInhabitantList = guestData["data"];
+    newGuestList = guestData["data"];
   })
 
   await pause(2500);
@@ -54,17 +54,24 @@ async function del_guest()
   pageContent.style.display = "block";
   loadingScreen.style.display = "none";
 
-  for (const element of newInhabitantList)
+  if (newGuestList.lenght > 0)
   {
-    if(element["id"] == data['guestId'])
-    {
-      succes = false;
-      break;
-    }
-    else
-    {
-      succes = true;
-    }
+      for (const element of newGuestList)
+      {
+        if(element["id"] == data['guestId'])
+        {
+          succes = false;
+          break;
+        }
+        else
+        {
+          succes = true;
+        }
+      }
+  }
+  else
+  {
+    succes = true;
   }
 
   if(succes == true)
@@ -92,5 +99,4 @@ async function del_guest()
     }
   }
 
-
-}delInhabitant
+}

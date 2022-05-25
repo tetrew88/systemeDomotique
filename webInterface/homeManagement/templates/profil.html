@@ -47,6 +47,25 @@
             <button type="button" class="col-2 container-fluid" onclick="set_profil_firstName();"></button>
           </div>
 
+          <div id="sexeSection" class="row container-fluid">
+            <div id="sexeLabel" class="col-4 container-fluid">
+              Sexe:
+            </div>
+              <select id="sexe" value="" class="col-6">
+                <option value="f">Femme</option>
+                <option value="m">Homme</option>
+              </select>
+            <button type="button" class="col-2 container-fluid" onclick="set_profil_sexe();"></button>
+          </div>
+
+          <div id="dateOfBirthSection" class="row container-fluid">
+            <div id="dateOfBirthLabel" class="col-4 container-fluid">
+              Date de naissance:
+            </div>
+            <input class="col-6" type="date" id="dateOfBirth" name="dateOfBirth">
+            <button type="button" class="col-2 container-fluid" onclick="set_profil_date_of_birth();"></button>
+          </div>
+
         </div>
         <div class="col-1 col-md-2 col-lg-4"></div>
       </div>
