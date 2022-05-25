@@ -39,32 +39,32 @@ Installation:(installer a venir)
 				
 			}
 
-		-configurer supervisor/gunicorn:
-			Supervisor lance des services et les redémarre ce qui permettra de démarrer l'appli au démarrage du rpi
+	-configurer supervisor/gunicorn:
+		Supervisor lance des services et les redémarre ce qui permettra de démarrer l'appli au démarrage du rpi
 
-			créer un fichier de configuration pour supervisor:
-			(sudo touch /etc/supervisor/conf.d/homeAutomationSystem.conf)
+		créer un fichier de configuration pour supervisor:
+		(sudo touch /etc/supervisor/conf.d/homeAutomationSystem.conf)
 
-			ouvrez le doc et entrer la commande suivante:
-				[program:homeAutomationSystem]
-				command = python3 manage.py runserver
-				user = pi
-				directory = /home/pi/Desktop/hestiaDomotics/systemeDomotique/webInterface
-				autostart = true
-				autorestart = true
+		ouvrez le doc et entrer la commande suivante:
+			[program:homeAutomationSystem]
+			command = python3 manage.py runserver
+			user = pi
+			directory = /home/pi/Desktop/hestiaDomotics/systemeDomotique/webInterface
+			autostart = true
+			autorestart = true
 			
-			créer un nouveau fichier de configuration pour supervisor:
-			(sudo touch /etc/supervisor/conf.d/automationServer.conf)
+		créer un nouveau fichier de configuration pour supervisor:
+		(sudo touch /etc/supervisor/conf.d/automationServer.conf)
 
-			ouvrez le doc et entrer la commande suivante:
-				[program:homeAutomationSystem]
-				command = python3 main.py
-				user = pi
-				directory = /home/pi/Desktop/hestiaDomotics/homeAutomationServer
-				autostart = true
-				autorestart = true
+		ouvrez le doc et entrer la commande suivante:
+			[program:homeAutomationSystem]
+			command = python3 main.py
+			user = pi
+			directory = /home/pi/Desktop/hestiaDomotics/homeAutomationServer
+			autostart = true
+			autorestart = true
 
-			(bien penser a réveiller vos nos endormis au redémarrage (necessaire au démarrage du système))
+(bien penser a réveiller vos nos endormis au (re)démarrage (necessaire au démarrage du système))
 			
 
 
