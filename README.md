@@ -11,6 +11,7 @@ quatre grand point sont a l'oeuvre dans ce projet:
   - le reseau domotique(zwave)
 
 Installation:(installer a venir)
+
 	- installer les dépendances
 	- modifier le chemin du controlleur réseau et du fichier de config dans le dossier config
 	- configurer nginx:
