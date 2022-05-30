@@ -82,7 +82,7 @@ class Home:
     	"""
 
 		tmpRooms = rooms = []
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpRooms = self.homeDatabase.get_rooms_list()
 
 			if tmpRooms is not False:
@@ -122,7 +122,7 @@ class Home:
 
 		tmpInhabitants = inhabitants = []
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpInhabitants = self.homeDatabase.get_inhabitants_list()
 
 			if tmpInhabitants is not False:
@@ -155,7 +155,7 @@ class Home:
 
 		tmpGuests = guests = []
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpGuests = self.homeDatabase.get_guests_list()
 
 			if tmpGuests is not False:
@@ -188,7 +188,7 @@ class Home:
 
 		tmpProfils = profils = []
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpProfils = self.homeDatabase.get_profils_list()
 
 			if tmpProfils is not False:
@@ -217,7 +217,7 @@ class Home:
 
 		tmpEvents = events = []
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpEvents = self.homeDatabase.get_events_list()
 
 			if tmpEvents is not False:
@@ -273,7 +273,7 @@ class Home:
 		room = False
 
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpRoom = self.homeDatabase.get_room(roomId)
 
 			if tmpRoom is not False:
@@ -316,7 +316,7 @@ class Home:
 
 		inhabitant = profil = False
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpInhabitant = self.homeDatabase.get_inhabitant(inhabitantId)
 
 			if tmpInhabitant is not False:
@@ -356,7 +356,7 @@ class Home:
 
 		guest = profil = False
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpGuest = self.homeDatabase.get_guest(guestId)
 
 			if tmpGuest is not False:
@@ -396,7 +396,7 @@ class Home:
 
 		profil = False
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpProfil = self.homeDatabase.get_profil(profilId)
 
 			if tmpProfil is not False:
@@ -450,7 +450,7 @@ class Home:
 
 		event = False
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			tmpEvent = self.homeDatabase.get_event(eventId)
 
 			if tmpEvent is not False:
@@ -484,7 +484,7 @@ class Home:
     				failes: False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.add_room(roomName, roomType)
 		else:
 			return False
@@ -511,7 +511,7 @@ class Home:
     				failed: False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.add_inhabitant(firstName, lastName, sexe, dateOfBirth)
 		else:
 			return False
@@ -538,7 +538,7 @@ class Home:
     				failed: False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.add_guest(firstName, lastName, sexe, dateOfBirth)
 		else:
 			return False
@@ -565,7 +565,7 @@ class Home:
     				failed: False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.add_profil(firstName, lastName, sexe, dateOfBirth)
 		else:
 			return False
@@ -620,7 +620,7 @@ class Home:
     				failed: False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			eventId = self.homeDatabase.add_event(eventType, eventDatetime, eventLocation)
 		else:
 			return False
@@ -646,7 +646,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.del_room(roomId)
 		else:
 			return False
@@ -669,7 +669,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.del_inhabitant(inhabitantId)
 		else:
 			return False
@@ -694,7 +694,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.del_guest(guestId)
 		else:
 			return False
@@ -717,7 +717,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.del_profil(profilId)
 		else:
 			return False
@@ -763,7 +763,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.del_event(eventId)
 		else:
 			return False
@@ -788,7 +788,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_room_name(roomId, newName)
 		else:
 			return False
@@ -812,7 +812,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_room_type(roomId, newType)
 		else:
 			return False
@@ -836,7 +836,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_profil_last_name(profilId, newLastName)
 		else:
 			return False
@@ -860,19 +860,19 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_profil_first_name(profilId, newFirstName)
 		else:
 			return False
 
 	def set_profil_sexe(self, profilId, newSexe):
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_profil_sexe(profilId, newSexe)
 		else:
 			return False
 
 	def set_profil_date_of_birth(self, profilId, newDateOfBirth):
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_profil_date_of_birth(profilId, newDateOfBirth)
 		else:
 			return False
@@ -896,7 +896,7 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_inhabitant_last_name(inhabitantId, newLastName)
 		else:
 			return False
@@ -920,19 +920,19 @@ class Home:
     				succes: True/False
     	"""
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_inhabitant_first_name(inhabitantId, newFirstName)
 		else:
 			return False
 
 	def set_inhabitant_sexe(self, inhabitantId, newSexe):
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_inhabitant_sexe(inhabitantId, newSexe)
 		else:
 			return False
 
 	def set_inhabitant_date_of_birth(self, inhabitantId, newDateOfBirth):
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_inhabitant_date_of_birth(inhabitantId, newDateOfBirth)
 		else:
 			return False
@@ -957,7 +957,7 @@ class Home:
     	"""
 
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_guest_last_name(guestId, newLastName)
 		else:
 			return False
@@ -982,19 +982,19 @@ class Home:
     	"""
 
 
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_guest_first_name(guestId, newFirstName)
 		else:
 			return False
 
 	def set_guest_sexe(self, guestId, newSexe):
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_guest_sexe(guestId, newSexe)
 		else:
 			return False
 
 	def set_guest_date_of_birth(self, guestId, newDateOfBirth):
-		if self.homeDatabase.db_connection is not False:
+		if self.homeDatabase is not False:
 			return self.homeDatabase.set_guest_date_of_birth(guestId, newDateOfBirth)
 		else:
 			return False

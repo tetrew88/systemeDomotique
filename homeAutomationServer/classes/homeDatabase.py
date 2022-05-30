@@ -125,13 +125,15 @@ class HomeDatabase:
 
 		request = """SELECT * FROM Rooms"""
 
-		if self.db_connection is not False and self.db_cursor is not False:
+		if self.connect():
 			try:
 				self.db_cursor.execute(request)
 			except:
+				self.disconnect()
 				return False
 
 			rooms = self.db_cursor.fetchall()
+			self.disconnect()
 
 			return rooms
 		else:
@@ -146,13 +148,15 @@ class HomeDatabase:
     	"""
 		request = """SELECT * FROM Inhabitants"""
 
-		if self.db_connection is not False and self.db_cursor is not False:
+		if self.connect():
 			try:
 				self.db_cursor.execute(request)
 			except:
+				self.disconnect()
 				return False
 
 			inhabitants = self.db_cursor.fetchall()
+			self.disconnect()
 
 			return inhabitants
 		else:
@@ -168,13 +172,15 @@ class HomeDatabase:
 
 		request = """SELECT * FROM Guests"""
 
-		if self.db_connection is not False and self.db_cursor is not False:
+		if self.connect():
 			try:
 				self.db_cursor.execute(request)
 			except:
+				self.disconnect()
 				return False
 
 			guests = self.db_cursor.fetchall()
+			self.disconnect()
 
 			return guests
 		else:
@@ -190,13 +196,15 @@ class HomeDatabase:
 
 		request = """SELECT * FROM Profils"""
 
-		if self.db_connection is not False and self.db_cursor is not False:
+		if self.connect():
 			try:
 				self.db_cursor.execute(request)
 			except:
+				self.disconnect()
 				return False
 
 			profils = self.db_cursor.fetchall()
+			self.disconnect()
 
 			return profils
 		else:
@@ -210,13 +218,15 @@ class HomeDatabase:
     	"""
 		request = """SELECT * FROM Events"""
 
-		if self.db_connection is not False and self.db_cursor is not False:
+		if self.connect():
 			try:
 				self.db_cursor.execute(request)
 			except:
+				self.disconnect()
 				return False
 
 			events = self.db_cursor.fetchall()
+			self.disconnect()
 
 			return events
 		else:
@@ -240,16 +250,18 @@ class HomeDatabase:
 
 		room = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(roomId, int):
+		if isinstance(roomId, int):
+			if self.connect():
 				request = "SELECT * FROM Rooms WHERE id = {}".format(roomId)
 
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				room = self.db_cursor.fetchall()
+				self.disconnect()
 
 				if len(room) > 0:
 					return room[0]
@@ -279,16 +291,18 @@ class HomeDatabase:
 
 		inhabitant = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(inhabitantId, int):
+		if isinstance(inhabitantId, int):
+			if self.connect():
 				request = "SELECT * FROM Inhabitants WHERE id = {}".format(inhabitantId)
 				
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				inhabitant = self.db_cursor.fetchall()
+				self.disconnect()
 
 				if len(inhabitant) > 0:
 					return inhabitant[0]
@@ -318,16 +332,18 @@ class HomeDatabase:
 
 		guest = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId, int):
+		if isinstance(guestId, int):
+			if self.connect():
 				request = "SELECT * FROM Guests WHERE id = {}".format(guestId)
-				
+
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				guest = self.db_cursor.fetchall()
+				self.disconnect()
 
 				if len(guest) > 0:
 					return guest[0]
@@ -357,16 +373,18 @@ class HomeDatabase:
 
 		profil = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(profilId, int):
+		if isinstance(profilId, int):
+			if self.connect():
 				request = "SELECT * FROM Profils WHERE id = {}".format(profilId)
 				
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				profil = self.db_cursor.fetchall()
+				self.disconnect()
 
 				if len(profil) > 0:
 					return profil[0]
@@ -396,16 +414,18 @@ class HomeDatabase:
 
 		event = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(eventId, int):
+		if isinstance(eventId, int):
+			if self.connect():
 				request = "SELECT * FROM Events WHERE id = {}".format(eventId)
 				
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				event = self.db_cursor.fetchall()
+				self.disconnect()
 
 				if len(event) > 0:
 					return event[0]
@@ -438,16 +458,18 @@ class HomeDatabase:
 		succes = False
 		roomId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(roomName, str) and isinstance(roomType, str):
+		if isinstance(roomName, str) and isinstance(roomType, str):
+			if self.connect():
 				request = "INSERT INTO Rooms(name, type) VALUES ('{}', '{}')".format(roomName, roomType)
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				self.commit_change()
 				roomId = self.db_cursor.lastrowid
+				self.disconnect()
 
 				for room in self.get_rooms_list():
 					if room[0] == roomId \
@@ -488,11 +510,11 @@ class HomeDatabase:
 		succes = False
 		profilId = inhabitantId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(firstName, str) \
+		if isinstance(firstName, str) \
 				and isinstance(lastName, str) \
 				and sexe == "f" or sexe == "m" \
 				and isinstance(dateOfBirth, str):
+			if self.connect():
 
 				profilId = self.add_profil(firstName, lastName, sexe, dateOfBirth)
 				if profilId is not False:
@@ -501,11 +523,13 @@ class HomeDatabase:
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
 
 					inhabitantId = self.db_cursor.lastrowid
+					self.disconnect()
 
 					for inhabitant in self.get_inhabitants_list():
 						if inhabitant[0] == inhabitantId and inhabitant[1] == profilId:
@@ -546,11 +570,11 @@ class HomeDatabase:
 		succes = False
 		profilId = guestId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(firstName, str) \
+		if isinstance(firstName, str) \
 				and isinstance(lastName, str) \
 				and sexe == "f" or sexe == "m" \
 				and isinstance(dateOfBirth, str):
+			if self.connect():
 
 				profilId = self.add_profil(firstName, lastName, sexe, dateOfBirth)
 				if profilId is not False:
@@ -559,11 +583,13 @@ class HomeDatabase:
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
 
 					guestId = self.db_cursor.lastrowid
+					self.disconnect()
 
 					for guest in self.get_guests_list():
 						if guest[0] == guestId and guest[1] == profilId:
@@ -606,11 +632,11 @@ class HomeDatabase:
 
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(firstName, str) \
+		if isinstance(firstName, str) \
 				and isinstance(lastName, str) \
 				and sexe == "f" or sexe == "m" \
 				and isinstance(dateOfBirth, str):
+			if self.connect():
 
 				request = "INSERT INTO Profils(first_name, last_name, sexe, date_of_birth) VALUES\
 				('{}', '{}', '{}', '{}')".format(firstName, lastName, sexe, dateOfBirth)
@@ -618,11 +644,13 @@ class HomeDatabase:
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				self.commit_change()
 
 				profilId = self.db_cursor.lastrowid
+				self.disconnect()
 
 				for profil in self.get_profils_list():
 					if profil[0] == profilId \
@@ -666,33 +694,32 @@ class HomeDatabase:
     	"""
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(eventType, str) and isinstance(eventDatetime, str):
-				if isinstance(eventLocation, int):
-					request = "INSERT INTO Events(type, datetime, fk_room_id) VALUES \
-							('{}', '{}', {})".format(eventType,
-													 eventDatetime,
-													 eventLocation)
+		if isinstance(eventType, str) and isinstance(eventDatetime, str) and isinstance(eventLocation, int):
+			if self.connect():
+				request = "INSERT INTO Events(type, datetime, fk_room_id) VALUES \
+						('{}', '{}', {})".format(eventType,
+												 eventDatetime,
+												 eventLocation)
 
-					try:
-						self.db_cursor.execute(request)
-						self.commit_change()
-					except:
-						return False
+				try:
+					self.db_cursor.execute(request)
+					self.commit_change()
+				except:
+					self.disconnect()
+					return False
 
-					eventId = self.db_cursor.lastrowid
+				eventId = self.db_cursor.lastrowid
+				self.disconnect()
 
-					for event in self.get_events_list():
-						if event[0] == eventId\
-								and event[1] == eventType \
-								and event[2] == eventDatetime \
-								and event[3] == eventLocation:
-							succes = True
-							break
-						else:
-							succes = False
-				else:
-					succes = False
+				for event in self.get_events_list():
+					if event[0] == eventId\
+							and event[1] == eventType \
+							and event[2] == eventDatetime \
+							and event[3] == eventLocation:
+						succes = True
+						break
+					else:
+						succes = False
 			else:
 				succes = False
 		else:
@@ -724,30 +751,27 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(roomId, int):
-				request = "DELETE FROM Rooms WHERE id = {}".format(roomId)
+		if isinstance(roomId, int):
+			if self.get_room(roomId) is not False:
+				eventList = self.get_events_list()
+				if eventList is not False:
+					for event in eventList:
+						if event[3] == roomId:
+							self.del_event(event[0])
 
-				if self.get_room(roomId) is not False:
-					eventList = self.get_events_list()
-					if eventList is not False:
-						for event in eventList:
-							if event[3] == roomId:
-								self.del_event(event[0])
-					else:
-						return False
-
+				if self.connect():
+					request = "DELETE FROM Rooms WHERE id = {}".format(roomId)
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
+					self.disconnect()
 
-					if self.get_room(roomId) is False:
-						succes = True
-					else:
-						succes = False
+				if self.get_room(roomId) is False:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -778,27 +802,28 @@ class HomeDatabase:
 		succes = False
 		profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(inhabitantId, int):
-				request = "DELETE FROM Inhabitants WHERE id = {}".format(inhabitantId)
+		if isinstance(inhabitantId, int):
 
-				inhabitant = self.get_inhabitant(inhabitantId)
-				if inhabitant is not False:
-					profilId = inhabitant[1]
+			inhabitant = self.get_inhabitant(inhabitantId)
+			if inhabitant is not False:
+				profilId = inhabitant[1]
+
+				if self.connect():
+					request = "DELETE FROM Inhabitants WHERE id = {}".format(inhabitantId)
 
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
+					self.disconnect()
 
-					if self.get_inhabitant(inhabitantId) is False:
-						if self.del_profil(profilId):
-							if self.get_profil(profilId) is False:
+				if self.get_inhabitant(inhabitantId) is False:
+					if self.del_profil(profilId):
+						if self.get_profil(profilId) is False:
 								succes = True
-							else:
-								succes = False
 						else:
 							succes = False
 					else:
@@ -833,26 +858,27 @@ class HomeDatabase:
 		succes = False
 		profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId, int):
-				request = "DELETE FROM Guests WHERE id = {}".format(guestId)
+		if isinstance(guestId, int):
+			guest = self.get_guest(guestId)
+			if guest is not False:
+				profilId = guest[1]
 
-				guest = self.get_guest(guestId)
-				if guest is not False:
-					profilId = guest[1]
+				if self.connect():
+					request = "DELETE FROM Guests WHERE id = {}".format(guestId)
+
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
+					self.disconnect()
 
-					if self.get_guest(guestId) is False:
-						if self.del_profil(profilId):
-							if self.get_profil(profilId) is False:
-								succes = True
-							else:
-								succes = False
+				if self.get_guest(guestId) is False:
+					if self.del_profil(profilId):
+						if self.get_profil(profilId) is False:
+							succes = True
 						else:
 							succes = False
 					else:
@@ -885,22 +911,22 @@ class HomeDatabase:
     	"""
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(profilId, int):
-				request = "DELETE FROM Profils WHERE id = {}".format(profilId)
-				
-				if self.get_profil(profilId) is not False:
+		if isinstance(profilId, int):
+			if self.get_profil(profilId) is not False:
+				if self.connect():
+					request = "DELETE FROM Profils WHERE id = {}".format(profilId)
+
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
+					self.disconnect()
 
-					if self.get_profil(profilId) is False:
-						succes = True
-					else:
-						succes = False
+				if self.get_profil(profilId) is False:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -930,22 +956,22 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(eventId, int):
-				request = "DELETE FROM Events WHERE id = {}".format(eventId)
-				
-				if self.get_event(eventId) is not False:
+		if isinstance(eventId, int):
+			if self.get_event(eventId) is not False:
+				if self.connect():
+					request = "DELETE FROM Events WHERE id = {}".format(eventId)
+
 					try:
 						self.db_cursor.execute(request)
 					except:
+						self.disconnect()
 						return False
 
 					self.commit_change()
+					self.disconnect()
 
-					if self.get_event(eventId) is False:
-						succes = True
-					else:
-						succes = False
+				if self.get_event(eventId) is False:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -977,14 +1003,19 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(roomId, int) and isinstance(newName, str):
+		if isinstance(roomId, int) and isinstance(newName, str):
+			if self.connect():
 				request = """UPDATE Rooms SET name = '{}' where id = {}""".format(newName, roomId)
 
-				self.db_cursor.execute(request)
+				try:
+					self.db_cursor.execute(request)
+				except:
+					self.disconnect()
+					return False
 
 
 				self.commit_change()
+				self.disconnect()
 
 				room = self.get_room(roomId)
 
@@ -1023,16 +1054,18 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(roomId, int) and isinstance(newType, str):
+		if isinstance(roomId, int) and isinstance(newType, str):
+			if self.connect():
 				request = """UPDATE Rooms SET type = '{}' where id = {}""".format(newType, roomId)
 
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				self.commit_change()
+				self.disconnect()
 
 				room = self.get_room(roomId)
 
@@ -1072,16 +1105,18 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(profilId, int) and isinstance(newLastName, str):
+		if isinstance(profilId, int) and isinstance(newLastName, str):
+			if self.connect():
 				request = """UPDATE Profils SET last_name = '{}' where id = {}""".format(newLastName, profilId)
 
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				self.commit_change()
+				self.disconnect()
 
 				profil = self.get_profil(profilId)
 
@@ -1120,16 +1155,18 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(profilId, int) and isinstance(newFirstName, str):
+		if isinstance(profilId, int) and isinstance(newFirstName, str):
+			if self.connect():
 				request = """UPDATE Profils SET first_name = '{}' where id = {}""".format(newFirstName, profilId)
 
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect
 					return False
 
 				self.commit_change()
+				self.disconnect
 
 				profil = self.get_profil(profilId)
 
@@ -1168,17 +1205,19 @@ class HomeDatabase:
 
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(profilId, int) and isinstance(newSexe, str) \
+		if isinstance(profilId, int) and isinstance(newSexe, str) \
 					and newSexe is 'f' or newSexe is 'm':
+			if self.connect():
 				request = """UPDATE Profils SET sexe = '{}' where id = {}""".format(newSexe, profilId)
 
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				self.commit_change()
+				self.disconnect()
 
 				profil = self.get_profil(profilId)
 
@@ -1200,16 +1239,18 @@ class HomeDatabase:
 	def set_profil_date_of_birth(self, profilId, newDateOfBirth):
 		succes = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(profilId, int) and isinstance(newDateOfBirth, str):
+		if isinstance(profilId, int) and isinstance(newDateOfBirth, str):
+			if self.connect():
 				request = """UPDATE Profils SET date_of_birth = '{}' where id = {}""".format(newDateOfBirth, profilId)
 
 				try:
 					self.db_cursor.execute(request)
 				except:
+					self.disconnect()
 					return False
 
 				self.commit_change()
+				self.disconnect()
 
 				profil = self.get_profil(profilId)
 
@@ -1249,21 +1290,18 @@ class HomeDatabase:
 
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(inhabitantId, int) and isinstance(newLastName, str):
-				inhabitant = self.get_inhabitant(inhabitantId)
-				if inhabitant is not False:
-					profilId = inhabitant[1]
+		if isinstance(inhabitantId, int) and isinstance(newLastName, str):
+			inhabitant = self.get_inhabitant(inhabitantId)
+			if inhabitant is not False:
+				profilId = inhabitant[1]
 
-				if profilId is not False:
-					self.set_profil_last_name(profilId, newLastName)
+			if profilId is not False:
+				self.set_profil_last_name(profilId, newLastName)
 
-					profil =  self.get_profil(profilId)
+				profil =  self.get_profil(profilId)
 
-					if profil[2] == newLastName:
-						succes = True
-					else:
-						succes = False
+				if profil[2] == newLastName:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1294,21 +1332,18 @@ class HomeDatabase:
 
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(inhabitantId, int) and isinstance(newFirstName, str):
-				inhabitant = self.get_inhabitant(inhabitantId)
-				if inhabitant is not False:
-					profilId = inhabitant[1]
+		if isinstance(inhabitantId, int) and isinstance(newFirstName, str):
+			inhabitant = self.get_inhabitant(inhabitantId)
+			if inhabitant is not False:
+				profilId = inhabitant[1]
 
-				if profilId is not False:
-					self.set_profil_first_name(profilId, newFirstName)
+			if profilId is not False:
+				self.set_profil_first_name(profilId, newFirstName)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[1] == newFirstName:
-						succes = True
-					else:
-						succes = False
+				if profil[1] == newFirstName:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1321,22 +1356,19 @@ class HomeDatabase:
 	def set_inhabitant_sexe(self, inhabitantId, newSexe):
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(inhabitantId, int) and isinstance(newSexe, str) \
-					and newSexe == "f" or newSexe == "m":
-				inhabitant = self.get_inhabitant(inhabitantId)
-				if inhabitant is not False:
-					profilId = inhabitant[1]
+		if isinstance(inhabitantId, int) and isinstance(newSexe, str) \
+				and newSexe == "f" or newSexe == "m":
+			inhabitant = self.get_inhabitant(inhabitantId)
+			if inhabitant is not False:
+				profilId = inhabitant[1]
 
-				if profilId is not False:
-					self.set_profil_sexe(profilId, newSexe)
+			if profilId is not False:
+				self.set_profil_sexe(profilId, newSexe)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[3] == newSexe:
-						succes = True
-					else:
-						succes = False
+				if profil[3] == newSexe:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1349,21 +1381,18 @@ class HomeDatabase:
 	def set_inhabitant_date_of_birth(self, inhabitantId, newDateOfBirth):
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(inhabitantId, int) and isinstance(newDateOfBirth, str):
-				inhabitant = self.get_inhabitant(inhabitantId)
-				if inhabitant is not False:
-					profilId = inhabitant[1]
+		if isinstance(inhabitantId, int) and isinstance(newDateOfBirth, str):
+			inhabitant = self.get_inhabitant(inhabitantId)
+			if inhabitant is not False:
+				profilId = inhabitant[1]
 
-				if profilId is not False:
-					self.set_profil_date_of_birth(profilId, newDateOfBirth)
+			if profilId is not False:
+				self.set_profil_date_of_birth(profilId, newDateOfBirth)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[4] == newDateOfBirth:
-						succes = True
-					else:
-						succes = False
+				if profil[4] == newDateOfBirth:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1394,21 +1423,18 @@ class HomeDatabase:
 
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId, int) and isinstance(newLastName, str):
-				guest = self.get_guest(guestId)
-				if guest is not False:
-					profilId = guest[1]
+		if isinstance(guestId, int) and isinstance(newLastName, str):
+			guest = self.get_guest(guestId)
+			if guest is not False:
+				profilId = guest[1]
 
-				if profilId is not False:
-					self.set_profil_last_name(profilId, newLastName)
+			if profilId is not False:
+				self.set_profil_last_name(profilId, newLastName)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[2] == newLastName:
-						succes = True
-					else:
-						succes = False
+				if profil[2] == newLastName:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1439,21 +1465,18 @@ class HomeDatabase:
 
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId, int) and isinstance(newFirstName, str):
-				guest = self.get_guest(guestId)
-				if guest is not False:
-					profilId = guest[1]
+		if isinstance(guestId, int) and isinstance(newFirstName, str):
+			guest = self.get_guest(guestId)
+			if guest is not False:
+				profilId = guest[1]
 
-				if profilId is not False:
-					self.set_profil_first_name(profilId, newFirstName)
+			if profilId is not False:
+				self.set_profil_first_name(profilId, newFirstName)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[1] == newFirstName:
-						succes = True
-					else:
-						succes = False
+				if profil[1] == newFirstName:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1466,22 +1489,19 @@ class HomeDatabase:
 	def set_guest_sexe(self, guestId, newSexe):
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId, int) and isinstance(newSexe, str) \
-					and newSexe == "f" or newSexe == "m":
-				guest = self.get_guest(guestId)
-				if guest is not False:
-					profilId = guest[1]
+		if isinstance(guestId, int) and isinstance(newSexe, str) \
+				and newSexe == "f" or newSexe == "m":
+			guest = self.get_guest(guestId)
+			if guest is not False:
+				profilId = guest[1]
 
-				if profilId is not False:
-					self.set_profil_sexe(profilId, newSexe)
+			if profilId is not False:
+				self.set_profil_sexe(profilId, newSexe)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[3] == newSexe:
-						succes = True
-					else:
-						succes = False
+				if profil[3] == newSexe:
+					succes = True
 				else:
 					succes = False
 			else:
@@ -1494,21 +1514,18 @@ class HomeDatabase:
 	def set_guest_date_of_birth(self, guestId, newDateOfBirth):
 		succes = profilId = False
 
-		if self.db_connection is not False and self.db_cursor is not False:
-			if isinstance(guestId, int) and isinstance(newDateOfBirth, str):
-				guest = self.get_guest(guestId)
-				if guest is not False:
-					profilId = guest[1]
+		if isinstance(guestId, int) and isinstance(newDateOfBirth, str):
+			guest = self.get_guest(guestId)
+			if guest is not False:
+				profilId = guest[1]
 
-				if profilId is not False:
-					self.set_profil_date_of_birth(profilId, newDateOfBirth)
+			if profilId is not False:
+				self.set_profil_date_of_birth(profilId, newDateOfBirth)
 
-					profil = self.get_profil(profilId)
+				profil = self.get_profil(profilId)
 
-					if profil[4] == newDateOfBirth:
-						succes = True
-					else:
-						succes = False
+				if profil[4] == newDateOfBirth:
+					succes = True
 				else:
 					succes = False
 			else:

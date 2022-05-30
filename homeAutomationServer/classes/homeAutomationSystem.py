@@ -101,11 +101,8 @@ class HomeAutomationSystem:
 					succes (True/False)
 		"""
 
-		if self.home.homeDatabase.connect() is True:
-			if self.home.homeAutomationNetwork.start() is True:
-				self.set_running(True)
-			else:
-				return False
+		if self.home.homeAutomationNetwork.start() is True:
+			self.set_running(True)
 		else:
 			return False
 
@@ -128,13 +125,11 @@ class HomeAutomationSystem:
     				succes (True/False)
     	"""
 
-		if self.home.homeDatabase.disconnect():
-			if self.home.homeAutomationNetwork.stop():
-				self.set_running(False)
-			else:
-				return False
+		if self.home.homeAutomationNetwork.stop():
+			self.set_running(False)
 		else:
 			return False
+
 		if self.running is False:
 			return True
 		else:
@@ -180,7 +175,7 @@ class HomeAutomationSystem:
     				list of room classes
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.roomsList
 		else:
 			return False
@@ -195,7 +190,7 @@ class HomeAutomationSystem:
     				list of inhabitant classes
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.inhabitantsList
 		else:
 			return False
@@ -210,7 +205,7 @@ class HomeAutomationSystem:
     				list of guests class
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.guestsList
 		else:
 			return False
@@ -225,7 +220,7 @@ class HomeAutomationSystem:
     				list of profil class
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.guestsList
 		else:
 			return False
@@ -240,7 +235,7 @@ class HomeAutomationSystem:
     				list of events class
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.eventsList
 		else:
 			return False
@@ -276,7 +271,7 @@ class HomeAutomationSystem:
     				room classes/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.get_room(roomId)
 		else:
 			return False
@@ -301,7 +296,7 @@ class HomeAutomationSystem:
 
 		room = False
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			room = self.home.get_room(roomId)
 
 			if room is not False:
@@ -332,7 +327,7 @@ class HomeAutomationSystem:
 		room = False
 		eventList = []
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			room = self.home.get_room(roomId)
 
 			if room is not False:
@@ -364,7 +359,7 @@ class HomeAutomationSystem:
     				inhabitant class/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.get_inhabitant(inhabitantId)
 		else:
 			return False
@@ -387,7 +382,7 @@ class HomeAutomationSystem:
     				guests class/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.get_guest(guestId)
 		else:
 			return False
@@ -410,7 +405,7 @@ class HomeAutomationSystem:
     				profil class/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.get_profil(profilId)
 		else:
 			return False
@@ -456,13 +451,13 @@ class HomeAutomationSystem:
     				event class/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.get_event(eventId)
 		else:
 			return False
 
 	def get_homeId(self):
-		if self.home.homeAutomationNetwork.isReady:
+		if self.home.homeDatabase is not False:
 			return self.home.homeAutomationNetwork.homeId
 		else:
 			return False
@@ -494,7 +489,7 @@ class HomeAutomationSystem:
     				failed False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.add_room(roomName, roomType)
 		else:
 			return False
@@ -522,7 +517,7 @@ class HomeAutomationSystem:
     				failed False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.add_inhabitant(firstName, lastName, sexe, dateOfBirth)
 		else:
 			return False
@@ -549,7 +544,7 @@ class HomeAutomationSystem:
     				failed False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.add_guest(firstName, lastName, sexe, dateOfBirth)
 		else:
 			return False
@@ -576,7 +571,7 @@ class HomeAutomationSystem:
     				failed False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.add_profil(firstName, lastName, sexe, dateOfBirth)
 		else:
 			return False
@@ -625,7 +620,7 @@ class HomeAutomationSystem:
     				failed False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.add_event(eventType, eventDatetime, eventLocation)
 		else:
 			return False
@@ -649,7 +644,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.del_room(roomId)
 		else:
 			return False
@@ -672,7 +667,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.del_inhabitant(inhabitantId)
 		else:
 			return False
@@ -695,7 +690,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.del_guest(guestId)
 		else:
 			return False
@@ -718,7 +713,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.del_profil(profilId)
 		else:
 			return False
@@ -764,7 +759,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.del_event(eventId)
 		else:
 			return False
@@ -789,7 +784,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_room_name(roomId, newName)
 		else:
 			return False
@@ -813,7 +808,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_room_type(roomId, newType)
 		else:
 			return False
@@ -837,7 +832,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_profil_last_name(profilId, newLastName)
 		else:
 			return False
@@ -861,7 +856,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_profil_first_name(profilId, newFirstName)
 		else:
 			return False
@@ -885,7 +880,7 @@ class HomeAutomationSystem:
 	    			succes: True/False
 	    """
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_profil_sexe(profilId, newSexe)
 		else:
 			return False
@@ -909,7 +904,7 @@ class HomeAutomationSystem:
 	    			succes: True/False
 	    """
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_profil_date_of_birth(profilId, newDateOfBirth)
 		else:
 			return False
@@ -933,7 +928,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_inhabitant_last_name(inhabitantId, newLastName)
 		else:
 			return False
@@ -957,7 +952,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_inhabitant_first_name(inhabitantId, newFirstName)
 		else:
 			return False
@@ -981,7 +976,7 @@ class HomeAutomationSystem:
 	    			succes: True/False
 	    """
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_inhabitant_sexe(inhabitantId, newSexe)
 		else:
 			return False
@@ -1005,7 +1000,7 @@ class HomeAutomationSystem:
 	    			succes: True/False
 	    """
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_inhabitant_date_of_birth(inhabitantId, newDateOfBirth)
 		else:
 			return False
@@ -1029,7 +1024,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_guest_last_name(guestId, newLastName)
 		else:
 			return False
@@ -1053,7 +1048,7 @@ class HomeAutomationSystem:
     				succes: True/False
     	"""
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_guest_first_name(guestId, newFirstName)
 		else:
 			return False
@@ -1077,7 +1072,7 @@ class HomeAutomationSystem:
 	    			succes: True/False
 	    """
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_guest_sexe(guestId, newSexe)
 		else:
 			return False
@@ -1101,7 +1096,7 @@ class HomeAutomationSystem:
 	    			succes: True/False
 	    """
 
-		if self.home.homeDatabase.db_connection is not False:
+		if self.home.homeDatabase is not False:
 			return self.home.set_guest_date_of_birth(guestId, newDateOfBirth)
 		else:
 			return False
